@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Landing page for Rove — a fast, minimal desktop network monitor",
   "private": true,
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
