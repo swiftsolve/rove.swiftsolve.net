@@ -1,0 +1,24 @@
+{
+  "name": "rove-swiftsolve-net",
+  "version": "1.0.0",
+  "description": "Landing page for Rove — a fast, minimal desktop network monitor",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "sync-demo": "bash scripts/sync-demo.sh"
+  },
+  "dependencies": {
+    "next": "^15.3.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "typescript": "^5.8.3"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "rove-dev",
+      "runtimeExecutable": "/Users/nabilrahman/.nvm/versions/node/v20.19.0/bin/node",
+      "runtimeArgs": ["node_modules/next/dist/bin/next", "dev", "--port", "3000"],
+      "port": 3000
+    },
+    {
+      "name": "rove-dev-preview",
+      "runtimeExecutable": "/Users/nabilrahman/.nvm/versions/node/v20.19.0/bin/node",
+      "runtimeArgs": ["node_modules/next/dist/bin/next", "dev"],
+      "autoPort": true
+    }
+  ]
+}
