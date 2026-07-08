@@ -132,7 +132,7 @@ export default function Showcase() {
 
           <div className="app-frame" ref={frameRef}>
             <div className="app-stage" ref={stageRef}>
-              <iframe ref={iframeRef} src="/app/index.html" title="Rove app demo" loading="lazy" />
+              <iframe ref={iframeRef} src="/app/" title="Rove app demo" loading="lazy" />
             </div>
           </div>
         </div>
