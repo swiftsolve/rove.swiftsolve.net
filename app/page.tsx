@@ -130,7 +130,7 @@ export default function Home() {
             <BrandIcon size={78} gradient />
           </span>
           <h1>
-            Your network,<br /><span className="accent">finally visible.</span>
+            Your network,<br /><span className="accent">finally visible</span>
           </h1>
           <p className="hero-sub">
             Rove is a tiny desktop app that shows you what your connection is really doing: live
