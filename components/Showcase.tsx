@@ -17,7 +17,7 @@ const TOUR: readonly TourStop[] = [
   {
     label: 'Home',
     title: 'The whole picture',
-    blurb: 'Connection, live traffic, capabilities and devices on one calm screen.',
+    blurb: 'Connection, live traffic, capabilities and devices on one calm screen, plus a QR code to share your Wi-Fi.',
   },
   {
     label: 'Speed',
@@ -30,9 +30,14 @@ const TOUR: readonly TourStop[] = [
     blurb: 'Every phone, TV and gadget on your network, named and classified.',
   },
   {
+    label: 'Timeline',
+    title: 'A history of your network',
+    blurb: 'A day-by-day feed of what changed on your network, from devices coming and going to new access points and connection switches.',
+  },
+  {
     label: 'Connection',
     title: 'When something feels off',
-    blurb: 'Router latency, packet loss and DNS servers at a glance.',
+    blurb: 'Router latency, packet loss, DNS and reachability for the cloud services you track.',
   },
   {
     label: 'Usage',

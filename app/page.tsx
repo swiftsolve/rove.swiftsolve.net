@@ -37,6 +37,19 @@ const FEATURES = [
     ),
   },
   {
+    title: 'A timeline of every change',
+    body: 'A running log of network changes, from devices joining and leaving to new access points and connection switches, kept for a week.',
+    icon: (
+      <>
+        <path d="M21 5H3" />
+        <path d="M10 12H3" />
+        <path d="M10 19H3" />
+        <circle cx="17" cy="15" r="3" />
+        <path d="m21 19-1.9-1.9" />
+      </>
+    ),
+  },
+  {
     title: 'Data usage with a memory',
     body: 'Per-day download and upload totals, accumulated from kernel counters and stored locally, so a reboot never wipes your history.',
     icon: (
@@ -62,6 +75,31 @@ const FEATURES = [
         <path d="M12 15v3" />
         <path d="M9 12H6" />
         <path d="M15 12h3" />
+      </>
+    ),
+  },
+  {
+    title: 'The cloud services you rely on',
+    body: 'Add the cloud services you rely on, and Rove monitors each one to tell service outages from problems on your own network.',
+    icon: <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />,
+  },
+  {
+    title: 'Share your Wi-Fi',
+    body: 'Turn your network into a QR code a phone camera reads to join. No password read aloud, and never shown in plaintext.',
+    icon: (
+      <>
+        <rect width="5" height="5" x="3" y="3" rx="1" />
+        <rect width="5" height="5" x="16" y="3" rx="1" />
+        <rect width="5" height="5" x="3" y="16" rx="1" />
+        <path d="M21 16h-3a2 2 0 0 0-2 2v3" />
+        <path d="M21 21v.01" />
+        <path d="M12 7v3a2 2 0 0 1-2 2H7" />
+        <path d="M3 12h.01" />
+        <path d="M12 3h.01" />
+        <path d="M12 16v.01" />
+        <path d="M16 12h1" />
+        <path d="M21 12v.01" />
+        <path d="M12 21v-1" />
       </>
     ),
   },
