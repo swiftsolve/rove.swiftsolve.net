@@ -32,6 +32,14 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${questrial.variable}`}>
+      <head>
+        {/* Reveal's opening frame (opacity:0) is inlined into the static HTML,
+            so without JS there is nothing to animate it back — the page would
+            just be blank. Put it back, !important to beat the inline style. */}
+        <noscript>
+          <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
+        </noscript>
+      </head>
       <body>{children}</body>
     </html>
   )
