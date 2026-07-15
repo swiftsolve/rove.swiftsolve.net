@@ -125,11 +125,9 @@ code {
   -webkit-backdrop-filter: blur(14px);
   background: rgba(10, 11, 14, 0.72);
   border-bottom: 1px solid var(--border);
-  /* The reveal animations transform content directly under this bar while it is
-     stuck. Without its own composited layer the blur is re-sampled mid-scroll
-     and tears; translateZ pins it to the compositor. */
-  transform: translateZ(0);
-  will-change: backdrop-filter;
+  /* No compositing hints here on purpose: forcing this element onto its own
+     layer (translateZ/will-change) makes Chrome drop the backdrop snapshot
+     mid-scroll, so the blur cuts out and returns. Let it stay uncomposited. */
 }
 
 .site-nav-inner {
