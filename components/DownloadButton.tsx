@@ -10,7 +10,11 @@ export default function DownloadButton() {
 
   useEffect(() => {
     const ua = `${navigator.userAgent} ${navigator.platform ?? ''}`
-    if (/Mac/i.test(ua)) setOs('macOS')
+    // Check phones first: iPhone UAs contain "Mac OS X" and Android UAs
+    // contain "Linux", so the desktop checks below would otherwise win.
+    if (/iPhone|iPad|iPod/i.test(ua)) setOs('iPhone')
+    else if (/Android/i.test(ua)) setOs('Android')
+    else if (/Mac/i.test(ua)) setOs('macOS')
     else if (/Win/i.test(ua)) setOs('Windows')
     else if (/Linux/i.test(ua)) setOs('Linux')
   }, [])

@@ -1,7 +1,8 @@
 import BrandIcon from '@/components/BrandIcon'
 import DownloadButton from '@/components/DownloadButton'
-import ScrollReveal from '@/components/ScrollReveal'
+import Reveal from '@/components/Reveal'
 import Showcase from '@/components/Showcase'
+import SpecTerminal from '@/components/SpecTerminal'
 
 const GITHUB_URL = 'https://github.com/swiftsolve/rove'
 const RELEASES_URL = `${GITHUB_URL}/releases/latest`
@@ -33,6 +34,18 @@ const FEATURES = [
         <path d="M10 19v-3.96 3.15" />
         <path d="M7 19h5" />
         <rect width="6" height="10" x="16" y="12" rx="2" />
+      </>
+    ),
+  },
+  {
+    title: 'Usage, app by app',
+    body: 'Download and upload for every app on your machine, measured without packet capture, plus the hosts each one has been talking to.',
+    icon: (
+      <>
+        <rect width="7" height="7" x="3" y="3" rx="1" />
+        <rect width="7" height="7" x="14" y="3" rx="1" />
+        <rect width="7" height="7" x="14" y="14" rx="1" />
+        <rect width="7" height="7" x="3" y="14" rx="1" />
       </>
     ),
   },
@@ -103,23 +116,6 @@ const FEATURES = [
       </>
     ),
   },
-  {
-    title: 'Tiny, fast, private',
-    body: '~5 MB installer, memory-safe Rust, deny-by-default sandbox. No account, no telemetry. Your network data never leaves your machine.',
-    icon: (
-      <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-    ),
-  },
-]
-
-const SPEC: readonly { key: string; value: string; tone?: 'accent' | 'positive' }[] = [
-  { key: 'core', value: '100% Rust, memory-safe', tone: 'accent' },
-  { key: 'ui', value: "your system's webview, no bundled browser" },
-  { key: 'bridge', value: 'typed commands + events' },
-  { key: 'installer', value: '~5 MB, not gigabytes' },
-  { key: 'sampling', value: '1 Hz, straight from kernel counters' },
-  { key: 'reacts in', value: '< 1 s to cable pulls & network hops' },
-  { key: 'telemetry', value: 'none; everything stays on your machine', tone: 'positive' },
 ]
 
 function CheckIcon() {
@@ -143,8 +139,6 @@ function CheckIcon() {
 export default function Home() {
   return (
     <>
-      <ScrollReveal />
-
       <nav className="site-nav">
         <div className="wrap site-nav-inner">
           <a className="site-brand" href="#">
@@ -162,23 +156,25 @@ export default function Home() {
         </div>
       </nav>
 
+      {/* The hero is already on screen when the page loads, so it deals itself
+          in on mount rather than waiting for a scroll that never comes. */}
       <header className="hero">
         <div className="wrap">
-          <span className="hero-logo" aria-hidden="true">
+          <Reveal as="span" className="hero-logo" onMount aria-hidden={true}>
             <BrandIcon size={78} gradient />
-          </span>
-          <h1>
+          </Reveal>
+          <Reveal as="h1" onMount delay={0.07}>
             Your network,<br /><span className="accent">finally visible</span>
-          </h1>
-          <p className="hero-sub">
+          </Reveal>
+          <Reveal as="p" className="hero-sub" onMount delay={0.14}>
             Rove is a tiny desktop app that shows you what your connection is really doing: live
             traffic, honest speed tests, every device on your Wi-Fi, and where the slowdowns
             actually come from.
-          </p>
-          <div className="hero-ctas">
+          </Reveal>
+          <Reveal className="hero-ctas" onMount delay={0.21}>
             <DownloadButton />
-          </div>
-          <div className="hero-meta">
+          </Reveal>
+          <Reveal className="hero-meta" onMount delay={0.28}>
             <span>
               <CheckIcon />
               ~5&nbsp;MB download
@@ -187,7 +183,7 @@ export default function Home() {
               <CheckIcon />
               No account, no telemetry
             </span>
-          </div>
+          </Reveal>
         </div>
       </header>
 
@@ -195,18 +191,27 @@ export default function Home() {
 
       <section className="features" id="features">
         <div className="wrap">
-          <div className="section-head" data-reveal>
-            <span className="kicker">Features</span>
-            <h2>Small app, complete picture</h2>
-            <p>
+          <div className="section-head">
+            <Reveal as="span" className="kicker">
+              Features
+            </Reveal>
+            <Reveal as="h2" delay={0.07}>
+              Small app, complete picture
+            </Reveal>
+            <Reveal as="p" delay={0.14}>
               No dashboards to configure, no agents, no account. Install Rove and it starts telling
               you the truth about your connection.
-            </p>
+            </Reveal>
           </div>
 
-          <div className="feature-grid" data-reveal>
-            {FEATURES.map((feature) => (
-              <div className="feature-card" key={feature.title}>
+          {/* Each card waits for its own turn on screen, so the delay only has
+              to wave in a row — hence the column index, not the card's place in
+              the whole grid. The grid drops to two columns and then one on
+              narrow screens, where `% 3` stops lining up with the rows; the
+              worst it costs there is a 90ms hesitation nobody will clock. */}
+          <div className="feature-grid">
+            {FEATURES.map((feature, i) => (
+              <Reveal className="feature-card" key={feature.title} scale delay={(i % 3) * 0.045}>
                 <span className="feature-icon">
                   <svg
                     width="20"
@@ -224,78 +229,58 @@ export default function Home() {
                 </span>
                 <h3>{feature.title}</h3>
                 <p>{feature.body}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
       <section className="hood">
-        <div className="wrap hood-grid" data-reveal>
-          <div className="hood-copy">
+        {/* SpecTerminal sits this one out: it already waits for the card to be
+            on screen and then types itself in. */}
+        <div className="wrap hood-grid">
+          <Reveal className="hood-copy">
             <span className="kicker">Under the hood</span>
             <h2>
-              Native to the metal,
+              Tiny and fast,
               <br />
-              not a browser in a box
+              private by default
             </h2>
             <p>
-              A pure-Rust core reads kernel counters, routing tables and mDNS directly from the
-              OS, then hands them to your system&apos;s own webview to draw. Nothing is bundled:
-              no Chromium, no Node runtime, no half-gigabyte of RAM sitting idle in the
-              background.
+              A pure-Rust core reads kernel counters and routing tables straight from the OS,
+              then hands them to your system&apos;s own webview to draw. No Chromium, no Node
+              runtime, no half-gigabyte of RAM sitting idle: about 5 MB in total, quick enough to
+              catch a cable pull before you&apos;ve set the laptop down.
             </p>
             <p>
-              On each platform Rove reaches for whatever the OS trusts most, from CoreWLAN on
-              macOS to <code>ip route</code> and <code>sysfs</code> on Linux to the Windows networking APIs.
-              Pull a cable or hop between networks and it catches the change before you&apos;ve
-              set the laptop down.
+              Private by construction, not by setting. No account, no telemetry, a deny-by-default
+              sandbox, and every number measured on your machine and kept there.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="terminal" role="img" aria-label="Rove technical spec sheet">
-            <div className="terminal-bar">
-              <span className="terminal-dot dot-r" />
-              <span className="terminal-dot dot-y" />
-              <span className="terminal-dot dot-g" />
-              <span className="terminal-title">rove · spec</span>
-            </div>
-            <div className="terminal-body">
-              <div className="terminal-prompt">
-                <span className="prompt-mark">$</span> rove --about
-              </div>
-              {SPEC.map((row) => (
-                <div className="terminal-row" key={row.key}>
-                  <span className="terminal-key">{row.key}</span>
-                  <span className={`terminal-value${row.tone ? ` is-${row.tone}` : ''}`}>
-                    {row.value}
-                  </span>
-                </div>
-              ))}
-              <div className="terminal-prompt">
-                <span className="prompt-mark">$</span>
-                <span className="terminal-cursor" aria-hidden="true" />
-              </div>
-            </div>
-          </div>
+          <SpecTerminal />
         </div>
       </section>
 
       <section className="bottom-cta">
-        <div className="wrap" data-reveal>
-          <h2>Stop guessing. Start seeing.</h2>
-          <p>Free, open source, and installed in about ten seconds.</p>
-          <div className="hero-ctas">
+        <div className="wrap">
+          <Reveal as="h2">Stop guessing. Start seeing.</Reveal>
+          <Reveal as="p" delay={0.07}>
+            The download takes ten seconds. The answers start immediately.
+          </Reveal>
+          <Reveal className="hero-ctas" delay={0.14}>
             <DownloadButton />
-            <a
-              className="cta-secondary"
-              href={RELEASES_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              All platforms &amp; releases
-            </a>
-          </div>
+          </Reveal>
+          <Reveal
+            as="a"
+            className="cta-link"
+            delay={0.21}
+            href={RELEASES_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            All platforms &amp; releases <span aria-hidden="true">&rarr;</span>
+          </Reveal>
         </div>
       </section>
 
