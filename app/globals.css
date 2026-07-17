@@ -420,7 +420,22 @@ code {
   gap: 14px;
 }
 
+/* Registering the cursor coordinates as real <percentage> properties lets them
+   be *transitioned*, so the glow eases toward the cursor instead of snapping.
+   inherits so ::before and the edge layer read the animated value. */
+@property --pointer-x {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 50%;
+}
+@property --pointer-y {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 50%;
+}
+
 .tour-stop {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 11px;
@@ -428,21 +443,65 @@ code {
   border-radius: 12px;
   border: 1px solid transparent;
   text-align: left;
-  transition: background 160ms ease, border-color 160ms ease;
+  /* the pointer transitions are what smooth the follow (see @property above) */
+  transition: background 160ms ease, border-color 160ms ease,
+    --pointer-x 130ms ease-out, --pointer-y 130ms ease-out;
 }
 
 /* the same accent wash the feature cards breathe in on hover. It rides
    ::before (not ::after) so it paints under the text rather than over it —
-   which is why the active bar below uses ::after. */
+   which is why the active bar below uses ::after. A tight circular spotlight
+   centred on the cursor via --pointer-x/y (set on pointermove in Showcase.tsx),
+   falling back to the card's centre before the pointer has moved. */
 .tour-stop::before {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(320px 150px at 20% 0%, rgba(91, 140, 255, 0.09), transparent 70%);
+  background: radial-gradient(
+    240px circle at var(--pointer-x) var(--pointer-y),
+    rgba(91, 140, 255, 0.07),
+    transparent 60%
+  );
   opacity: 0;
   transition: opacity 240ms ease;
   pointer-events: none;
+}
+
+/* The border-light: a gradient masked down to just the 1px border ring, so the
+   card's edge brightens where the cursor is — the piece that makes it read as a
+   lit pane rather than a wash. Sharper falloff and a lighter blue than the
+   interior glow so the highlight stays crisp against the dark border. */
+.tour-stop-edge {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(
+    200px circle at var(--pointer-x) var(--pointer-y),
+    rgba(125, 165, 255, 0.38),
+    transparent 52%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 260ms ease;
+  pointer-events: none;
+}
+
+.tour-stop:hover .tour-stop-edge {
+  opacity: 1;
+}
+
+/* the eased follow is motion; honour a reduced-motion request by snapping
+   instead (the glow itself stays), matching how Reveal opts out. */
+@media (prefers-reduced-motion: reduce) {
+  .tour-stop {
+    transition: background 160ms ease, border-color 160ms ease;
+  }
 }
 
 .tour-stop:hover {
@@ -454,9 +513,17 @@ code {
 }
 
 /* no outline — the lifted panel, its shadow and the accent bar already say
-   "selected", and a border on top of them reads as clutter */
+   "selected", and a border on top of them reads as clutter.
+
+   A soft accent glow anchored to the left edge reads as the accent bar casting
+   light into the card — a *static* selection cue, distinct from the cursor
+   spotlight (::before) that only tracks on hover. It's a background layer so it
+   sits behind the text and the bar, and survives being hovered: this rule comes
+   after :hover, so on an active+hovered card its background wins and the cursor
+   glow layers on top. */
 .tour-stop.is-active {
-  background: var(--bg-panel);
+  background: radial-gradient(300px 240px at 0% 50%, rgba(91, 140, 255, 0.038), transparent 70%),
+    var(--bg-panel);
   box-shadow: var(--shadow-panel);
   position: relative;
 }
