@@ -266,8 +266,8 @@ export default function Showcase() {
             Don&apos;t take our word for it
           </Reveal>
           <Reveal as="p" delay={0.14}>
-            This is the real Rove, running in your browser on sample data. Click through the tabs,
-            run a speed test, poke around. It all works.
+            This is the real Rove app, running in your browser on sample data. Click through the
+            tabs, run a speed test, poke around.
           </Reveal>
         </div>
 
