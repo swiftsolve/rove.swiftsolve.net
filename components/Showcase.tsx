@@ -1,6 +1,6 @@
 'use client'
 
-import type { ReactNode } from 'react'
+import type { PointerEvent, ReactNode } from 'react'
 import { useEffect, useRef, useState } from 'react'
 
 import Reveal from '@/components/Reveal'
@@ -125,6 +125,16 @@ const TOUR: readonly TourStop[] = [
 const LEFT_STOPS = TOUR.slice(0, 4)
 const RIGHT_STOPS = TOUR.slice(4)
 
+/** Feed the cursor's position within a stop into CSS vars so the hover glow
+ *  (.tour-stop::before) can centre its gradient there. Written straight to the
+ *  element's style — no React state — so a move never triggers a re-render. */
+function trackPointer(event: PointerEvent<HTMLButtonElement>) {
+  const el = event.currentTarget
+  const rect = el.getBoundingClientRect()
+  el.style.setProperty('--pointer-x', `${((event.clientX - rect.left) / rect.width) * 100}%`)
+  el.style.setProperty('--pointer-y', `${((event.clientY - rect.top) / rect.height) * 100}%`)
+}
+
 function Rail({
   stops,
   side,
@@ -150,7 +160,12 @@ function Rail({
           aria-selected={active === stop.label}
           className={`tour-stop${active === stop.label ? ' is-active' : ''}`}
           onClick={() => onPick(stop.label)}
+          onPointerMove={trackPointer}
         >
+          {/* The border-light layer: a masked gradient ring that brightens where
+              the cursor is. Its own element because ::before carries the interior
+              glow and ::after the active bar. */}
+          <span className="tour-stop-edge" aria-hidden="true" />
           <span className="tour-stop-title">
             <svg
               width="20"
@@ -251,8 +266,8 @@ export default function Showcase() {
             Don&apos;t take our word for it
           </Reveal>
           <Reveal as="p" delay={0.14}>
-            This is the real Rove, running in your browser on sample data. Click through the tabs,
-            run a speed test, poke around. It all works.
+            This is the real Rove app, running in your browser on sample data. Click through the
+            tabs, run a speed test, poke around.
           </Reveal>
         </div>
 
