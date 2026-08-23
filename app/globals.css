@@ -201,16 +201,24 @@ code {
 /* --- hero --- */
 .hero {
   position: relative;
-  /* the extra top clears the sticky nav; the bottom joins the rhythm */
-  padding: 104px 0 var(--section-y);
+  /* The hero has no section above it, only the nav, so to sit on the page's
+     rhythm its top gap must equal the gap *between* two sections — one
+     section's bottom pad plus the next's top pad, i.e. 2×. The bottom keeps the
+     single unit so the seam into the showcase matches every other seam. */
+  padding: calc(var(--section-y) * 2) 0 var(--section-y);
   text-align: center;
 }
 
-/* layered atmosphere: accent glow + a dot lattice fading out from the title */
+/* layered atmosphere: accent glow + a dot lattice fading out from the title.
+   The -160px lift keeps the bloom's centre just off the top edge so the hero
+   opens on a wash rather than a hotspot — but no further, or the falloff is all
+   that's left on screen and the top reads weaker than the bottom-CTA glow. At
+   this offset both arrive at the same ~0.12 alpha where they first clear their
+   chrome (the nav here, the footer there). */
 .hero::before {
   content: '';
   position: absolute;
-  inset: -200px 0 auto 0;
+  inset: -160px 0 auto 0;
   height: 620px;
   background:
     radial-gradient(560px 300px at 50% 12%, rgba(91, 140, 255, 0.17), transparent 70%),
@@ -663,36 +671,235 @@ code {
   font-size: 16.5px;
 }
 
-/* --- features --- */
-.features {
+/* --- pricing --- */
+.pricing {
+  position: relative;
   padding: var(--section-y) 0;
 }
 
-.feature-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+/* the hero's dot lattice, re-centred: masked to a soft round patch that fades
+   out at the edges (no accent glow here — the dots carry the texture alone) */
+.pricing::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1.4px);
+  background-size: 26px 26px;
+  mask-image: radial-gradient(ellipse 58% 60% at 50% 50%, black 18%, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse 58% 60% at 50% 50%, black 18%, transparent 72%);
+  pointer-events: none;
 }
 
-/* when the card count leaves one straggler in the last 3-up row, centre it */
-@media (min-width: 961px) {
-  .feature-grid > .feature-card:last-child:nth-child(3n + 1) {
-    grid-column: 2;
+/* lift the heading and card above the atmosphere layers */
+.pricing > * {
+  position: relative;
+  z-index: 1;
+}
+
+.price-card {
+  --price-pad-x: 36px;
+  position: relative;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 32px var(--price-pad-x);
+  border-radius: 20px;
+  background: linear-gradient(180deg, var(--bg-panel), var(--bg-inset) 70%);
+  /* accent-tinted hairline instead of the plain border, so the card reads as
+     the page's one call-to-action rather than another panel */
+  border: 1px solid rgba(91, 140, 255, 0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    var(--shadow-panel),
+    0 40px 80px -52px rgba(91, 140, 255, 0.22);
+  overflow: hidden;
+  text-align: center;
+}
+
+/* a thin accent seam along the very top edge */
+.price-card::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(91, 140, 255, 0.6), transparent);
+}
+
+/* faint accent bloom rising from the card's base */
+.price-card::before {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 200px;
+  background: radial-gradient(360px 160px at 50% 100%, rgba(91, 140, 255, 0.07), transparent 72%);
+  pointer-events: none;
+}
+
+.price-card > * {
+  position: relative;
+}
+
+.price-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 18px;
+  border-radius: 99px;
+  background: var(--accent-muted);
+  color: var(--accent);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.price-amount {
+  /* block-level flex, so the badge above sits on its own line and the
+     currency + value stay centred together */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 3px;
+  margin-top: 22px;
+  color: var(--text-primary);
+  font-family: var(--font-numeric);
+  line-height: 1;
+}
+
+.price-currency {
+  margin-top: 9px;
+  font-size: 30px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.price-value {
+  font-size: 76px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.price-note {
+  display: block;
+  margin-top: 12px;
+  color: var(--text-tertiary);
+  font-size: 13.5px;
+}
+
+.price-list {
+  list-style: none;
+  /* no rules; even whitespace above and below does the separating. Top margin
+     is 3px shy of the bottom to cancel the note's text leading above, so the
+     *visible* gap reads equal on both sides. */
+  margin: 27px 0 30px;
+  padding: 0;
+  display: grid;
+  gap: 17px;
+  text-align: left;
+}
+
+.price-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  color: var(--text-secondary);
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+
+.price-list svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--positive);
+}
+
+.price-buy {
+  width: 100%;
+  justify-content: center;
+  padding-block: 11px;
+  font-size: 14.5px;
+}
+
+.price-trial {
+  display: block;
+  margin-top: 16px;
+  color: var(--text-secondary);
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: color 140ms ease;
+}
+
+.price-trial:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* --- testimonials --- */
+.testimonials {
+  padding: var(--section-y) 0;
+}
+
+/* the marquee carries 12px of top padding for the cards' hover lift, which would
+   otherwise stack onto the section-head's 52px and open a wider gap than the other
+   sections. Trim the head's margin by that 12px so the rendered gap matches. */
+.testimonials .section-head {
+  margin-bottom: 40px;
+}
+
+/* the viewport: one strip, clipped, its two edges dissolved so cards slide in
+   and out of a soft fade rather than popping at a hard border */
+.testimonial-marquee {
+  position: relative;
+  overflow: hidden;
+  /* vertical breathing room inside the clip: the horizontal marquee needs
+     overflow:hidden, but that would otherwise shave the cards' hover lift off
+     the top and their drop shadow off the bottom. */
+  padding: 12px 0;
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+
+/* the belt: the list laid down twice, sliding left forever. width:max-content
+   lets it run past the viewport; pausing on hover lets you stop to read one. */
+.testimonial-track {
+  display: flex;
+  width: max-content;
+  animation: testimonial-scroll 52s linear infinite;
+}
+
+.testimonial-marquee:hover .testimonial-track,
+.testimonial-marquee:focus-within .testimonial-track {
+  animation-play-state: paused;
+}
+
+/* every card advances by exactly width + margin, so at the -50% mark the
+   second copy lands where the first began — the seam never shows. Spacing is
+   margin, not flex gap, so that per-card advance stays uniform across the seam. */
+@keyframes testimonial-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
   }
 }
 
-.feature-card {
+.testimonial-card {
   position: relative;
-  padding: 26px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  width: 360px;
+  margin-right: 20px;
+  padding: 26px;
   border-radius: var(--radius);
-  background: linear-gradient(180deg, var(--bg-panel-hi), var(--bg-panel) 55%);
+  background: linear-gradient(180deg, var(--bg-panel), var(--bg-inset) 90%);
   box-shadow: var(--shadow-panel);
   overflow: hidden;
   transition: transform 200ms var(--ease-out);
 }
 
-/* faint accent wash that breathes in on hover */
-.feature-card::before {
+/* the feature cards' faint accent wash that breathes in on hover */
+.testimonial-card::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -702,38 +909,66 @@ code {
   pointer-events: none;
 }
 
-.feature-card:hover {
+.testimonial-card:hover {
   transform: translateY(-3px);
 }
 
-.feature-card:hover::before {
+.testimonial-card:hover::before {
   opacity: 1;
 }
 
-.feature-icon {
-  display: inline-flex;
+/* keep the quote and author above the wash */
+.testimonial-quote,
+.testimonial-author {
+  position: relative;
+}
+
+/* the quote takes the slack so every author row sits flush at the card's base,
+   however long the quote runs */
+.testimonial-quote {
+  flex: 1;
+  margin: 0 0 22px;
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.testimonial-author {
+  display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 13px;
+}
+
+.testimonial-avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
   width: 40px;
   height: 40px;
-  border-radius: 11px;
+  border-radius: 50%;
   background: var(--accent-muted);
   color: var(--accent);
-}
-
-.feature-card h3 {
-  margin-top: 16px;
-  font-size: 16.5px;
-  font-weight: 600;
-  letter-spacing: -0.015em;
-  color: var(--text-primary);
-}
-
-.feature-card p {
-  margin-top: 8px;
-  color: var(--text-secondary);
+  font-family: var(--font-numeric);
   font-size: 14px;
-  line-height: 1.62;
+  letter-spacing: 0.02em;
+}
+
+.testimonial-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.testimonial-name {
+  color: var(--text-primary);
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.testimonial-role {
+  color: var(--text-tertiary);
+  font-size: 13px;
 }
 
 /* --- under the hood --- */
@@ -1077,10 +1312,6 @@ code {
 }
 
 @media (max-width: 960px) {
-  .feature-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .hood-grid {
     grid-template-columns: 1fr;
     gap: 36px;
@@ -1088,12 +1319,15 @@ code {
 }
 
 @media (max-width: 620px) {
-  .feature-grid {
-    grid-template-columns: 1fr;
+  .price-card {
+    --price-pad-x: 24px;
+    padding: 34px var(--price-pad-x) 30px;
   }
 
-  .hero {
-    padding-top: 72px;
+  /* a hair under viewport width, so the next card always peeks in and the
+     strip reads as a slider rather than a single static card */
+  .testimonial-card {
+    width: min(360px, 82vw);
   }
 
   .site-nav-links a:not(.nav-cta) {
@@ -1117,5 +1351,16 @@ code {
   *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+  }
+
+  /* the crushed 0.01ms duration above would make the marquee stutter in place,
+     so stop it outright and hand the strip over to manual scrolling — every
+     testimonial still reachable, just by swipe instead of on its own. */
+  .testimonial-track {
+    animation-name: none;
+  }
+
+  .testimonial-marquee {
+    overflow-x: auto;
   }
 }

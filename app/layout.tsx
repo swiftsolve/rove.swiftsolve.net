@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Rove: a fast, minimal desktop network monitor',
     description:
-      'Live traffic, speed tests, LAN device discovery, diagnostics and data-usage tracking in a ~5 MB desktop app.',
+      'Live traffic, speed tests, LAN device discovery, diagnostics and data-usage tracking in a small, fast desktop app.',
     url: 'https://rove.swiftsolve.net/',
     type: 'website',
   },

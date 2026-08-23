@@ -3,118 +3,75 @@ import DownloadButton from '@/components/DownloadButton'
 import Reveal from '@/components/Reveal'
 import Showcase from '@/components/Showcase'
 import SpecTerminal from '@/components/SpecTerminal'
+import Testimonials from '@/components/Testimonials'
 
 const GITHUB_URL = 'https://github.com/swiftsolve/rove'
 const RELEASES_URL = `${GITHUB_URL}/releases/latest`
+// TODO: point at the real checkout once it exists.
+const PURCHASE_URL = RELEASES_URL
 
-const FEATURES = [
+const PRICING_POINTS: readonly string[] = [
+  'Every update in this major version, included.',
+  'Every feature unlocked. No tiers, no add-ons.',
+  'No subscription, no telemetry. Your data never leaves your device.',
+]
+
+type Testimonial = {
+  quote: string
+  name: string
+  role: string
+}
+
+/**
+ * The testimonials section is parked, not deleted: the markup, the component and
+ * the .testimonial-* styles all stay put, and flipping SHOW_TESTIMONIALS to true
+ * brings the whole thing back.
+ *
+ * Before you flip it: the quotes below are PLACEHOLDERS — invented people, not
+ * real customers. They were written to exercise the layout, and each one is at
+ * least pinned to something Rove genuinely does. Publishing them as-is would be
+ * presenting fabricated endorsements as real customer feedback, which the FTC's
+ * 2024 rule on fake testimonials treats as a civil-penalty matter. Replace them
+ * with real, attributed quotes you have permission to publish, then switch this on.
+ */
+const SHOW_TESTIMONIALS: boolean = false
+
+const TESTIMONIALS: readonly Testimonial[] = [
   {
-    title: 'Live traffic, every second',
-    body: "Real numbers straight from the kernel's own counters, charted the moment they change. VPN and virtual interfaces filtered out, so the line means what it says.",
-    icon: (
-      <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" />
-    ),
+    quote:
+      'My uploads crawled every evening and I’d assumed it was my plan. The per-app breakdown showed a backup client pushing to the cloud the whole time. Ten minutes to find something I’d lived with for months.',
+    name: 'Priya Nadkarni',
+    role: 'Freelance video editor',
   },
   {
-    title: 'Speed tests that tell the truth',
-    body: 'Parallel streams saturate your link in both directions, then measure latency, jitter and loss, all rated against real life: 4K streaming, video calls, cloud gaming.',
-    icon: (
-      <>
-        <path d="m12 14 4-4" />
-        <path d="M3.34 19a10 10 0 1 1 17.32 0" />
-      </>
-    ),
+    quote:
+      'I opened it to poke around and it hasn’t left my second monitor since. Connection, live traffic and every device on one screen — I don’t keep four router tabs open any more.',
+    name: 'Marcus Boone',
+    role: 'Home lab tinkerer',
   },
   {
-    title: 'Every device, named',
-    body: 'A ping sweep, mDNS listening and the ARP table catch gadgets that hide from ordinary scanners. Each one comes with vendor, hostname and what kind of thing it is.',
-    icon: (
-      <>
-        <path d="M18 8V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h8" />
-        <path d="M10 19v-3.96 3.15" />
-        <path d="M7 19h5" />
-        <rect width="6" height="10" x="16" y="12" rx="2" />
-      </>
-    ),
+    quote:
+      'It puts jitter and packet loss next to the throughput numbers, which is the part most speed tests skip. Matches what I measure on the wire, and that’s half my job.',
+    name: 'Lena Fischer',
+    role: 'Remote SRE',
   },
   {
-    title: 'Usage, app by app',
-    body: 'Download and upload for every app on your machine, measured without packet capture, plus the hosts each one has been talking to.',
-    icon: (
-      <>
-        <rect width="7" height="7" x="3" y="3" rx="1" />
-        <rect width="7" height="7" x="14" y="3" rx="1" />
-        <rect width="7" height="7" x="14" y="14" rx="1" />
-        <rect width="7" height="7" x="3" y="14" rx="1" />
-      </>
-    ),
+    quote:
+      'Calls kept breaking up and nothing obvious was wrong. The diagnostics page put the packet loss at my own router rather than the ISP — it was a dying powerline adapter.',
+    name: 'Diego Ramos',
+    role: 'Product designer',
   },
   {
-    title: 'A timeline of every change',
-    body: 'A running log of network changes, from devices joining and leaving to new access points and connection switches, kept for a week.',
-    icon: (
-      <>
-        <path d="M21 5H3" />
-        <path d="M10 12H3" />
-        <path d="M10 19H3" />
-        <circle cx="17" cy="15" r="3" />
-        <path d="m21 19-1.9-1.9" />
-      </>
-    ),
+    quote:
+      'It reads the counters locally and nothing leaves the machine. No account, no telemetry, and I can see exactly what it touches. I don’t say that about much software.',
+    name: 'Aisha Coleman',
+    role: 'Security engineer',
   },
   {
-    title: 'Data usage with a memory',
-    body: 'Per-day download and upload totals, accumulated from kernel counters and stored locally, so a reboot never wipes your history.',
-    icon: (
-      <>
-        <path d="M3 3v16a2 2 0 0 0 2 2h16" />
-        <path d="M18 17V9" />
-        <path d="M13 17V5" />
-        <path d="M8 17v-3" />
-      </>
-    ),
-  },
-  {
-    title: 'Diagnostics in one click',
-    body: "Router ping, jitter, packet loss and the DNS servers you're actually using. Know in seconds whether it's your Wi-Fi, your router, or your ISP.",
-    icon: (
-      <>
-        <circle cx="12" cy="12" r="3" />
-        <circle cx="12" cy="4" r="2" />
-        <circle cx="12" cy="20" r="2" />
-        <circle cx="4" cy="12" r="2" />
-        <circle cx="20" cy="12" r="2" />
-        <path d="M12 9V6" />
-        <path d="M12 15v3" />
-        <path d="M9 12H6" />
-        <path d="M15 12h3" />
-      </>
-    ),
-  },
-  {
-    title: 'The cloud services you rely on',
-    body: 'Add the cloud services you rely on, and Rove monitors each one to tell service outages from problems on your own network.',
-    icon: <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />,
-  },
-  {
-    title: 'Share your Wi-Fi',
-    body: 'Turn your network into a QR code a phone camera reads to join. No password read aloud, and never shown in plaintext.',
-    icon: (
-      <>
-        <rect width="5" height="5" x="3" y="3" rx="1" />
-        <rect width="5" height="5" x="16" y="3" rx="1" />
-        <rect width="5" height="5" x="3" y="16" rx="1" />
-        <path d="M21 16h-3a2 2 0 0 0-2 2v3" />
-        <path d="M21 21v.01" />
-        <path d="M12 7v3a2 2 0 0 1-2 2H7" />
-        <path d="M3 12h.01" />
-        <path d="M12 3h.01" />
-        <path d="M12 16v.01" />
-        <path d="M16 12h1" />
-        <path d="M21 12v.01" />
-        <path d="M12 21v-1" />
-      </>
-    ),
+    quote:
+      'Paid for it once and got on with my day. No account, no renewal email six months later. A small download that does one job properly.',
+    name: 'Tom Whitfield',
+    role: 'Small studio owner',
   },
 ]
 
@@ -136,6 +93,25 @@ function CheckIcon() {
   )
 }
 
+function CircleCheckIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <path d="m9 12 2 2 4-4" />
+    </svg>
+  )
+}
+
 export default function Home() {
   return (
     <>
@@ -148,7 +124,7 @@ export default function Home() {
           </a>
           <div className="site-nav-links">
             <a href="#app">Live demo</a>
-            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
             <a className="nav-cta" href={RELEASES_URL} target="_blank" rel="noopener noreferrer">
               Download
             </a>
@@ -177,7 +153,7 @@ export default function Home() {
           <Reveal className="hero-meta" onMount delay={0.28}>
             <span>
               <CheckIcon />
-              ~5&nbsp;MB download
+              Small download
             </span>
             <span>
               <CheckIcon />
@@ -189,49 +165,78 @@ export default function Home() {
 
       <Showcase />
 
-      <section className="features" id="features">
+      {SHOW_TESTIMONIALS && (
+        <section className="testimonials" id="testimonials">
+          <div className="wrap">
+            <div className="section-head">
+              <Reveal as="span" className="kicker">
+                Testimonials
+              </Reveal>
+              <Reveal as="h2" delay={0.07}>
+                Quietly running on
+                <br />
+                a lot of desks
+              </Reveal>
+              <Reveal as="p" delay={0.14}>
+                People who were tired of guessing about their own connection, and
+                tired of paying a subscription to keep guessing.
+              </Reveal>
+            </div>
+
+            <Testimonials items={TESTIMONIALS} />
+          </div>
+        </section>
+      )}
+
+      <section className="pricing" id="pricing">
         <div className="wrap">
           <div className="section-head">
             <Reveal as="span" className="kicker">
-              Features
+              Pricing
             </Reveal>
             <Reveal as="h2" delay={0.07}>
-              Small app, complete picture
+              Pay once. It&apos;s yours.
             </Reveal>
             <Reveal as="p" delay={0.14}>
-              No dashboards to configure, no agents, no account. Install Rove and it starts telling
-              you the truth about your connection.
+              One flat price, paid once. No subscription, no account, no upsell. Rove is yours to
+              keep, with free updates through the current major version.
             </Reveal>
           </div>
 
-          {/* Each card waits for its own turn on screen, so the delay only has
-              to wave in a row — hence the column index, not the card's place in
-              the whole grid. The grid drops to two columns and then one on
-              narrow screens, where `% 3` stops lining up with the rows; the
-              worst it costs there is a 90ms hesitation nobody will clock. */}
-          <div className="feature-grid">
-            {FEATURES.map((feature, i) => (
-              <Reveal className="feature-card" key={feature.title} scale delay={(i % 3) * 0.045}>
-                <span className="feature-icon">
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.75"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                  >
-                    {feature.icon}
-                  </svg>
-                </span>
-                <h3>{feature.title}</h3>
-                <p>{feature.body}</p>
-              </Reveal>
-            ))}
-          </div>
+          <Reveal className="price-card" scale delay={0.07}>
+            <span className="price-badge">Perpetual license</span>
+            <div className="price-amount">
+              <span className="price-currency">$</span>
+              <span className="price-value">20</span>
+            </div>
+            <span className="price-note">One-time payment</span>
+
+            <ul className="price-list">
+              {PRICING_POINTS.map((point) => (
+                <li key={point}>
+                  <CircleCheckIcon />
+                  {point}
+                </li>
+              ))}
+            </ul>
+
+            <a
+              className="cta-primary price-buy"
+              href={PURCHASE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Buy now
+            </a>
+            <a
+              className="price-trial"
+              href={RELEASES_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              or start a free 30-day trial
+            </a>
+          </Reveal>
         </div>
       </section>
 
@@ -249,7 +254,7 @@ export default function Home() {
             <p>
               A pure-Rust core reads kernel counters and routing tables straight from the OS,
               then hands them to your system&apos;s own webview to draw. No Chromium, no Node
-              runtime, no half-gigabyte of RAM sitting idle: about 5 MB in total, quick enough to
+              runtime, no half-gigabyte of RAM sitting idle: a small download, quick enough to
               catch a cable pull before you&apos;ve set the laptop down.
             </p>
             <p>

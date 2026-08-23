@@ -8,7 +8,7 @@ const SPEC: readonly { key: string; value: string; tone?: 'accent' | 'positive' 
   { key: 'core', value: '100% Rust, memory-safe', tone: 'accent' },
   { key: 'ui', value: "your system's webview, no bundled browser" },
   { key: 'bridge', value: 'typed commands + events' },
-  { key: 'installer', value: '~5 MB, not gigabytes' },
+  { key: 'installer', value: 'small, no bundled runtime' },
   { key: 'sampling', value: '1 Hz, straight from kernel counters' },
   { key: 'reacts in', value: '< 1 s to cable pulls & network hops' },
   { key: 'telemetry', value: 'none; everything stays on your machine', tone: 'positive' },
