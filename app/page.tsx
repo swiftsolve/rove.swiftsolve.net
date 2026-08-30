@@ -25,16 +25,24 @@ type Testimonial = {
 /**
  * The testimonials section is parked, not deleted: the markup, the component and
  * the .testimonial-* styles all stay put, and flipping SHOW_TESTIMONIALS to true
- * brings the whole thing back.
+ * brings the whole thing back — handy for demoing the layout locally.
  *
- * Before you flip it: the quotes below are PLACEHOLDERS — invented people, not
- * real customers. They were written to exercise the layout, and each one is at
- * least pinned to something Rove genuinely does. Publishing them as-is would be
+ * Keep it false on anything public. The quotes below are PLACEHOLDERS — invented
+ * people, not real customers. They were written to exercise the layout, and each
+ * one is at least pinned to something Rove genuinely does. Shipping them as-is is
  * presenting fabricated endorsements as real customer feedback, which the FTC's
- * 2024 rule on fake testimonials treats as a civil-penalty matter. Replace them
+ * 2024 rule on fake testimonials treats as a civil-penalty matter. Replace all six
  * with real, attributed quotes you have permission to publish, then switch this on.
  */
 const SHOW_TESTIMONIALS: boolean = false
+
+/**
+ * Pricing is parked the same way: the section, the nav link and the .price-*
+ * styles all stay put, and flipping this back to true restores them. Note that
+ * PURCHASE_URL still points at the releases page — wire up the real checkout
+ * before switching this on.
+ */
+const SHOW_PRICING: boolean = false
 
 const TESTIMONIALS: readonly Testimonial[] = [
   {
@@ -124,7 +132,7 @@ export default function Home() {
           </a>
           <div className="site-nav-links">
             <a href="#app">Live demo</a>
-            <a href="#pricing">Pricing</a>
+            {SHOW_PRICING && <a href="#pricing">Pricing</a>}
             <a className="nav-cta" href={RELEASES_URL} target="_blank" rel="noopener noreferrer">
               Download
             </a>
@@ -188,57 +196,59 @@ export default function Home() {
         </section>
       )}
 
-      <section className="pricing" id="pricing">
-        <div className="wrap">
-          <div className="section-head">
-            <Reveal as="span" className="kicker">
-              Pricing
-            </Reveal>
-            <Reveal as="h2" delay={0.07}>
-              Pay once. It&apos;s yours.
-            </Reveal>
-            <Reveal as="p" delay={0.14}>
-              One flat price, paid once. No subscription, no account, no upsell. Rove is yours to
-              keep, with free updates through the current major version.
+      {SHOW_PRICING && (
+        <section className="pricing" id="pricing">
+          <div className="wrap">
+            <div className="section-head">
+              <Reveal as="span" className="kicker">
+                Pricing
+              </Reveal>
+              <Reveal as="h2" delay={0.07}>
+                Pay once. It&apos;s yours.
+              </Reveal>
+              <Reveal as="p" delay={0.14}>
+                One flat price, paid once. No subscription, no account, no upsell. Rove is yours to
+                keep, with free updates through the current major version.
+              </Reveal>
+            </div>
+
+            <Reveal className="price-card" scale delay={0.07}>
+              <span className="price-badge">Perpetual license</span>
+              <div className="price-amount">
+                <span className="price-currency">$</span>
+                <span className="price-value">20</span>
+              </div>
+              <span className="price-note">One-time payment</span>
+
+              <ul className="price-list">
+                {PRICING_POINTS.map((point) => (
+                  <li key={point}>
+                    <CircleCheckIcon />
+                    {point}
+                  </li>
+                ))}
+              </ul>
+
+              <a
+                className="cta-primary price-buy"
+                href={PURCHASE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Buy now
+              </a>
+              <a
+                className="price-trial"
+                href={RELEASES_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                or start a free 30-day trial
+              </a>
             </Reveal>
           </div>
-
-          <Reveal className="price-card" scale delay={0.07}>
-            <span className="price-badge">Perpetual license</span>
-            <div className="price-amount">
-              <span className="price-currency">$</span>
-              <span className="price-value">20</span>
-            </div>
-            <span className="price-note">One-time payment</span>
-
-            <ul className="price-list">
-              {PRICING_POINTS.map((point) => (
-                <li key={point}>
-                  <CircleCheckIcon />
-                  {point}
-                </li>
-              ))}
-            </ul>
-
-            <a
-              className="cta-primary price-buy"
-              href={PURCHASE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Buy now
-            </a>
-            <a
-              className="price-trial"
-              href={RELEASES_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              or start a free 30-day trial
-            </a>
-          </Reveal>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className="hood">
         {/* SpecTerminal sits this one out: it already waits for the card to be
