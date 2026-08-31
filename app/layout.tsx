@@ -33,9 +33,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${inter.variable} ${questrial.variable}`}>
       <head>
-        {/* Reveal's opening frame (opacity:0) is inlined into the static HTML,
-            so without JS there is nothing to animate it back — the page would
-            just be blank. Put it back, !important to beat the inline style. */}
+        {/* Reveal's opening frame (the [data-reveal] rule in globals.css) leaves
+            its elements at opacity:0, and without JS there is no GSAP to
+            animate them back — the page would just be blank. Put them back;
+            !important so it also beats the inline styles a half-finished
+            reveal could have left behind. */}
         <noscript>
           <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
         </noscript>

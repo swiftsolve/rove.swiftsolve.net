@@ -1,7 +1,9 @@
 'use client'
 
-import { motion, useReducedMotion } from 'motion/react'
-import type { ReactNode } from 'react'
+import type { ElementType, ReactNode } from 'react'
+import { useRef } from 'react'
+
+import { gsap, useGSAP } from '@/lib/gsap'
 
 /**
  * Scroll reveal: the element fades and rises into place the first time it comes
@@ -20,22 +22,23 @@ import type { ReactNode } from 'react'
  * Renders as `as` with `className` straight through, so it drops in where the
  * plain element was and the CSS keeps matching — no wrapper to break `>` or
  * `:nth-child()` rules.
+ *
+ * The hidden opening frame is CSS, not an inline style: `[data-reveal]` in
+ * globals.css. That keeps the static HTML free of style attributes, lets the
+ * noscript block in layout.tsx put everything back, and lets a reduced-motion
+ * request switch the whole effect off in the stylesheet — before any JS runs,
+ * so there is no window in which content could be stranded invisible.
  */
 
-const TAGS = {
-  div: motion.div,
-  span: motion.span,
-  h1: motion.h1,
-  h2: motion.h2,
-  h3: motion.h3,
-  p: motion.p,
-  a: motion.a,
-} as const
-
 /** Matches --ease-out in globals.css. */
-const EASE_OUT = [0.16, 1, 0.3, 1] as const
-const RISE = 20
+const EASE_OUT = 'cubic-bezier(0.16, 1, 0.3, 1)'
 const DURATION = 0.72
+/**
+ * Trip as soon as a sliver of the element clears the fold, rather than waiting
+ * on a share of a tall card — the equivalent of watching for its top edge to
+ * reach 88% of the way down the viewport.
+ */
+const START = 'top 88%'
 
 type Props = {
   children: ReactNode
@@ -50,7 +53,7 @@ type Props = {
    * trigger it, so on-view would just mean "visible from the first frame".
    */
   onMount?: boolean
-  as?: keyof typeof TAGS
+  as?: 'div' | 'span' | 'h1' | 'h2' | 'h3' | 'p' | 'a'
   href?: string
   target?: string
   rel?: string
@@ -66,39 +69,45 @@ export default function Reveal({
   as = 'div',
   ...rest
 }: Props) {
-  const Tag = TAGS[as]
-  const reduced = useReducedMotion()
+  const ref = useRef<HTMLElement>(null)
+  const Tag = as as ElementType
 
-  // Asked for less motion: hand back the plain element, fully visible. Nothing
-  // to animate means nothing that can strand content invisible either.
-  if (reduced) {
-    return (
-      <Tag className={className} {...rest}>
-        {children}
-      </Tag>
-    )
-  }
+  useGSAP(
+    () => {
+      const el = ref.current
+      if (!el) return
 
-  const shown = { opacity: 1, y: 0, ...(scale && { scale: 1 }) }
+      const mm = gsap.matchMedia()
+
+      // Asked for less motion: nothing runs. The stylesheet has already left
+      // this element at its finished state, so there is nothing to undo either.
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        gsap.to(el, {
+          opacity: 1,
+          y: 0,
+          ...(scale && { scale: 1 }),
+          duration: DURATION,
+          delay,
+          ease: EASE_OUT,
+          // Drop the hook first, then the transform GSAP was driving: with the
+          // attribute gone the CSS opening frame no longer matches, so the
+          // element needs no inline styles to hold it open and leaves no
+          // stray compositing layer behind.
+          onComplete: () => {
+            el.removeAttribute('data-reveal')
+            gsap.set(el, { clearProps: 'all' })
+          },
+          ...(onMount ? {} : { scrollTrigger: { trigger: el, start: START, once: true } }),
+        })
+      })
+
+      return () => mm.revert()
+    },
+    { scope: ref },
+  )
 
   return (
-    <Tag
-      className={className}
-      // Hook for the no-JS fallback in layout.tsx. Nothing else styles off it.
-      data-reveal=""
-      initial={{ opacity: 0, y: RISE, ...(scale && { scale: 0.985 }) }}
-      {...(onMount
-        ? { animate: shown }
-        : {
-            whileInView: shown,
-            // `once` so it never replays on the way back up; `amount` trips as
-            // soon as a sliver clears the fold rather than waiting on a share
-            // of a tall card.
-            viewport: { once: true, amount: 0.15 },
-          })}
-      transition={{ duration: DURATION, delay, ease: EASE_OUT }}
-      {...rest}
-    >
+    <Tag ref={ref} className={className} data-reveal={scale ? 'scale' : ''} {...rest}>
       {children}
     </Tag>
   )

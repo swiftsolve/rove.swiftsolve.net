@@ -1,6 +1,7 @@
 import BrandIcon from '@/components/BrandIcon'
 import DownloadButton from '@/components/DownloadButton'
 import Reveal from '@/components/Reveal'
+import ScrollEffects from '@/components/ScrollEffects'
 import Showcase from '@/components/Showcase'
 import SpecTerminal from '@/components/SpecTerminal'
 import Testimonials from '@/components/Testimonials'
@@ -138,6 +139,8 @@ export default function Home() {
             </a>
           </div>
         </div>
+        {/* Filled left to right as the page goes by; ScrollEffects drives it. */}
+        <span className="nav-progress" aria-hidden="true" />
       </nav>
 
       {/* The hero is already on screen when the page loads, so it deals itself
@@ -316,6 +319,10 @@ export default function Home() {
           </span>
         </div>
       </footer>
+
+      {/* Renders nothing: the page's scroll-linked motion, set up once the
+          sections above are in the DOM. */}
+      <ScrollEffects />
     </>
   )
 }

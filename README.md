@@ -27,6 +27,24 @@ load-bearing flags: `--mode development` + `NODE_ENV=development` keep
 `import.meta.env.DEV` true so the mock bridge is bundled (without it the demo has no
 data), and `--target es2022` is needed for the top-level `await` in `main.tsx`.
 
+## Motion
+
+Animation is [GSAP](https://gsap.com) with ScrollTrigger, registered once in
+`lib/gsap.ts` and used in two places:
+
+- `components/Reveal.tsx` — the one-shot entrance the sections are built from.
+  Its hidden opening frame is the `[data-reveal]` rule in `app/globals.css`
+  rather than an inline style, so the exported HTML ships clean and the effect
+  can be switched off from the stylesheet.
+- `components/ScrollEffects.tsx` — everything tied to the scroll position: the
+  nav's progress hairline and its solid state past the fold, the hero's parallax
+  exit, and a few pixels of drift between layers that should read as sitting at
+  different distances. Every tween there is scrubbed, so it moves only while you
+  do and runs backwards on the way up.
+
+Both honour `prefers-reduced-motion: reduce`: the parallax is never set up, and
+the reveal's elements are shown at their finished state by CSS.
+
 ## Development
 
 ```bash
