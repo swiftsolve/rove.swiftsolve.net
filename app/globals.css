@@ -1377,6 +1377,21 @@ code {
     transition-duration: 0.01ms !important;
   }
 
+  /* The reveal's opening frame is an inline style, server-rendered onto every
+     [data-reveal] element, and motion drives the same style attribute as it
+     animates — so only !important can hold the finished state against it. The
+     same rule (and the same reasoning) backs the no-JS case in layout.tsx.
+     It has to be CSS rather than a check inside Reveal: the component renders
+     on the server, where this media query cannot be read, and deciding the
+     markup from it on the client instead is what mismatched hydration. Here
+     the content is simply visible from the first paint, whatever JS does.
+     Scoped to the element itself, so the child transforms that hover states
+     use (.hero-logo svg, .cta-link span) are untouched. */
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
   /* the crushed 0.01ms duration above would make the marquee stutter in place,
      so stop it outright and hand the strip over to manual scrolling — every
      testimonial still reachable, just by swipe instead of on its own. */

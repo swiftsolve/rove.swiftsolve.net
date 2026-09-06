@@ -67,17 +67,25 @@ export default function Reveal({
   ...rest
 }: Props) {
   const Tag = TAGS[as]
-  const reduced = useReducedMotion()
 
-  // Asked for less motion: hand back the plain element, fully visible. Nothing
-  // to animate means nothing that can strand content invisible either.
-  if (reduced) {
-    return (
-      <Tag className={className} {...rest}>
-        {children}
-      </Tag>
-    )
-  }
+  /**
+   * Asked for less motion: the tween collapses to an instant snap, and
+   * globals.css pins [data-reveal] visible outright so the element is already
+   * there on the first paint — before this, or any, JS runs.
+   *
+   * Deliberately *not* a render-time branch handing back a different element.
+   * This hook reads a media query through useState during render, so it is
+   * false on the server and true on such a visitor's very first client render;
+   * branching on it changed which attributes the element carried between the
+   * two, which is a hydration mismatch. React does not patch mismatched
+   * attributes up, so the server's opacity:0 stayed on content that no longer
+   * had an animation to clear it — reduced motion meant an invisible page.
+   *
+   * Only `initial` is serialised into the SSR markup, so anything keyed to this
+   * hook has to stay out of it. `transition` is read by motion at animation
+   * time and never reaches the DOM, which makes it safe to vary here.
+   */
+  const reduced = useReducedMotion()
 
   const shown = { opacity: 1, y: 0, ...(scale && { scale: 1 }) }
 
@@ -96,7 +104,7 @@ export default function Reveal({
             // of a tall card.
             viewport: { once: true, amount: 0.15 },
           })}
-      transition={{ duration: DURATION, delay, ease: EASE_OUT }}
+      transition={reduced ? { duration: 0, delay: 0 } : { duration: DURATION, delay, ease: EASE_OUT }}
       {...rest}
     >
       {children}
