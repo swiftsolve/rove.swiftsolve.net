@@ -248,10 +248,12 @@ code {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 104px;
-  height: 104px;
+  width: 112px;
+  height: 112px;
   margin: 0 auto 26px;
-  border-radius: 24px;
+  /* Tracks the tile: the squircle's corner is ~23% of its side, and holding
+     that ratio is what keeps it reading as the app icon at any size. */
+  border-radius: 26px;
   background:
     radial-gradient(circle at 50% 56%, rgba(91, 140, 255, 0.22), rgba(91, 140, 255, 0) 68%),
     linear-gradient(180deg, #1f2125 0%, #16171a 100%);
@@ -1165,8 +1167,30 @@ code {
   pointer-events: none;
 }
 
+/* the hero's dot lattice, mirrored: there the patch sits over the glow at the
+   top and has faded out by the sub-copy, so here it sits over the closing glow
+   at the bottom and has faded out by the heading — texture wrapping the light
+   at both ends of the page, with the words themselves left clear.
+   Its radius is the one number that isn't the hero's: shorter (44% vs 48%), so
+   that recentring it low still lands the fade on the footer seam rather than
+   cutting the field of dots off mid-strength, which an edge in a lattice shows
+   far more readily than one in a gradient. */
+.bottom-cta::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1.4px);
+  background-size: 26px 26px;
+  mask-image: radial-gradient(ellipse 55% 44% at 50% 68%, black 16%, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse 55% 44% at 50% 68%, black 16%, transparent 72%);
+  pointer-events: none;
+}
+
+/* lift the copy above both atmosphere layers — ::after is painted after the
+   children, so without the stacking context the dots would speckle the type */
 .bottom-cta > * {
   position: relative;
+  z-index: 1;
 }
 
 .bottom-cta h2 {
