@@ -42,8 +42,11 @@
 
   /* The drop from a lede paragraph to whatever it introduces — the hero's sub
      to its CTA, the demo's note to the app frame. Wider than --title-gap: this
-     is the seam between the copy and the thing itself, not a gap inside it. */
-  --lede-gap: 36px;
+     is the seam between the copy and the thing itself, not a gap inside it.
+     Fluid because the headings above it are: once the hero h1 hits its 42px
+     clamp floor a fixed 36px reads as a hole, so the gap tracks the type down
+     instead of staying pinned. */
+  --lede-gap: clamp(26px, 3.2vw, 36px);
 
   --shadow-panel: 0 1px 2px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.22);
 
