@@ -307,8 +307,10 @@ code {
   color: transparent;
 }
 
+/* The hero headline runs two lines at display size, so it needs a touch more
+   air under it than the section titles that share --title-gap. */
 .hero-sub {
-  margin: var(--title-gap) auto 0;
+  margin: calc(var(--title-gap) + 8px) auto 0;
   max-width: 54ch;
   color: var(--text-secondary);
   font-size: clamp(16px, 2vw, 18.5px);
