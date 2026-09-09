@@ -40,6 +40,11 @@
      --title-gap: the kicker labels the heading, so it belongs to it. */
   --kicker-gap: 14px;
 
+  /* The drop from a lede paragraph to whatever it introduces — the hero's sub
+     to its CTA, the demo's note to the app frame. Wider than --title-gap: this
+     is the seam between the copy and the thing itself, not a gap inside it. */
+  --lede-gap: 36px;
+
   --shadow-panel: 0 1px 2px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.22);
 
   --font: var(--font-inter), system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -307,10 +312,11 @@ code {
   color: transparent;
 }
 
-/* The hero headline runs two lines at display size, so it needs a touch more
-   air under it than the section titles that share --title-gap. */
+/* The hero stacks headline → sub → CTA, and the two seams carry equal weight,
+   so both take --lede-gap rather than the tighter --title-gap the section
+   heads use. */
 .hero-sub {
-  margin: calc(var(--title-gap) + 8px) auto 0;
+  margin: var(--lede-gap) auto 0;
   max-width: 54ch;
   color: var(--text-secondary);
   font-size: clamp(16px, 2vw, 18.5px);
@@ -323,7 +329,7 @@ code {
   justify-content: center;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 36px;
+  margin-top: var(--lede-gap);
 }
 
 .cta-primary {
@@ -403,6 +409,13 @@ code {
 /* --- app showcase / tour --- */
 .showcase {
   padding: var(--section-y) 0;
+}
+
+/* The demo's note introduces the app frame the same way the hero's sub
+   introduces its CTA, so it takes the tighter --lede-gap rather than the
+   standard section-head drop. */
+.showcase .section-head {
+  margin-bottom: var(--lede-gap);
 }
 
 /* The window sits in the middle with four stops down each side. Stacking all
