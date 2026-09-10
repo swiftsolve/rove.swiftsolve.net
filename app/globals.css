@@ -63,7 +63,17 @@
 }
 
 html {
-  overflow-x: hidden;
+  /* clip, not hidden. `overflow-x: hidden` here is the same guard, but it makes
+     <html> a scroll container: overflow stops propagating to the viewport, so
+     overflow-y computes to auto and the page scrolls *inside* html instead of
+     the viewport scrolling it. Mobile Chrome then sizes that inner scroller to
+     the large viewport while the visual viewport is the small one, and the top
+     of the page ends up unreachable under the address bar once you've scrolled
+     down and come back. `clip` creates no scroll container — overflow-y stays
+     visible, the viewport stays the scroller — while still fencing off any
+     stray horizontal overflow. Nothing on the page currently overflows
+     sideways at any width; this is purely a guard. */
+  overflow-x: clip;
   scroll-behavior: smooth;
 }
 

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
 
@@ -27,6 +27,19 @@ export const metadata: Metadata = {
     url: 'https://rove.swiftsolve.net/',
     type: 'website',
   },
+}
+
+/* The browser's own chrome, told to match the page.
+   - themeColor tints the address bar / status bar on mobile Chrome and Safari.
+     It's --bg-app, the colour sitting directly under the sticky nav, so the
+     bar and the page top read as one surface with no seam.
+   - colorScheme is what desktop does something with: Chrome paints the tab's
+     canvas, the scrollbars and the pre-paint flash from it, so a dark page
+     stops opening on a white frame. Declared 'dark' only — the page has no
+     light palette to switch to. */
+export const viewport: Viewport = {
+  themeColor: '#0a0b0e',
+  colorScheme: 'dark',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

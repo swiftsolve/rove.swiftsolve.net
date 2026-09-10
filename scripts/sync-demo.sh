@@ -22,13 +22,14 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SITE_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 ROVE_REPO="${ROVE_REPO:-$SITE_DIR/../rove}"
 
-# Vite needs Node 18+. If nvm is installed, switch to the version in .nvmrc so a
-# stale default (e.g. Node 12) doesn't fail the build with a cryptic syntax
-# error. Falls back to a clear message if the running Node is still too old.
+# This repo runs on Node 24 (.nvmrc, and engines.node in package.json — keep all
+# three in step). If nvm is installed, switch to the version in .nvmrc so a stale
+# shell default doesn't fail the build with a cryptic syntax error. Falls back to
+# a clear message if the running Node is still too old.
 if [ -s "${NVM_DIR:-$HOME/.nvm}/nvm.sh" ]; then
   # shellcheck disable=SC1091
   \. "${NVM_DIR:-$HOME/.nvm}/nvm.sh"
-  nvm use "$SITE_DIR" >/dev/null 2>&1 || nvm use 22 >/dev/null 2>&1 || true
+  nvm use "$SITE_DIR" >/dev/null 2>&1 || nvm use 24 >/dev/null 2>&1 || true
 fi
 
 NODE_MAJOR="$(node -p 'process.versions.node.split(".")[0]' 2>/dev/null || echo 0)"
