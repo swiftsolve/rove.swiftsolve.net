@@ -309,10 +309,26 @@ code {
 
 .hero h1 .accent {
   white-space: nowrap;
-  background: linear-gradient(100deg, var(--accent) 0%, #9db9ff 55%, var(--series-up) 100%);
+  background: linear-gradient(100deg, var(--accent) 0%, #9db9ff 22%, var(--series-up) 45%, #9db9ff 72%, var(--accent) 100%);
+  background-size: 150% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  animation: accent-drift 7s linear infinite;
+}
+
+/* the gradient drifts leftward across the words so "finally visible" keeps
+   catching the light. The ramp starts and ends on the same colour and the
+   travel is exactly one tile of the repeated background (150% wide, which
+   background-position reaches at 300%), so the loop point lands where the two
+   tiles already match — no seam. */
+@keyframes accent-drift {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 300% 50%;
+  }
 }
 
 /* The hero stacks headline → sub → CTA, and the two seams carry equal weight,
