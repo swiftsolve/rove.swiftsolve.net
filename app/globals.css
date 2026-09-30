@@ -1637,7 +1637,13 @@ code {
 .cta-wordmark {
   --wordmark-size: clamp(140px, 40vw, 560px);
   height: calc(var(--wordmark-size) * 0.62);
-  margin-top: calc(var(--wordmark-size) * -0.3);
+  /* Pulled up by however much it must be to leave the same room below the
+     form at every width: the section's 2x rhythm above the heading, and a
+     touch more, which is what reads as centred. The letters scale with the
+     viewport, so a fixed share here let that room grow with the screen and
+     left the copy sitting high on wide ones; now a bigger wordmark rises
+     further behind the copy instead of pushing the footer away. */
+  margin-top: calc(var(--section-y) * 2 + 12px - var(--wordmark-size) * 0.62);
   overflow: hidden;
   font-size: var(--wordmark-size);
   font-weight: 500;
