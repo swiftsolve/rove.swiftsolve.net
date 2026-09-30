@@ -1590,8 +1590,8 @@ code {
   margin-top: calc(var(--wordmark-size) * -0.3);
   overflow: hidden;
   font-size: var(--wordmark-size);
-  font-weight: 700;
-  letter-spacing: -0.06em;
+  font-weight: 500;
+  letter-spacing: -0.045em;
   line-height: 0.9;
   text-align: center;
   user-select: none;
