@@ -141,7 +141,7 @@ export default function Home() {
         </div>
         <div className="wrap">
           <Reveal as="span" className="hero-logo" onMount aria-hidden={true}>
-            <BrandIcon size={90} gradient />
+            <BrandIcon size={90} gradient animated />
           </Reveal>
           <Reveal as="h1" onMount delay={0.07}>
             Your network,<br /><span className="accent">finally visible</span>

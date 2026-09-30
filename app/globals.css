@@ -406,6 +406,56 @@ code {
     0 6px 16px rgba(0, 0, 0, 0.35);
 }
 
+/* The mark at rest, alive: its dot breathes and a glint runs the arc from
+   one end to the other, the signal the icon draws. One shared period, so the
+   dot is fullest as the glint crosses the top. The glint is a single 12-unit
+   dash on a path normalised to 100, walked from just before the arc's start
+   to just past its end, in a lighter step of the arc's own blue. The same
+   animation runs on the Rove tile on nabilr.com. */
+.brand-dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: brand-dot-breathe 3.6s ease-in-out infinite;
+}
+
+.brand-glint {
+  stroke: #a8c2ff;
+  stroke-opacity: 0.9;
+  stroke-dasharray: 12 120;
+  stroke-dashoffset: 12;
+  filter: drop-shadow(0 0 2px rgba(91, 140, 255, 0.8));
+  animation: brand-glint 3.6s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+}
+
+@keyframes brand-dot-breathe {
+  0%,
+  100% {
+    transform: scale(0.9);
+  }
+  30% {
+    transform: scale(1.04);
+  }
+}
+
+@keyframes brand-glint {
+  0% {
+    stroke-dashoffset: 12;
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  52% {
+    stroke-dashoffset: -100;
+    opacity: 1;
+  }
+  58%,
+  100% {
+    stroke-dashoffset: -100;
+    opacity: 0;
+  }
+}
+
 .hero-logo svg {
   /* the mark's ink sits slightly high in its viewBox; nudge down to visually center */
   transform: translateY(2px);
@@ -1865,6 +1915,16 @@ code {
      off, and the page shows them at rest. */
   .hero-radar {
     display: none;
+  }
+
+  .brand-dot {
+    animation: none;
+    transform: none;
+  }
+
+  .brand-glint {
+    animation: none;
+    stroke-opacity: 0;
   }
 
   .hero h1 .accent {
