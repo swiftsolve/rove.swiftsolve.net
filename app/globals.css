@@ -1646,10 +1646,15 @@ code {
   text-align: center;
   user-select: none;
   pointer-events: none;
-  background: linear-gradient(100deg, var(--accent) 0%, #9db9ff 50%, var(--series-up) 100%);
+  /* The hero's "finally visible" ramp and drift, so the page closes on the
+     same moving light it opened with. Slower (12s to the hero's 7s): at this
+     size the same speed reads as busy rather than as light catching. */
+  background: linear-gradient(100deg, var(--accent) 0%, #9db9ff 22%, var(--series-up) 45%, #9db9ff 72%, var(--accent) 100%);
+  background-size: 150% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  animation: accent-drift 12s linear infinite;
   opacity: 0.25;
   mask-image: linear-gradient(180deg, transparent 0%, black 45%, transparent 100%);
   -webkit-mask-image: linear-gradient(180deg, transparent 0%, black 45%, transparent 100%);
@@ -1837,6 +1842,9 @@ code {
      comes out from behind and sits under the form, shown from the top. */
   .cta-wordmark {
     margin-top: 20px;
+    /* Taller than desktop's crop, so more of the letters clear the footer:
+       at phone size the desktop share leaves only their top half. */
+    height: calc(var(--wordmark-size) * 0.78);
     mask-image: linear-gradient(180deg, black 0%, transparent 100%);
     -webkit-mask-image: linear-gradient(180deg, black 0%, transparent 100%);
   }
@@ -1910,9 +1918,10 @@ code {
     animation-name: none;
   }
 
-  /* Same for the hero's loops: at 0.01ms a looping animation flickers rather
-     than stops, so the scan and the headline's drifting gradient are switched
-     off, and the page shows them at rest. */
+  /* Same for the page's loops: at 0.01ms a looping animation flickers rather
+     than stops, so the scan and the drifting gradients (the headline's and
+     the closing wordmark's) are switched off, and the page shows them at
+     rest. */
   .hero-radar {
     display: none;
   }
@@ -1927,7 +1936,8 @@ code {
     stroke-opacity: 0;
   }
 
-  .hero h1 .accent {
+  .hero h1 .accent,
+  .cta-wordmark {
     animation-name: none;
   }
 
