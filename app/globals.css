@@ -412,9 +412,11 @@ code {
    dash on a path normalised to 100, walked from just before the arc's start
    to just past its end, in a lighter step of the arc's own blue. The same
    animation runs on the Rove tile on nabilr.com. */
+/* The dot breathes by its radius, not a scale transform: Firefox redraws a
+   transformed SVG shape on whole pixels each frame, which on a 7px dot reads
+   as a stutter, while a changing radius it draws smoothly. 7.5 is the
+   drawn radius; this runs 90% to 104% of it. */
 .brand-dot {
-  transform-box: fill-box;
-  transform-origin: center;
   animation: brand-dot-breathe 3.6s ease-in-out infinite;
 }
 
@@ -430,10 +432,10 @@ code {
 @keyframes brand-dot-breathe {
   0%,
   100% {
-    transform: scale(0.9);
+    r: 6.75px;
   }
   30% {
-    transform: scale(1.04);
+    r: 7.8px;
   }
 }
 
@@ -1655,13 +1657,25 @@ code {
   /* The hero's "finally visible" ramp and drift, so the page closes on the
      same moving light it opened with. Slower (12s to the hero's 7s): at this
      size the same speed reads as busy rather than as light catching. */
-  background: linear-gradient(100deg, var(--accent) 0%, #9db9ff 22%, var(--series-up) 45%, #9db9ff 72%, var(--accent) 100%);
+  background: linear-gradient(
+    100deg,
+    rgba(91, 140, 255, 0.38) 0%,
+    rgba(157, 185, 255, 0.38) 22%,
+    rgba(179, 157, 255, 0.38) 45%,
+    rgba(157, 185, 255, 0.38) 72%,
+    rgba(91, 140, 255, 0.38) 100%
+  );
   background-size: 150% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   animation: accent-drift 12s linear infinite;
-  opacity: 0.25;
+  /* The faintness lives in the gradient's alpha, not in `opacity`. Browsers
+     disagree about `opacity` over text-clipped backgrounds: Firefox paints
+     it far darker than Chrome, so the same 0.25 left the wordmark nearly
+     gone in one and plainly there in the other. An alpha in the colours
+     renders the same in both. 0.38: a little stronger than the 0.25 that
+     Chrome used to show, which read as too faint. */
   mask-image: linear-gradient(180deg, transparent 0%, black 45%, transparent 100%);
   -webkit-mask-image: linear-gradient(180deg, transparent 0%, black 45%, transparent 100%);
 }
@@ -1934,7 +1948,6 @@ code {
 
   .brand-dot {
     animation: none;
-    transform: none;
   }
 
   .brand-glint {
