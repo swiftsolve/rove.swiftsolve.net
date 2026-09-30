@@ -170,18 +170,6 @@ code {
   color: var(--accent);
 }
 
-.brand-version {
-  margin-left: 2px;
-  padding: 5px 8px;
-  border-radius: 99px;
-  border: 1px solid var(--border);
-  background: var(--bg-panel);
-  color: var(--text-tertiary);
-  font-family: var(--font-numeric);
-  font-size: 11px;
-  letter-spacing: 0.03em;
-}
-
 .site-nav-links {
   display: flex;
   align-items: center;
@@ -206,16 +194,6 @@ code {
   background: var(--bg-hover);
 }
 
-.site-nav-links a.nav-cta {
-  color: #fff;
-  background: var(--accent);
-  margin-left: 6px;
-}
-
-.site-nav-links a.nav-cta:hover {
-  background: var(--accent-hover);
-}
-
 /* --- hero --- */
 .hero {
   position: relative;
@@ -237,10 +215,14 @@ code {
   content: '';
   position: absolute;
   inset: -160px 0 auto 0;
-  height: 620px;
+  height: 760px;
+  /* Wide rather than tall: a broad wash across the top of the page, not a
+     spotlight on the title. */
   background:
-    radial-gradient(560px 300px at 50% 12%, rgba(91, 140, 255, 0.17), transparent 70%),
-    radial-gradient(900px 420px at 50% -10%, rgba(179, 157, 255, 0.08), transparent 70%);
+    radial-gradient(1100px 380px at 50% 12%, rgba(91, 140, 255, 0.07), rgba(91, 140, 255, 0.03) 45%, transparent 85%),
+    radial-gradient(1600px 520px at 50% -10%, rgba(179, 157, 255, 0.045), transparent 80%);
+  /* Softens what the long falloff leaves, so there is no edge to find. */
+  filter: blur(32px);
   pointer-events: none;
 }
 
@@ -250,8 +232,10 @@ code {
   inset: 0;
   background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1.4px);
   background-size: 26px 26px;
-  mask-image: radial-gradient(ellipse 55% 48% at 50% 22%, black 20%, transparent 72%);
-  -webkit-mask-image: radial-gradient(ellipse 55% 48% at 50% 22%, black 20%, transparent 72%);
+  /* Tall rather than round: the field runs from the top of the hero down
+     behind the headline and the form, fading out before the section ends. */
+  mask-image: radial-gradient(ellipse 58% 78% at 50% 32%, black 25%, transparent 76%);
+  -webkit-mask-image: radial-gradient(ellipse 58% 78% at 50% 32%, black 25%, transparent 76%);
   pointer-events: none;
 }
 
@@ -260,18 +244,113 @@ code {
   z-index: 1;
 }
 
+/* --- hero scan ---
+   The hero reads as Rove at work: a beam sweeps clockwise round the logo,
+   lights the dot lattice as it passes, and picks up a few devices on the way.
+   Everything shares one period, so each blip flashes exactly as the beam
+   reaches it.
+
+   --radar-y is the logo's centre: the hero's top pad plus half the tile. */
+@property --sweep {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.hero {
+  --radar-period: 8s;
+  --radar-y: calc(var(--section-y) * 2 + 60px);
+}
+
+.hero > .hero-radar {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* The lit dots: the same 26px lattice as .hero::after, so they land exactly on
+   its dots, only brighter, and visible only inside the beam. */
+.hero-radar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(157, 185, 255, 0.5) 1px, transparent 1.4px);
+  background-size: 26px 26px;
+  -webkit-mask-image:
+    conic-gradient(from var(--sweep) at 50% var(--radar-y), transparent 0deg 290deg, rgba(0, 0, 0, 0.5) 340deg, #000 360deg),
+    radial-gradient(580px 640px at 50% var(--radar-y), #000 0%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    conic-gradient(from var(--sweep) at 50% var(--radar-y), transparent 0deg 290deg, rgba(0, 0, 0, 0.5) 340deg, #000 360deg),
+    radial-gradient(580px 640px at 50% var(--radar-y), #000 0%, transparent 100%);
+  mask-composite: intersect;
+  animation: radar-sweep var(--radar-period) linear infinite;
+}
+
+@keyframes radar-sweep {
+  to {
+    --sweep: 360deg;
+  }
+}
+
+/* A found device. --f is how far round the sweep it sits (0 is twelve
+   o'clock, clockwise); that fixes both its angle and its delay, which is when
+   the beam gets there. --r is its distance from the logo, shrinking with the
+   viewport so phones keep it on screen. */
+.hero-blip {
+  --f: 0;
+  --r: 300px;
+  --a: calc(var(--f) * 360deg);
+  position: absolute;
+  left: calc(50% + sin(var(--a)) * var(--r));
+  top: calc(var(--radar-y) - cos(var(--a)) * var(--r));
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: #b5caff;
+  box-shadow: 0 0 10px 2px rgba(91, 140, 255, 0.55);
+  opacity: 0;
+  animation: radar-blip var(--radar-period) ease-out infinite;
+  animation-delay: calc(var(--f) * var(--radar-period));
+}
+
+.hero-blip:nth-child(1) { --f: 0.105; --r: min(170px, 30vw); }
+.hero-blip:nth-child(2) { --f: 0.3;   --r: min(380px, 44vw); }
+.hero-blip:nth-child(3) { --f: 0.36;  --r: min(420px, 46vw); }
+.hero-blip:nth-child(4) { --f: 0.69;  --r: min(360px, 44vw); }
+.hero-blip:nth-child(5) { --f: 0.85;  --r: min(260px, 38vw); }
+
+@keyframes radar-blip {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  3% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  45%,
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
 /* mirror the app's About-page logo tile: charcoal squircle with a soft blue
    bloom just below centre, the glyph itself carrying the app icon's gradient */
 .hero-logo {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 112px;
-  height: 112px;
+  width: 120px;
+  height: 120px;
   margin: 0 auto 26px;
   /* Tracks the tile: the squircle's corner is ~23% of its side, and holding
      that ratio is what keeps it reading as the app icon at any size. */
-  border-radius: 26px;
+  border-radius: 28px;
   background:
     radial-gradient(circle at 50% 56%, rgba(91, 140, 255, 0.22), rgba(91, 140, 255, 0) 68%),
     linear-gradient(180deg, #1f2125 0%, #16171a 100%);
@@ -389,50 +468,240 @@ code {
     0 8px 20px rgba(91, 140, 255, 0.24);
 }
 
-.cta-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 26px;
+/* --- platforms ---
+   Supporting detail, not a step: it sits in the hero-meta row under the form,
+   small and quiet, rather than between the pitch and the ask. */
+.platforms {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  list-style: none;
+}
+
+.platforms-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  background: var(--bg-panel);
   color: var(--text-secondary);
-  font-size: 14.5px;
-  font-weight: 500;
   transition: color 140ms ease;
 }
 
-.cta-link:hover {
+/* The platform's name, under the icon on hover — above it would sit over the
+   form. */
+.platforms-icon::after {
+  content: attr(data-name);
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  translate: -50% -4px;
+  padding: 5px 9px;
+  border: 1px solid var(--border-strong);
+  border-radius: 7px;
+  background: var(--bg-panel-hi);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 140ms ease, translate 140ms ease;
+}
+
+.platforms-icon:hover {
   color: var(--text-primary);
 }
 
-.cta-link span {
-  display: inline-block;
-  transition: transform 140ms ease;
+.platforms-icon:hover::after {
+  opacity: 1;
+  translate: -50% 0;
 }
 
-.cta-link:hover span {
-  transform: translateX(3px);
+/* --- interest signup ---
+   Stands where the download button did, in the hero and the closing CTA. The
+   field and its button sit in one capsule, so they read as a single control
+   rather than two boxes that happen to be neighbours; the capsule, not the
+   input, takes the border and the focus ring. */
+.interest {
+  width: 100%;
+  max-width: 420px;
 }
 
-.hero-meta {
+.interest-row {
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 8px 22px;
-  margin-top: 22px;
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid var(--border-strong);
+  border-radius: 14px;
+  background: var(--bg-panel);
+  box-shadow: var(--shadow-panel);
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.interest-row:focus-within {
+  border-color: rgba(91, 140, 255, 0.55);
+  box-shadow: var(--shadow-panel), 0 0 0 3px var(--accent-muted);
+}
+
+/* Decorative: the placeholder and the field's label already say "email". */
+.interest-icon {
+  flex: none;
+  margin-left: 10px;
   color: var(--text-tertiary);
+  transition: color 140ms ease;
+}
+
+.interest-row:focus-within .interest-icon {
+  color: var(--text-secondary);
+}
+
+.interest-input {
+  flex: 1;
+  min-width: 0;
+  align-self: stretch;
+  padding: 0 6px 0 8px;
+  border: none;
+  background: none;
+  color: var(--text-primary);
+  font: inherit;
+  /* 16px, not less: iOS Safari zooms the page into any field set smaller the
+     moment it takes focus. */
+  font-size: 16px;
+  outline: none;
+}
+
+.interest-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* Inset in the capsule, so it drops the standalone CTA's size and glow. */
+.interest-submit {
+  flex: none;
+  justify-content: center;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 14.5px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.interest-submit:hover {
+  transform: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.interest-submit:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+/* Phones: the desktop padding makes the capsule a tall 55px block. Trimmed,
+   the whole control is ~46px, still a comfortable tap target. */
+@media (max-width: 480px) {
+  .interest-row {
+    padding: 4px;
+    border-radius: 12px;
+  }
+
+  .interest-submit {
+    padding: 8px 14px;
+    border-radius: 9px;
+    font-size: 14px;
+  }
+}
+
+/* Below 380px the field needs the icon's room more than it needs the icon. */
+@media (max-width: 379px) {
+  .interest-icon {
+    display: none;
+  }
+
+  .interest-input {
+    padding-left: 12px;
+  }
+}
+
+/* On the narrowest phones the button would leave the field too little room
+   for an address, so it drops under it, full width, inside the same capsule.
+   Only below 360px: from there up the field keeps a comfortable ~170px. */
+@media (max-width: 359px) {
+  .interest-row {
+    flex-wrap: wrap;
+  }
+
+  .interest-input {
+    flex-basis: 100%;
+    height: 38px;
+  }
+
+  .interest-submit {
+    flex: 1;
+  }
+}
+
+/* Off-screen rather than display:none, which some bots know to skip. */
+.interest-trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+/* Only rendered when there is something to say, so it takes no room otherwise;
+   a reserved empty line would sit as a visible gap under the form. */
+.interest-error {
+  margin-top: 8px;
+  color: #ff8a8a;
   font-size: 13px;
 }
 
-.hero-meta span {
+.interest-done {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  gap: 9px;
+  padding: 13px 20px;
+  border: 1px solid rgba(67, 214, 160, 0.25);
+  border-radius: 14px;
+  background: rgba(67, 214, 160, 0.08);
+  color: var(--positive);
+  font-size: 15px;
+  font-weight: 550;
 }
 
-.hero-meta svg {
-  color: var(--positive);
-  flex-shrink: 0;
+/* The confirmation takes the form's place, so it arrives rather than just
+   appearing: a short rise and fade, with the check landing a beat after. The
+   page-wide reduced-motion rule flattens both. */
+.interest-done {
+  animation: interest-done-in 420ms var(--ease-out) both;
+}
+
+.interest-done svg {
+  animation: interest-check-in 360ms var(--ease-out) 160ms both;
+}
+
+@keyframes interest-done-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+}
+
+@keyframes interest-check-in {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+}
+
+/* The row of details under the hero's form — now just the platforms. */
+.hero-meta {
+  margin-top: 32px;
 }
 
 /* --- app showcase / tour --- */
@@ -1197,8 +1466,9 @@ code {
 /* --- bottom CTA --- */
 .bottom-cta {
   position: relative;
-  /* the extra bottom sets the CTA off the footer's edge */
-  padding: var(--section-y) 0 120px;
+  /* No bottom pad: the wordmark closes the section and is cropped by the
+     footer's edge, so it is what sets the form off from the footer. */
+  padding: var(--section-y) 0 0;
   text-align: center;
 }
 
@@ -1206,27 +1476,26 @@ code {
   content: '';
   position: absolute;
   inset: auto 0 0 0;
-  height: 420px;
-  background: radial-gradient(620px 300px at 50% 100%, rgba(91, 140, 255, 0.12), transparent 70%);
+  height: 520px;
+  /* As wide as the hero's, so the page opens and closes on the same wash, but
+     only a trace of it: the wordmark carries the colour here. */
+  background: radial-gradient(1200px 380px at 50% 100%, rgba(91, 140, 255, 0.05), rgba(91, 140, 255, 0.02) 45%, transparent 85%);
+  filter: blur(32px);
   pointer-events: none;
 }
 
-/* the hero's dot lattice, mirrored: there the patch sits over the glow at the
-   top and has faded out by the sub-copy, so here it sits over the closing glow
-   at the bottom and has faded out by the heading — texture wrapping the light
-   at both ends of the page, with the words themselves left clear.
-   Its radius is the one number that isn't the hero's: shorter (44% vs 48%), so
-   that recentring it low still lands the fade on the footer seam rather than
-   cutting the field of dots off mid-strength, which an edge in a lattice shows
-   far more readily than one in a gradient. */
+/* the hero's dot lattice, echoed at the close. The lower half of this section
+   belongs to the wordmark, which paints over anything under it, so the patch
+   sits higher, around the heading and form, and fades out before the footer
+   seam rather than being cut off there. */
 .bottom-cta::after {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1.4px);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1.4px);
   background-size: 26px 26px;
-  mask-image: radial-gradient(ellipse 55% 44% at 50% 68%, black 16%, transparent 72%);
-  -webkit-mask-image: radial-gradient(ellipse 55% 44% at 50% 68%, black 16%, transparent 72%);
+  mask-image: radial-gradient(ellipse 65% 55% at 50% 38%, black 24%, transparent 76%);
+  -webkit-mask-image: radial-gradient(ellipse 65% 55% at 50% 38%, black 24%, transparent 76%);
   pointer-events: none;
 }
 
@@ -1247,14 +1516,48 @@ code {
   color: var(--text-primary);
 }
 
+/* Same rhythm as every section head on the page, the live demo's included:
+   --title-gap from heading to line, then --lede-gap from the line to the
+   thing it introduces — here, the form. */
 .bottom-cta p {
   margin-top: var(--title-gap);
   color: var(--text-secondary);
-  font-size: 16px;
+  font-size: 16.5px;
 }
 
 .bottom-cta .hero-ctas {
-  margin-top: 28px;
+  margin-top: var(--lede-gap);
+}
+
+/* The closing wordmark: a backdrop to the ask, not a block after it. It is
+   pulled up so its top half sits behind the form, fades in from nothing there
+   so the form stays the thing you read, and fades out again into the footer's
+   edge, which crops it. The hero's gradient, so the page ends on the colours
+   it opened with. */
+.cta-wordmark {
+  --wordmark-size: clamp(140px, 40vw, 560px);
+  height: calc(var(--wordmark-size) * 0.62);
+  margin-top: calc(var(--wordmark-size) * -0.3);
+  overflow: hidden;
+  font-size: var(--wordmark-size);
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  line-height: 0.9;
+  text-align: center;
+  user-select: none;
+  pointer-events: none;
+  background: linear-gradient(100deg, var(--accent) 0%, #9db9ff 50%, var(--series-up) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  opacity: 0.25;
+  mask-image: linear-gradient(180deg, transparent 0%, black 45%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, black 45%, transparent 100%);
+}
+
+/* The copy and form sit over the wordmark. */
+.bottom-cta > .wrap {
+  z-index: 2;
 }
 
 /* --- footer --- */
@@ -1398,10 +1701,6 @@ code {
     width: min(360px, 82vw);
   }
 
-  .site-nav-links a:not(.nav-cta) {
-    display: none;
-  }
-
   .footer-inner {
     flex-direction: column;
     justify-content: center;
@@ -1430,7 +1729,7 @@ code {
      markup from it on the client instead is what mismatched hydration. Here
      the content is simply visible from the first paint, whatever JS does.
      Scoped to the element itself, so the child transforms that hover states
-     use (.hero-logo svg, .cta-link span) are untouched. */
+     use (.hero-logo svg) are untouched. */
   [data-reveal] {
     opacity: 1 !important;
     transform: none !important;
@@ -1440,6 +1739,17 @@ code {
      so stop it outright and hand the strip over to manual scrolling — every
      testimonial still reachable, just by swipe instead of on its own. */
   .testimonial-track {
+    animation-name: none;
+  }
+
+  /* Same for the hero's loops: at 0.01ms a looping animation flickers rather
+     than stops, so the scan and the headline's drifting gradient are switched
+     off, and the page shows them at rest. */
+  .hero-radar {
+    display: none;
+  }
+
+  .hero h1 .accent {
     animation-name: none;
   }
 

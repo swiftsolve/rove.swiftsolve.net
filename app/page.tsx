@@ -1,5 +1,6 @@
 import BrandIcon from '@/components/BrandIcon'
-import DownloadButton from '@/components/DownloadButton'
+import InterestForm from '@/components/InterestForm'
+import Platforms from '@/components/Platforms'
 import Reveal from '@/components/Reveal'
 import Showcase from '@/components/Showcase'
 import SpecTerminal from '@/components/SpecTerminal'
@@ -83,24 +84,6 @@ const TESTIMONIALS: readonly Testimonial[] = [
   },
 ]
 
-function CheckIcon() {
-  return (
-    <svg
-      width="13"
-      height="13"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M20 6 9 17l-5-5" />
-    </svg>
-  )
-}
-
 function CircleCheckIcon() {
   return (
     <svg
@@ -128,14 +111,10 @@ export default function Home() {
           <a className="site-brand" href="#">
             <BrandIcon size={28} />
             Rove
-            <span className="brand-version">v0.0.2</span>
           </a>
           <div className="site-nav-links">
             <a href="#app">Live demo</a>
             {SHOW_PRICING && <a href="#pricing">Pricing</a>}
-            <a className="nav-cta" href={RELEASES_URL} target="_blank" rel="noopener noreferrer">
-              Download
-            </a>
           </div>
         </div>
       </nav>
@@ -143,9 +122,19 @@ export default function Home() {
       {/* The hero is already on screen when the page loads, so it deals itself
           in on mount rather than waiting for a scroll that never comes. */}
       <header className="hero">
+        {/* Decorative scan: a beam sweeps round the logo, lighting the dot
+            lattice as it passes and picking up a few "devices". Pure CSS; see
+            .hero-radar in globals.css. */}
+        <div className="hero-radar" aria-hidden="true">
+          <span className="hero-blip" />
+          <span className="hero-blip" />
+          <span className="hero-blip" />
+          <span className="hero-blip" />
+          <span className="hero-blip" />
+        </div>
         <div className="wrap">
           <Reveal as="span" className="hero-logo" onMount aria-hidden={true}>
-            <BrandIcon size={84} gradient />
+            <BrandIcon size={90} gradient />
           </Reveal>
           <Reveal as="h1" onMount delay={0.07}>
             Your network,<br /><span className="accent">finally visible</span>
@@ -156,17 +145,10 @@ export default function Home() {
             actually come from.
           </Reveal>
           <Reveal className="hero-ctas" onMount delay={0.21}>
-            <DownloadButton />
+            <InterestForm />
           </Reveal>
           <Reveal className="hero-meta" onMount delay={0.28}>
-            <span>
-              <CheckIcon />
-              Small download
-            </span>
-            <span>
-              <CheckIcon />
-              No account, no telemetry
-            </span>
+            <Platforms />
           </Reveal>
         </div>
       </header>
@@ -279,23 +261,18 @@ export default function Home() {
 
       <section className="bottom-cta">
         <div className="wrap">
-          <Reveal as="h2">Stop guessing. Start seeing.</Reveal>
+          <Reveal as="h2">Interested in Rove?</Reveal>
           <Reveal as="p" delay={0.07}>
-            The download takes ten seconds. The answers start immediately.
+            Still in the works. Let us know if you&apos;d use it.
           </Reveal>
           <Reveal className="hero-ctas" delay={0.14}>
-            <DownloadButton />
+            <InterestForm />
           </Reveal>
-          <Reveal
-            as="a"
-            className="cta-link"
-            delay={0.21}
-            href={RELEASES_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            All platforms &amp; releases <span aria-hidden="true">&rarr;</span>
-          </Reveal>
+        </div>
+        {/* Decorative: the brand again, huge and faint, cropped where the
+            section meets the footer. The heading's "Rove" is the one read. */}
+        <div className="cta-wordmark" aria-hidden="true">
+          Rove
         </div>
       </section>
 
