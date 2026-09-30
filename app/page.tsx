@@ -131,6 +131,13 @@ export default function Home() {
           <span className="hero-blip" />
           <span className="hero-blip" />
           <span className="hero-blip" />
+          <span className="hero-blip" />
+          <span className="hero-blip" />
+          <span className="hero-blip" />
+          <span className="hero-blip" />
+          <span className="hero-blip" />
+          <span className="hero-blip" />
+          <span className="hero-blip" />
         </div>
         <div className="wrap">
           <Reveal as="span" className="hero-logo" onMount aria-hidden={true}>

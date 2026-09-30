@@ -152,7 +152,7 @@ code {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 60px;
+  height: 66px;
 }
 
 .site-brand {
@@ -232,6 +232,10 @@ code {
   inset: 0;
   background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1.4px);
   background-size: 26px 26px;
+  /* A dot sits exactly on the logo's centre, so the radar's rings can pass
+     through dots and the blips on them land on the field (see .hero-radar).
+     50% centres a tile, and so its dot, across; the y offset does it down. */
+  background-position: 50% calc(var(--radar-y) - 13px);
   /* Tall rather than round: the field runs from the top of the hero down
      behind the headline and the form, fading out before the section ends. */
   mask-image: radial-gradient(ellipse 58% 78% at 50% 32%, black 25%, transparent 76%);
@@ -258,7 +262,7 @@ code {
 }
 
 .hero {
-  --radar-period: 8s;
+  --radar-period: 9.5s;
   --radar-y: calc(var(--section-y) * 2 + 60px);
 }
 
@@ -276,15 +280,23 @@ code {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(rgba(157, 185, 255, 0.5) 1px, transparent 1.4px);
-  background-size: 26px 26px;
+  /* The rings, bright, then the dots: the beam's mask below shows all of it
+     only where it is passing, so the faint rings light up arc by arc. */
+  --ring-lit: rgba(157, 185, 255, 0.3);
+  background-image:
+    radial-gradient(circle at 50% var(--radar-y), transparent calc(var(--ring-1) - 0.75px), var(--ring-lit) var(--ring-1), transparent calc(var(--ring-1) + 0.75px)),
+    radial-gradient(circle at 50% var(--radar-y), transparent calc(var(--ring-2) - 0.75px), var(--ring-lit) var(--ring-2), transparent calc(var(--ring-2) + 0.75px)),
+    radial-gradient(circle at 50% var(--radar-y), transparent calc(var(--ring-3) - 0.75px), var(--ring-lit) var(--ring-3), transparent calc(var(--ring-3) + 0.75px)),
+    radial-gradient(rgba(157, 185, 255, 0.3) 1px, transparent 1.4px);
+  background-size: auto, auto, auto, 26px 26px;
+  background-position: 0 0, 0 0, 0 0, 50% calc(var(--radar-y) - 13px);
   -webkit-mask-image:
     conic-gradient(from var(--sweep) at 50% var(--radar-y), transparent 0deg 290deg, rgba(0, 0, 0, 0.5) 340deg, #000 360deg),
-    radial-gradient(580px 640px at 50% var(--radar-y), #000 0%, transparent 100%);
+    radial-gradient(760px 700px at 50% var(--radar-y), #000 45%, transparent 100%);
   -webkit-mask-composite: source-in;
   mask-image:
     conic-gradient(from var(--sweep) at 50% var(--radar-y), transparent 0deg 290deg, rgba(0, 0, 0, 0.5) 340deg, #000 360deg),
-    radial-gradient(580px 640px at 50% var(--radar-y), #000 0%, transparent 100%);
+    radial-gradient(760px 700px at 50% var(--radar-y), #000 45%, transparent 100%);
   mask-composite: intersect;
   animation: radar-sweep var(--radar-period) linear infinite;
 }
@@ -295,33 +307,67 @@ code {
   }
 }
 
-/* A found device. --f is how far round the sweep it sits (0 is twelve
-   o'clock, clockwise); that fixes both its angle and its delay, which is when
-   the beam gets there. --r is its distance from the logo, shrinking with the
-   viewport so phones keep it on screen. */
+/* The app's device colours, by kind (its Devices list tints each row's icon
+   the same way), so a blip reads as the kind of thing it found. */
+.hero {
+  --device-computer: #6aa0ff;
+  --device-media: #b39dff;
+  --device-iot: #f5c451;
+  --device-router: #34d399;
+}
+
+/* Range rings: three circles round the logo, as on a radar display. They are
+   never drawn at rest; the beam lights them arc by arc as it passes (see the
+   ring layers in .hero-radar::before).
+
+   With a lattice dot on the logo's centre, a circle of radius 26px * sqrt(n)
+   passes exactly through every dot (a, b) tiles away where a² + b² = n. The
+   three radii are picked for n with several such dots — 65, 169 and 325 — so
+   each blip can sit on a ring and on the lattice at once. */
+.hero {
+  --ring-1: calc(26px * sqrt(65));
+  --ring-2: calc(26px * 13);
+  --ring-3: calc(26px * sqrt(325));
+}
+
+/* A found device, where a ring crosses a lattice dot. --dx and --dy are that
+   dot's offset from the logo in lattice tiles (y down). --f is how far round
+   the sweep it sits (0 is twelve o'clock, clockwise), which is when the beam
+   gets there and so when it flashes. */
 .hero-blip {
+  --blip: var(--device-computer);
+  --dx: 0;
+  --dy: 0;
   --f: 0;
-  --r: 300px;
-  --a: calc(var(--f) * 360deg);
   position: absolute;
-  left: calc(50% + sin(var(--a)) * var(--r));
-  top: calc(var(--radar-y) - cos(var(--a)) * var(--r));
+  left: calc(50% + var(--dx) * 26px);
+  top: calc(var(--radar-y) + var(--dy) * 26px);
   width: 6px;
   height: 6px;
   margin: -3px 0 0 -3px;
   border-radius: 50%;
-  background: #b5caff;
-  box-shadow: 0 0 10px 2px rgba(91, 140, 255, 0.55);
+  background: var(--blip);
+  box-shadow: 0 0 10px 2px color-mix(in srgb, var(--blip) 55%, transparent);
   opacity: 0;
   animation: radar-blip var(--radar-period) ease-out infinite;
   animation-delay: calc(var(--f) * var(--radar-period));
 }
 
-.hero-blip:nth-child(1) { --f: 0.105; --r: min(170px, 30vw); }
-.hero-blip:nth-child(2) { --f: 0.3;   --r: min(380px, 44vw); }
-.hero-blip:nth-child(3) { --f: 0.36;  --r: min(420px, 46vw); }
-.hero-blip:nth-child(4) { --f: 0.69;  --r: min(360px, 44vw); }
-.hero-blip:nth-child(5) { --f: 0.85;  --r: min(260px, 38vw); }
+/* In mirrored pairs, left and right of the logo, so together they trace
+   the three rings rather than scattering; each pair shares a ring (the
+   comment is its a² + b²). All sit clear of the headline, copy and form. */
+.hero-blip:nth-child(1)  { --dx: 7;   --dy: -4; --f: 0.1674; --blip: var(--device-router); } /* 65 */
+.hero-blip:nth-child(2)  { --dx: -7;  --dy: -4; --f: 0.8326; }                              /* 65 */
+.hero-blip:nth-child(3)  { --dx: 13;  --dy: 0;  --f: 0.25; }                                /* 169 */
+.hero-blip:nth-child(4)  { --dx: -13; --dy: 0;  --f: 0.75;   --blip: var(--device-media); }  /* 169 */
+.hero-blip:nth-child(5)  { --dx: 12;  --dy: 5;  --f: 0.3128; --blip: var(--device-iot); }    /* 169 */
+.hero-blip:nth-child(6)  { --dx: -12; --dy: 5;  --f: 0.6872; }                              /* 169 */
+.hero-blip:nth-child(7)  { --dx: 17;  --dy: -6; --f: 0.196; }                               /* 325 */
+.hero-blip:nth-child(8)  { --dx: -17; --dy: -6; --f: 0.804;  --blip: var(--device-iot); }    /* 325 */
+.hero-blip:nth-child(9)  { --dx: 15;  --dy: 10; --f: 0.3436; --blip: var(--device-media); }  /* 325 */
+.hero-blip:nth-child(10) { --dx: -15; --dy: 10; --f: 0.6564; }                              /* 325 */
+.hero-blip:nth-child(11) { --dx: 10;  --dy: 15; --f: 0.4064; }                              /* 325 */
+.hero-blip:nth-child(12) { --dx: -10; --dy: 15; --f: 0.5936; --blip: var(--device-media); }  /* 325 */
 
 @keyframes radar-blip {
   0% {
@@ -332,7 +378,8 @@ code {
     opacity: 1;
     transform: scale(1);
   }
-  45%,
+  /* Faded by about 2.8s: 30% of the 9.5s period. */
+  30%,
   100% {
     opacity: 0;
     transform: scale(1);
@@ -1523,6 +1570,9 @@ code {
   margin-top: var(--title-gap);
   color: var(--text-secondary);
   font-size: 16.5px;
+  /* Where it wraps, wrap evenly: unbalanced, a phone leaves "it." alone on
+     the second line. */
+  text-wrap: balance;
 }
 
 .bottom-cta .hero-ctas {
@@ -1690,6 +1740,74 @@ code {
 }
 
 @media (max-width: 620px) {
+  /* A phone's hero is tall and narrow, so the desktop field (sized in % of
+     it) runs most of the way down. Here it stays round the logo and headline
+     and fades out by the copy, and the beam's reach shrinks with it. */
+  .hero::after {
+    mask-image: radial-gradient(ellipse 80% 38% at 50% 22%, black 25%, transparent 76%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 38% at 50% 22%, black 25%, transparent 76%);
+  }
+
+  .hero-radar::before {
+    -webkit-mask-image:
+      conic-gradient(from var(--sweep) at 50% var(--radar-y), transparent 0deg 290deg, rgba(0, 0, 0, 0.5) 340deg, #000 360deg),
+      radial-gradient(300px 300px at 50% var(--radar-y), #000 45%, transparent 100%);
+    mask-image:
+      conic-gradient(from var(--sweep) at 50% var(--radar-y), transparent 0deg 290deg, rgba(0, 0, 0, 0.5) 340deg, #000 360deg),
+      radial-gradient(300px 300px at 50% var(--radar-y), #000 45%, transparent 100%);
+  }
+
+  /* The radar at phone scale. The desktop rings would run off both sides, so
+     smaller ones, still through lattice dots (n = 25, 50, 85), and the blips
+     move with them. Below the logo a phone's copy fills the width, so they
+     gather above and beside it; the last two have no room and sit out. */
+  .hero {
+    --ring-1: calc(26px * 5);
+    --ring-2: calc(26px * sqrt(50));
+    --ring-3: calc(26px * sqrt(85));
+  }
+
+  .hero-blip:nth-child(1)  { --dx: 3;  --dy: -4; --f: 0.1024; } /* 25 */
+  .hero-blip:nth-child(2)  { --dx: -3; --dy: -4; --f: 0.8976; } /* 25 */
+  .hero-blip:nth-child(3)  { --dx: 5;  --dy: 0;  --f: 0.25; }   /* 25 */
+  .hero-blip:nth-child(4)  { --dx: -5; --dy: 0;  --f: 0.75; }   /* 25 */
+  .hero-blip:nth-child(5)  { --dx: 5;  --dy: -5; --f: 0.125; }  /* 50 */
+  .hero-blip:nth-child(6)  { --dx: -5; --dy: -5; --f: 0.875; }  /* 50 */
+  .hero-blip:nth-child(7)  { --dx: 7;  --dy: 1;  --f: 0.2726; } /* 50 */
+  .hero-blip:nth-child(8)  { --dx: -7; --dy: 1;  --f: 0.7274; } /* 50 */
+  .hero-blip:nth-child(9)  { --dx: 7;  --dy: -6; --f: 0.1372; } /* 85 */
+  .hero-blip:nth-child(10) { --dx: -7; --dy: -6; --f: 0.8628; } /* 85 */
+
+  .hero-blip:nth-child(n + 11) {
+    display: none;
+  }
+
+  /* A phone's wordmark is too small to sit behind the form: the form hides
+     its top half and the footer crops the rest, leaving a sliver. So here it
+     comes out from behind and sits under the form, shown from the top. */
+  .cta-wordmark {
+    margin-top: 20px;
+    mask-image: linear-gradient(180deg, black 0%, transparent 100%);
+    -webkit-mask-image: linear-gradient(180deg, black 0%, transparent 100%);
+  }
+
+  /* The hero logo, a size down: at 120px it outweighs a phone's headline.
+     The radar is centred on it, so its centre moves with the tile's half. */
+  .hero {
+    --radar-y: calc(var(--section-y) * 2 + 48px);
+  }
+
+  .hero-logo {
+    width: 96px;
+    height: 96px;
+    border-radius: 22px;
+  }
+
+  .hero-logo svg {
+    width: 72px;
+    height: 72px;
+  }
+
   .price-card {
     --price-pad-x: 24px;
     padding: 34px var(--price-pad-x) 30px;
