@@ -1010,6 +1010,8 @@ code {
   font-size: 14px;
   line-height: 1.62;
   color: var(--text-tertiary);
+  /* no one-word last lines ("is.", "track.") */
+  text-wrap: pretty;
 }
 
 /* The stage holds the app at its exact desktop-window size (500×660,

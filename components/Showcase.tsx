@@ -22,7 +22,7 @@ const TOUR: readonly TourStop[] = [
   {
     label: 'Home',
     title: 'The whole picture',
-    blurb: 'Connection, live traffic, capabilities, usage and a QR code to share your Wi\u2011Fi.',
+    blurb: 'Connection, live traffic and devices on one calm screen, plus a QR code to share your\u00a0Wi\u2011Fi.',
     icon: (
       <>
         <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
@@ -33,7 +33,7 @@ const TOUR: readonly TourStop[] = [
   {
     label: 'Speed',
     title: 'Honest speed tests',
-    blurb: 'Speed, ping, jitter, loss and what your connection is capable of.',
+    blurb: 'Download, upload, latency, jitter, loss, and what your link can actually handle.',
     icon: (
       <>
         <path d="m12 14 4-4" />
@@ -57,7 +57,7 @@ const TOUR: readonly TourStop[] = [
   {
     label: 'Apps',
     title: 'What your apps are up to',
-    blurb: 'Data usage for every app, and the hosts each one talks to.',
+    blurb: 'Data usage for every app on your machine, and the hosts each one talks to.',
     icon: (
       <>
         <rect width="7" height="7" x="3" y="3" rx="1" />
@@ -70,13 +70,13 @@ const TOUR: readonly TourStop[] = [
   {
     label: 'Services',
     title: 'The services you rely on',
-    blurb: 'Uptime and latency for every service you track, cloud or local.',
+    blurb: 'Up or down, latency and a sparkline for every service you track.',
     icon: <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />,
   },
   {
     label: 'Timeline',
     title: 'A history of your network',
-    blurb: 'A week of devices coming and going, outages and network switches.',
+    blurb: 'A day-by-day feed of what changed, from devices coming and going to connection switches.',
     icon: (
       <>
         <path d="M21 5H3" />
@@ -90,7 +90,7 @@ const TOUR: readonly TourStop[] = [
   {
     label: 'Connection',
     title: 'When something feels off',
-    blurb: 'Your router, DNS servers, packet loss and who your ISP really is.',
+    blurb: 'Router latency, packet loss, DNS servers and who your ISP really is.',
     // The app's own hub-and-spoke glyph — custom, with no Lucide equivalent.
     icon: (
       <>
@@ -108,8 +108,8 @@ const TOUR: readonly TourStop[] = [
   },
   {
     label: 'Usage',
-    title: 'How much you use',
-    blurb: 'Daily download and upload for the past week, kept through reboots.',
+    title: 'Where your data goes',
+    blurb: 'Daily download and upload totals that survive reboots.',
     icon: (
       <>
         <path d="M3 3v16a2 2 0 0 0 2 2h16" />
