@@ -144,7 +144,7 @@ function Rail({
   readonly stops: readonly TourStop[]
   readonly side: 'left' | 'right'
   readonly active: string
-  readonly onPick: (label: string) => void
+  readonly onPick: (label: string, stop: HTMLElement) => void
 }) {
   return (
     <div
@@ -159,7 +159,7 @@ function Rail({
           role="tab"
           aria-selected={active === stop.label}
           className={`tour-stop${active === stop.label ? ' is-active' : ''}`}
-          onClick={() => onPick(stop.label)}
+          onClick={(event) => onPick(stop.label, event.currentTarget)}
           onPointerMove={trackPointer}
         >
           {/* The border-light layer: a masked gradient ring that brightens where
@@ -248,11 +248,23 @@ export default function Showcase() {
     }
   }, [])
 
-  const goTo = (label: string) => {
+  const goTo = (label: string, stop: HTMLElement) => {
     setActive(label)
     const doc = iframeRef.current?.contentDocument
     const btn = doc?.querySelector<HTMLButtonElement>(`nav button[aria-label="${label}"]`)
-    btn?.click()
+    if (!doc || !btn) return
+
+    // On navigation the app moves focus to the new page's heading (its
+    // route-change pattern for screen readers). Right for a visitor using the
+    // app, but here the tour drove the click, and losing focus into the iframe
+    // would strand a keyboard visitor mid-tour. Hand it back to the stop they
+    // picked. The app focuses within a microtask of the click; the listener
+    // lapses shortly after, so a re-pick of the current stop (no navigation,
+    // no focus move) can't leave it waiting to yank a later click out of the app.
+    const keepFocus = () => stop.focus({ preventScroll: true })
+    doc.addEventListener('focusin', keepFocus, { once: true })
+    setTimeout(() => doc.removeEventListener('focusin', keepFocus), 100)
+    btn.click()
   }
 
   return (
