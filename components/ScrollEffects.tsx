@@ -119,10 +119,11 @@ export default function ScrollEffects() {
       )
     })
 
-    // Only in the three-column layout: below 1080px the rails collapse into a
-    // row of chips above the window, where drifting them vertically against it
-    // would be motion with nothing left to be parallax *to*.
-    mm.add('(prefers-reduced-motion: no-preference) and (min-width: 1081px)', () => {
+    // Only in the three-column layout: below 1120px (the breakpoint in
+    // globals.css — keep the two in step) the rails collapse into a row of
+    // chips above the window, where drifting them vertically against it would
+    // be motion with nothing left to be parallax *to*.
+    mm.add('(prefers-reduced-motion: no-preference) and (min-width: 1121px)', () => {
       gsap.fromTo(
         '.tour-rail',
         { y: RAIL_DRIFT },
