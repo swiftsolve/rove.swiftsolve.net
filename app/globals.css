@@ -820,7 +820,11 @@ code {
    reads as one composition centred on the app. */
 .showcase-grid {
   display: grid;
-  grid-template-columns: minmax(0, 290px) minmax(0, 500px) minmax(0, 290px);
+  /* The rails are sized off what's left: the window takes its native 540 and
+     the two gaps 56, and .wrap caps the row at 1140, so 270 each is the widest
+     they can be and still let the app render 1:1 rather than scaled down a few
+     percent on a full-width desktop. */
+  grid-template-columns: minmax(0, 270px) minmax(0, 540px) minmax(0, 270px);
   gap: 28px;
   justify-content: center;
   /* each rail keeps its natural height and centres against the window */
@@ -1014,7 +1018,7 @@ code {
   text-wrap: pretty;
 }
 
-/* The stage holds the app at its exact desktop-window size (500×660,
+/* The stage holds the app at its exact desktop-window size (540×660,
    from tauri.conf.json) and scales down only when the column is narrower. */
 .app-frame {
   position: relative;
@@ -1034,7 +1038,7 @@ code {
 
 .app-stage {
   position: relative;
-  width: 500px;
+  width: 540px;
   height: 660px;
   transform-origin: top center;
   border-radius: 12px;
@@ -1046,7 +1050,7 @@ code {
 
 .app-stage iframe {
   display: block;
-  width: 500px;
+  width: 540px;
   height: 660px;
   border: 0;
   border-radius: 12px;
@@ -1736,9 +1740,10 @@ code {
 /* --- responsive --- */
 /* Below this the three-column composition would squeeze the rails under ~240px,
    so the stops collapse to chip rows above the window. It's wider than the
-   960px breakpoint the rest of the page uses because flanking a 500px window
-   needs the room for both rails. */
-@media (max-width: 1080px) {
+   960px breakpoint the rest of the page uses because flanking a 540px window
+   needs the room for both rails — and it moved out with the window, by the
+   same 40px, to keep that floor where it was. */
+@media (max-width: 1120px) {
   .showcase-grid {
     /* minmax(0, …) so the fixed-width app stage can't inflate the track */
     grid-template-columns: minmax(0, 1fr);
@@ -1764,7 +1769,7 @@ code {
     display: none;
   }
 
-  /* the un-transformed 500px stage overflows the narrow frame's layout box;
+  /* the un-transformed 540px stage overflows the narrow frame's layout box;
      clip it so the page never gains a horizontal scroll (the scaled render
      fits exactly, so nothing visible is cut) — and re-center the window now
      that the rails sit above it instead of beside it */
