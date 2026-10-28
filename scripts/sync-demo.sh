@@ -12,7 +12,7 @@
 #
 # The three build flags are load-bearing:
 #   --mode development + NODE_ENV=development  keep import.meta.env.DEV true, so
-#     src/dev/mockNetworkApi.ts is bundled — without it the demo has no data.
+#     src/dev/mock-network-api.ts is bundled — without it the demo has no data.
 #   --target es2022                            top-level await in main.tsx needs it.
 
 set -euo pipefail
