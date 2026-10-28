@@ -220,31 +220,41 @@ export default function Showcase() {
     return () => observer.disconnect()
   }, [])
 
-  // Keep the tour rail in sync when visitors click the app's nav directly.
-  // Attached via effect (not onLoad): the iframe usually finishes loading
-  // before React hydrates, so a load handler alone would never fire.
+  // Keep the tour rail in sync with the app however it navigates: its nav rail,
+  // or a card that opens a tab (Usage, Devices…). The app marks the current
+  // tab's rail button aria-current="page", so watch for that rather than for
+  // clicks. Attached via effect (not onLoad): the iframe usually finishes
+  // loading before React hydrates, so a load handler alone would never fire.
   useEffect(() => {
     const iframe = iframeRef.current
     if (!iframe) return
 
-    const syncFromApp = (event: Event) => {
-      // Only the app's tab buttons carry a `nav-item-<id>` class; the theme
-      // toggle beside them is a plain `nav-item` and doesn't navigate, so it
-      // must leave the rail's highlight alone.
-      const btn = (event.target as Element | null)?.closest?.('nav button[class*="nav-item-"]')
-      if (!btn) return
-      const label = btn.getAttribute('aria-label') ?? ''
+    let observer: MutationObserver | undefined
+
+    const syncFromApp = () => {
+      const current = iframe.contentDocument?.querySelector('nav button[aria-current="page"]')
+      if (!current) return
+      const label = current.getAttribute('aria-label') ?? ''
       // The app has tabs the tour doesn't cover (Interfaces, Settings). Landing
       // on one means no stop applies, so clear rather than strand the old one.
       setActive(TOUR.some((stop) => stop.label === label) ? label : '')
     }
 
-    const attach = () => iframe.contentDocument?.addEventListener('click', syncFromApp)
+    const attach = () => {
+      const body = iframe.contentDocument?.body
+      if (!body) return
+      observer?.disconnect()
+      // childList too, since the app may not have rendered its nav yet.
+      observer = new MutationObserver(syncFromApp)
+      observer.observe(body, { subtree: true, childList: true, attributeFilter: ['aria-current'] })
+      syncFromApp()
+    }
+
     if (iframe.contentDocument && iframe.contentDocument.readyState !== 'loading') attach()
     iframe.addEventListener('load', attach)
     return () => {
       iframe.removeEventListener('load', attach)
-      iframe.contentDocument?.removeEventListener('click', syncFromApp)
+      observer?.disconnect()
     }
   }, [])
 
