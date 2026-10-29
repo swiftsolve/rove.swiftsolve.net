@@ -6,7 +6,7 @@ network monitor. Built with Next.js (static export).
 ## The embedded app demo
 
 The showcase section runs the **actual Rove app** in an iframe at the desktop window's
-native size (560×660, from `tauri.conf.json`). `public/app/` holds a static Vite build
+native size (545×660, from `tauri.conf.json`). `public/app/` holds a static Vite build
 of the app compiled in dev mode so its in-browser mock bridge
 (`src/dev/mockNetworkApi.ts`) is bundled — live traffic, speed tests, device scans and
 all other interactions work with sample data, no backend needed.

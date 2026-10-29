@@ -5,8 +5,8 @@ import { useEffect, useRef, useState } from 'react'
 
 import Reveal from '@/components/Reveal'
 
-/** The Rove desktop window's exact size (tauri.conf.json: 560×660, not resizable). */
-const APP_W = 560
+/** The Rove desktop window's exact size (tauri.conf.json: 545×660, not resizable). */
+const APP_W = 545
 const APP_H = 660
 
 interface TourStop {
