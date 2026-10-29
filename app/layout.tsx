@@ -15,6 +15,13 @@ const questrial = localFont({
   display: 'swap',
 })
 
+const geistMono = localFont({
+  src: './fonts/GeistMono-Regular.woff2',
+  variable: '--font-geist-mono',
+  weight: '400',
+  display: 'swap',
+})
+
 export const metadata: Metadata = {
   title: 'Rove: a fast, minimal desktop network monitor',
   description:
@@ -44,7 +51,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${questrial.variable}`}>
+    <html lang="en" className={`${inter.variable} ${questrial.variable} ${geistMono.variable}`}>
       <head>
         {/* Reveal's opening frame (opacity:0) is inlined into the static HTML,
             so without JS there is nothing to animate it back — the page would
