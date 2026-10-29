@@ -816,16 +816,22 @@ code {
   margin-bottom: var(--lede-gap);
 }
 
+/* 40px wider than the page's other sections, so the rails flanking the 545px
+   window still fit their longest title ("When something feels off") on one line. */
+.showcase .wrap {
+  width: min(1180px, calc(100% - 48px));
+}
+
 /* The window sits in the middle with four stops down each side. Stacking all
    eight in one column ran ~130px taller than the 660px window; split in two it
    reads as one composition centred on the app. */
 .showcase-grid {
   display: grid;
   /* The rails are sized off what's left: the window takes its native 545 and
-     the two gaps 56, and .wrap caps the row at 1140, so 266 each is the widest
-     they can be and still let the app render 1:1 rather than scaled down a few
-     percent on a full-width desktop. */
-  grid-template-columns: minmax(0, 266px) minmax(0, 545px) minmax(0, 266px);
+     the two gaps 56, and .showcase .wrap caps the row at 1180, so 288 each is
+     the widest they can be and still let the app render 1:1 rather than scaled
+     down a few percent on a full-width desktop. */
+  grid-template-columns: minmax(0, 288px) minmax(0, 545px) minmax(0, 288px);
   gap: 28px;
   justify-content: center;
   /* each rail keeps its natural height and centres against the window */
@@ -1764,9 +1770,10 @@ code {
 /* Below this the three-column composition would squeeze the rails under ~240px,
    so the stops collapse to chip rows above the window. It's wider than the
    960px breakpoint the rest of the page uses because flanking a 545px window
-   needs the room for both rails — and it moves with the window (1100 at 520,
-   1125 at 545) to keep that floor where it was. */
-@media (max-width: 1125px) {
+   needs the room for both rails — and it moves with the window and rails
+   (1100 at 520 with 280px rails, 1140 at 545 with 288px) to keep that floor
+   where it was. */
+@media (max-width: 1140px) {
   .showcase-grid {
     /* minmax(0, …) so the fixed-width app stage can't inflate the track */
     grid-template-columns: minmax(0, 1fr);
