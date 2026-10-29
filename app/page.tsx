@@ -1,4 +1,5 @@
 import BrandIcon from '@/components/BrandIcon'
+import CtaWordmark from '@/components/CtaWordmark'
 import InterestForm from '@/components/InterestForm'
 import Platforms from '@/components/Platforms'
 import Reveal from '@/components/Reveal'
@@ -278,9 +279,7 @@ export default function Home() {
         </div>
         {/* Decorative: the brand again, huge and faint, cropped where the
             section meets the footer. The heading's "Rove" is the one read. */}
-        <div className="cta-wordmark" aria-hidden="true">
-          Rove
-        </div>
+        <CtaWordmark />
       </section>
 
       <footer className="site-footer">
