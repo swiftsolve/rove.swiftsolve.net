@@ -252,14 +252,13 @@ export default function Home() {
               private by default
             </h2>
             <p>
-              A pure-Rust core reads kernel counters and routing tables straight from the OS,
-              then hands them to your system&apos;s own webview to draw. No Chromium, no Node
-              runtime, no half-gigabyte of RAM sitting idle: a small download, quick enough to
-              catch a cable pull before you&apos;ve set the laptop down.
+              Rove reads straight from the OS and draws in your system&apos;s own webview. No
+              Chromium, no idle half-gigabyte of RAM, just a small app that notices a cable pull
+              before you&apos;ve set the laptop down.
             </p>
             <p>
-              Private by construction, not by setting. No account, no telemetry, a deny-by-default
-              sandbox, and every number measured on your machine and kept there.
+              Private by construction, not by setting. No account, no telemetry, and every number
+              stays on your machine.
             </p>
           </Reveal>
 
