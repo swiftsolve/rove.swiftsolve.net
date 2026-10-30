@@ -1694,21 +1694,21 @@ code {
 
 /* The letters rise from behind the footer's edge, which crops the wordmark,
    one after another: Cloud Couture's footer wordmark, at Rove's pace. They
-   move by `top`, not `transform`: a transformed letter drops out of the
-   word's text-clipped gradient, so it would rise invisible and pop in at the
-   end. 1em is a whole letter's height, enough to clear the crop. */
+   move by `vertical-align`, not `transform` or a relative `top`: either of
+   those gives a letter its own layer, which drops it out of the word's
+   text-clipped gradient, and Safari then paints it not at all. 1em is a
+   whole letter's height, enough to clear the crop. */
 .cta-letter {
-  position: relative;
-  top: 0;
-  transition: top 1s var(--ease-out) calc(var(--i) * 60ms);
+  vertical-align: 0;
+  transition: vertical-align 1s var(--ease-out) calc(var(--i) * 60ms);
 }
 
 .cta-wordmark.is-armed .cta-letter {
-  top: 1em;
+  vertical-align: -1em;
 }
 
 .cta-wordmark.is-armed.is-shown .cta-letter {
-  top: 0;
+  vertical-align: 0;
 }
 
 /* The copy and form sit over the wordmark. */
