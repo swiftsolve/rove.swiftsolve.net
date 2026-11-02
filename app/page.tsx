@@ -9,6 +9,8 @@ import Testimonials from '@/components/Testimonials'
 
 const GITHUB_URL = 'https://github.com/swiftsolve/rove'
 const RELEASES_URL = `${GITHUB_URL}/releases/latest`
+// The design tokens, built from the Rove Design System in Figma.
+const DESIGN_URL = 'https://github.com/swiftsolve/rove-tokens'
 // TODO: point at the real checkout once it exists.
 const PURCHASE_URL = RELEASES_URL
 
@@ -291,6 +293,9 @@ export default function Home() {
           <span className="footer-links">
             <a href={RELEASES_URL} target="_blank" rel="noopener noreferrer">
               Releases
+            </a>
+            <a href={DESIGN_URL} target="_blank" rel="noopener noreferrer">
+              Design
             </a>
             <a href={`${GITHUB_URL}/issues`} target="_blank" rel="noopener noreferrer">
               Report an issue
