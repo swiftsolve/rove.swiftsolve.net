@@ -59,6 +59,23 @@ build() {
 build "$ROVE_REPO" "$ROVE_REF" rove
 build "$ROVE_TOKENS_REPO" "$ROVE_TOKENS_REF" rove-tokens
 
+# check_subpath <name>: the Storybooks are served under /storybook/, so a
+# stylesheet that loads from the site root (url('/fonts/…')) 404s there and the
+# pages fall back to the system font. Stop before anything is copied.
+check_subpath() {
+  local name="$1" found
+  found="$(grep -rEo "url\(['\"]?/[^/][^)]*\)" --include='*.css' "$WORK/$name-static" || true)"
+  if [ -n "$found" ]; then
+    echo "error: the $name Storybook loads from the site root, which isn't there under /storybook/:" >&2
+    echo "$found" >&2
+    echo "       reference the file by a relative path so Vite bundles it." >&2
+    exit 1
+  fi
+}
+
+check_subpath rove
+check_subpath rove-tokens
+
 rm -rf "$OUT_DIR"
 mkdir -p "$OUT_DIR"
 cp -R "$WORK/rove-static/." "$OUT_DIR/"
