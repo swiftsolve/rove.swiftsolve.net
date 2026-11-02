@@ -666,7 +666,7 @@ code {
   /* 16px, not the app's 13: iOS Safari zooms the page into any field set
      smaller the moment it takes focus. */
   font-size: 16px;
-  line-height: 20px;
+  line-height: 22px;
   outline: none;
 }
 
@@ -676,14 +676,14 @@ code {
 
 /* Inset in the group, 4px off its top and bottom edges like TextField's
    action, so it drops the standalone CTA's size. The label is Button's
-   solid one, semibold with no tracking, scaled up with the field: the app
-   sets 12px against a 13px input, this page 14px against 16px. */
+   solid one, semibold with no tracking, scaled up with the page's larger
+   field (16px text, 44px tall). */
 .interest-submit {
   flex: none;
   justify-content: center;
-  height: 32px;
-  padding: 0 14px;
-  font-size: 14px;
+  height: 34px;
+  padding: 0 16px;
+  font-size: 15px;
   letter-spacing: 0;
 }
 
