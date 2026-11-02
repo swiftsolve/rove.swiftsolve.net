@@ -563,12 +563,12 @@ code {
   font-size: 15px;
   font-weight: 600;
   color: var(--text-on-fill);
-  background: var(--accent-fill);
-  transition: background var(--duration-fast) ease-in-out, transform var(--duration-fast) ease-in-out;
+  background-color: var(--accent-fill);
+  transition: background-color var(--duration-fast) ease-in-out, transform var(--duration-fast) ease-in-out;
 }
 
 .cta-primary:hover {
-  background: var(--accent-fill-hover);
+  background-color: var(--accent-fill-hover);
 }
 
 .cta-primary:active:not(:disabled) {
@@ -676,21 +676,58 @@ code {
 
 /* Inset in the group, 4px off its top and bottom edges like TextField's
    action, so it drops the standalone CTA's size. The label is Button's
-   solid one, semibold with no tracking, scaled up with the page's larger
-   field (16px text, 44px tall). */
+   solid one, semibold with no tracking, at the field's 16px so the hint and
+   the label read as one line. */
 .interest-submit {
   flex: none;
   justify-content: center;
   height: 34px;
   padding: 0 16px;
-  font-size: 15px;
+  font-size: 16px;
   letter-spacing: 0;
 }
 
+/* The sheen, after swiftwallet's sign-up buttons: a soft top gloss and a
+   shimmer that keeps sweeping across, the gloss brightening on hover. Drawn
+   as background layers over the fill, so the label stays on top. */
+.interest-submit {
+  background-image:
+    linear-gradient(180deg, rgb(255 255 255 / 0.07) 0%, transparent 45%),
+    linear-gradient(90deg, transparent 30%, rgb(255 255 255 / 0.3) 50%, transparent 70%);
+  background-size: 100% 100%, 250% 100%;
+  background-position: 0 0, 120% 0;
+  background-repeat: no-repeat;
+  animation: interest-sheen 2.4s ease-in-out infinite;
+}
+
+.interest-submit:hover {
+  background-image:
+    linear-gradient(180deg, rgb(255 255 255 / 0.11) 0%, transparent 45%),
+    linear-gradient(90deg, transparent 30%, rgb(255 255 255 / 0.3) 50%, transparent 70%);
+}
+
+/* Left to right across the first half, then a rest before the next pass. */
+@keyframes interest-sheen {
+  0% {
+    background-position: 0 0, 120% 0;
+  }
+  50%,
+  100% {
+    background-position: 0 0, -20% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .interest-submit {
+    animation: none;
+  }
+}
+
 /* Sending: the button keeps full strength, as Button's loading state does;
-   the spinner in front of the label shows the wait. */
+   the spinner in front of the label shows the wait, and the sheen rests. */
 .interest-submit:disabled {
   cursor: default;
+  animation: none;
 }
 
 .interest-spinner {
