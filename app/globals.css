@@ -677,13 +677,14 @@ code {
 /* Inset in the group, 6px off its top, right and bottom edges (a roomier
    take on TextField's 4px, for the page's larger field), so it drops the
    standalone CTA's size. The label is Button's solid one, semibold with no
-   tracking, at the field's 16px so the hint and the label read as one line. */
+   tracking, at 14px: a step under the field's 16px, so the button reads as
+   the action rather than as more of the address. */
 .interest-submit {
   flex: none;
   justify-content: center;
   height: 34px;
   padding: 0 16px;
-  font-size: 16px;
+  font-size: 14px;
   letter-spacing: 0;
 }
 
