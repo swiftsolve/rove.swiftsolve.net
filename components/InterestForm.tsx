@@ -85,7 +85,7 @@ export default function InterestForm() {
           aria-busy={status === 'sending' || undefined}
         >
           {status === 'sending' && <span className="interest-spinner" aria-hidden="true" />}
-          {status === 'sending' ? 'Sending' : 'I’m interested'}
+          {status === 'sending' ? 'Sending' : 'Notify me'}
         </button>
       </div>
       {status === 'error' && (

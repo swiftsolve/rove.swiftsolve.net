@@ -658,7 +658,7 @@ code {
 .interest-input {
   flex: 1;
   min-width: 0;
-  padding: 10px 12px;
+  padding: 12px 14px;
   border: none;
   background: none;
   color: var(--text-primary);
@@ -674,10 +674,10 @@ code {
   color: var(--text-tertiary);
 }
 
-/* Inset in the group, 4px off its top and bottom edges like TextField's
-   action, so it drops the standalone CTA's size. The label is Button's
-   solid one, semibold with no tracking, at the field's 16px so the hint and
-   the label read as one line. */
+/* Inset in the group, 6px off its top, right and bottom edges (a roomier
+   take on TextField's 4px, for the page's larger field), so it drops the
+   standalone CTA's size. The label is Button's solid one, semibold with no
+   tracking, at the field's 16px so the hint and the label read as one line. */
 .interest-submit {
   flex: none;
   justify-content: center;
