@@ -2,9 +2,13 @@ import type { Metadata, Viewport } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
 
+// The weight range matters: without it the face is declared 400 only, and
+// every 500–650 heading and label is faux-bolded from the regular weight
+// instead of drawn from the variable font's own axis, as the app does.
 const inter = localFont({
   src: './fonts/InterVariable.woff2',
   variable: '--font-inter',
+  weight: '100 900',
   display: 'swap',
 })
 

@@ -676,14 +676,14 @@ code {
 
 /* Inset in the group, 4px off its top and bottom edges like TextField's
    action, so it drops the standalone CTA's size. The label is Button's
-   solid one: Label/Large, 12px semibold with no tracking. */
+   solid one, semibold with no tracking, scaled up with the field: the app
+   sets 12px against a 13px input, this page 14px against 16px. */
 .interest-submit {
   flex: none;
   justify-content: center;
   height: 32px;
   padding: 0 14px;
-  font-size: 12px;
-  line-height: 1.45;
+  font-size: 14px;
   letter-spacing: 0;
 }
 
