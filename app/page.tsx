@@ -150,9 +150,8 @@ export default function Home() {
             Your network,<br /><span className="accent">finally visible</span>
           </Reveal>
           <Reveal as="p" className="hero-sub" onMount delay={0.14}>
-            Rove is a tiny desktop app that shows you what your connection is really doing: live
-            traffic, honest speed tests, every device on your Wi-Fi, how much data each app uses
-            and where in the world it goes, and whether the services you rely on are up.
+            Rove is a tiny desktop app that shows you what&apos;s on your network, what&apos;s using
+            it, and how well it&apos;s really working.
           </Reveal>
           <Reveal className="hero-ctas" onMount delay={0.21}>
             <InterestForm />
