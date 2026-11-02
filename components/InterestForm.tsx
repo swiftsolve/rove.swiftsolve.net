@@ -59,21 +59,6 @@ export default function InterestForm() {
   return (
     <form className="interest" onSubmit={onSubmit}>
       <div className="interest-row">
-        <svg
-          className="interest-icon"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <rect x="2" y="4" width="20" height="16" rx="2" />
-          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-        </svg>
         <input
           className="interest-input"
           type="email"
@@ -93,8 +78,14 @@ export default function InterestForm() {
           autoComplete="off"
           aria-hidden="true"
         />
-        <button className="cta-primary interest-submit" type="submit" disabled={status === 'sending'}>
-          {status === 'sending' ? 'Sending…' : 'I’m interested'}
+        <button
+          className="cta-primary interest-submit"
+          type="submit"
+          disabled={status === 'sending'}
+          aria-busy={status === 'sending' || undefined}
+        >
+          {status === 'sending' && <span className="interest-spinner" aria-hidden="true" />}
+          {status === 'sending' ? 'Sending' : 'I’m interested'}
         </button>
       </div>
       {status === 'error' && (

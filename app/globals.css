@@ -27,6 +27,17 @@
   --positive: #43d6a0;
   --series-up: #b39dff;
 
+  /* Under the Rove tokens' own names: what the Rove UI library's Button and
+     TextField draw with, so the controls built to their recipes match. */
+  --accent-fill: #3a69d5;
+  --accent-fill-hover: #3360c9;
+  --status-negative: #f6675a;
+  --text-on-fill: #ffffff;
+  --radius-sm: 8px;
+  --opacity-tint-sm: 10%;
+  --opacity-tint-md: 14%;
+  --duration-fast: 140ms;
+
   --radius: 13px;
 
   /* Every section pads by this top and bottom, so the gap between any two
@@ -540,32 +551,28 @@ code {
   margin-top: var(--lede-gap);
 }
 
+/* Rove's solid accent Button, at the page's size: a flat accent fill under a
+   white label (white on the lighter --accent is too faint to read), and a
+   half-pixel press rather than a lift. */
 .cta-primary {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
+  gap: 6px;
   padding: 13px 26px;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   font-size: 15px;
   font-weight: 600;
-  letter-spacing: -0.01em;
-  transition: background 140ms ease, transform 140ms ease, box-shadow 140ms ease;
-}
-
-.cta-primary {
-  color: #fff;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0) 42%), var(--accent);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    0 6px 16px rgba(91, 140, 255, 0.18);
+  color: var(--text-on-fill);
+  background: var(--accent-fill);
+  transition: background var(--duration-fast) ease-in-out, transform var(--duration-fast) ease-in-out;
 }
 
 .cta-primary:hover {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0) 42%), var(--accent-hover);
-  transform: translateY(-1px);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    0 8px 20px rgba(91, 140, 255, 0.24);
+  background: var(--accent-fill-hover);
+}
+
+.cta-primary:active:not(:disabled) {
+  transform: translateY(0.5px);
 }
 
 /* --- platforms ---
@@ -623,10 +630,11 @@ code {
 }
 
 /* --- interest signup ---
-   Stands where the download button did, in the hero and the closing CTA. The
-   field and its button sit in one capsule, so they read as a single control
-   rather than two boxes that happen to be neighbours; the capsule, not the
-   input, takes the border and the focus ring. */
+   Stands where the download button did, in the hero and the closing CTA.
+   Built to the Rove UI library's TextField with an action: the group, not the
+   input, draws the border, so field and button read as one control, and focus
+   turns that border accent. The type runs a step above the app's, at the
+   page's scale. */
 .interest {
   width: 100%;
   max-width: 420px;
@@ -635,44 +643,30 @@ code {
 .interest-row {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px;
-  border: 1px solid var(--border-strong);
-  border-radius: 14px;
-  background: var(--bg-panel);
-  box-shadow: var(--shadow-panel);
-  transition: border-color 140ms ease, box-shadow 140ms ease;
+  gap: 4px;
+  padding-right: 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-inset);
+  transition: border-color var(--duration-fast) ease-in-out;
 }
 
 .interest-row:focus-within {
-  border-color: rgba(91, 140, 255, 0.55);
-  box-shadow: var(--shadow-panel), 0 0 0 3px var(--accent-muted);
-}
-
-/* Decorative: the placeholder and the field's label already say "email". */
-.interest-icon {
-  flex: none;
-  margin-left: 10px;
-  color: var(--text-tertiary);
-  transition: color 140ms ease;
-}
-
-.interest-row:focus-within .interest-icon {
-  color: var(--text-secondary);
+  border-color: var(--accent);
 }
 
 .interest-input {
   flex: 1;
   min-width: 0;
-  align-self: stretch;
-  padding: 0 6px 0 8px;
+  padding: 10px 12px;
   border: none;
   background: none;
   color: var(--text-primary);
   font: inherit;
-  /* 16px, not less: iOS Safari zooms the page into any field set smaller the
-     moment it takes focus. */
+  /* 16px, not the app's 13: iOS Safari zooms the page into any field set
+     smaller the moment it takes focus. */
   font-size: 16px;
+  line-height: 20px;
   outline: none;
 }
 
@@ -680,63 +674,49 @@ code {
   color: var(--text-tertiary);
 }
 
-/* Inset in the capsule, so it drops the standalone CTA's size and glow. */
+/* Inset in the group, 4px off its top and bottom edges like TextField's
+   action, so it drops the standalone CTA's size. */
 .interest-submit {
   flex: none;
   justify-content: center;
-  padding: 10px 18px;
-  border-radius: 10px;
-  font-size: 14.5px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  height: 32px;
+  padding: 0 14px;
+  font-size: 14px;
 }
 
-.interest-submit:hover {
-  transform: none;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
-}
-
+/* Sending: the button keeps full strength, as Button's loading state does;
+   the spinner in front of the label shows the wait. */
 .interest-submit:disabled {
   cursor: default;
-  opacity: 0.7;
 }
 
-/* Phones: the desktop padding makes the capsule a tall 55px block. Trimmed,
-   the whole control is ~46px, still a comfortable tap target. */
-@media (max-width: 480px) {
-  .interest-row {
-    padding: 4px;
-    border-radius: 12px;
-  }
-
-  .interest-submit {
-    padding: 8px 14px;
-    border-radius: 9px;
-    font-size: 14px;
-  }
+.interest-spinner {
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: interest-spin 1s linear infinite;
 }
 
-/* Below 380px the field needs the icon's room more than it needs the icon. */
-@media (max-width: 379px) {
-  .interest-icon {
-    display: none;
-  }
-
-  .interest-input {
-    padding-left: 12px;
+@keyframes interest-spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
 /* On the narrowest phones the button would leave the field too little room
-   for an address, so it drops under it, full width, inside the same capsule.
+   for an address, so it drops under it, full width, inside the same group.
    Only below 360px: from there up the field keeps a comfortable ~170px. */
 @media (max-width: 359px) {
   .interest-row {
     flex-wrap: wrap;
+    padding: 0 6px 6px;
   }
 
   .interest-input {
     flex-basis: 100%;
-    height: 38px;
+    padding-inline: 6px;
   }
 
   .interest-submit {
@@ -757,21 +737,27 @@ code {
    a reserved empty line would sit as a visible gap under the form. */
 .interest-error {
   margin-top: 8px;
-  color: #ff8a8a;
+  color: var(--status-negative);
   font-size: 13px;
 }
 
+/* Rove's Banner wash and outline, in the positive tone: a green check, the
+   words in the page's primary text. */
 .interest-done {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  padding: 13px 20px;
-  border: 1px solid rgba(67, 214, 160, 0.25);
-  border-radius: 14px;
-  background: rgba(67, 214, 160, 0.08);
-  color: var(--positive);
+  gap: 8px;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--positive) var(--opacity-tint-sm), transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--positive) var(--opacity-tint-md), transparent);
+  color: var(--text-primary);
   font-size: 15px;
-  font-weight: 550;
+  font-weight: 500;
+}
+
+.interest-done svg {
+  color: var(--positive);
 }
 
 /* The confirmation takes the form's place, so it arrives rather than just
