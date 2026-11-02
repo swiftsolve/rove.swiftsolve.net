@@ -76,10 +76,32 @@ check_subpath() {
 check_subpath rove
 check_subpath rove-tokens
 
+# version_fixed_names <name> <rev>: most of a build is named by content hash,
+# but the sidebar's runtime and addons (sb-manager/, sb-addons/) and the
+# preview's mocker entry keep the same name every build, and Cloudflare tells
+# browsers to keep JS for 4 hours, so a resync would show a stale sidebar.
+# Each is loaded only from index.html or iframe.html, so the build's commit
+# goes on those references as ?v=, and a new build is a new URL.
+version_fixed_names() {
+  local dir="$WORK/$1-static" rev="$2" page
+  for page in "$dir/index.html" "$dir/iframe.html"; do
+    perl -pi -e "s#(\./(?:sb-manager|sb-addons)/[^'\"?]+\.js|\./vite-inject-mocker-entry\.js)(?=['\"])#\$1?v=$rev#g" "$page"
+  done
+  if grep -qE "\./(sb-manager|sb-addons)/[^'\"?]+\.js['\"]|\./vite-inject-mocker-entry\.js['\"]" "$dir/index.html" "$dir/iframe.html"; then
+    echo "error: the $1 Storybook still loads a fixed-name file without a version." >&2
+    exit 1
+  fi
+}
+
+ROVE_REV="$(git -C "$ROVE_REPO" rev-parse --short "$ROVE_REF")"
+ROVE_TOKENS_REV="$(git -C "$ROVE_TOKENS_REPO" rev-parse --short "$ROVE_TOKENS_REF")"
+version_fixed_names rove "$ROVE_REV"
+version_fixed_names rove-tokens "$ROVE_TOKENS_REV"
+
 rm -rf "$OUT_DIR"
 mkdir -p "$OUT_DIR"
 cp -R "$WORK/rove-static/." "$OUT_DIR/"
 cp -R "$WORK/rove-tokens-static" "$OUT_DIR/tokens"
 
-echo "✓ Storybooks synced (rove $(git -C "$ROVE_REPO" rev-parse --short "$ROVE_REF"), rove-tokens $(git -C "$ROVE_TOKENS_REPO" rev-parse --short "$ROVE_TOKENS_REF"))"
+echo "✓ Storybooks synced (rove $ROVE_REV, rove-tokens $ROVE_TOKENS_REV)"
 echo "  commit public/storybook/ and redeploy the site."
