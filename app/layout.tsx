@@ -45,7 +45,7 @@ export const metadata: Metadata = {
      stops opening on a white frame. Declared 'dark' only — the page has no
      light palette to switch to. */
 export const viewport: Viewport = {
-  themeColor: '#0a0b0e',
+  themeColor: '#0b0b0c',
   colorScheme: 'dark',
 }
 
