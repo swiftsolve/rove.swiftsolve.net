@@ -981,20 +981,19 @@ code {
   position: relative;
 }
 
-/* Same visual language as the app nav rail's active indicator
-   (.nav-item.active::before): an accent bar flat on the outer edge, rounded
-   on the inner. The nav's is 20px because its items are tiny; on these taller
-   cards it insets from top/bottom so the length stays proportionate instead
-   of looking stubby, and runs a hair under the nav's 3px so a bar this long
-   doesn't read as heavy. Sits on ::after because ::before carries the hover
-   glow; it clears the text, so painting above the content costs nothing. */
+/* The app nav rail's active bar, to the pixel: 3px by 20px, flat on the outer
+   edge and rounded on the inner. The rail centres it on its item's icon, so
+   here it sits level with the stop's icon: the title row is 20px tall and
+   starts at the 18px top padding. Sits on ::after because ::before carries
+   the hover glow; it clears the text, so painting above the content costs
+   nothing. */
 .tour-stop.is-active::after {
   content: '';
   position: absolute;
   left: 0;
-  top: 17px;
-  bottom: 17px;
-  width: 2.75px;
+  top: 18px;
+  width: 3px;
+  height: 20px;
   border-radius: 0 3px 3px 0;
   background: var(--accent);
 }
