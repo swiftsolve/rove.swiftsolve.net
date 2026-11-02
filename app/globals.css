@@ -663,8 +663,8 @@ code {
   background: none;
   color: var(--text-primary);
   font: inherit;
-  /* 16px, not the app's 13: iOS Safari zooms the page into any field set
-     smaller the moment it takes focus. */
+  /* 16px on touch screens: iOS Safari zooms the page into any field set
+     smaller the moment it takes focus. With a mouse it's 14px (below). */
   font-size: 16px;
   line-height: 22px;
   outline: none;
@@ -677,15 +677,24 @@ code {
 /* Inset in the group, 6px off its top, right and bottom edges (a roomier
    take on TextField's 4px, for the page's larger field), so it drops the
    standalone CTA's size. The label is Button's solid one, semibold with no
-   tracking, at 14px: a step under the field's 16px, so the button reads as
-   the action rather than as more of the address. */
+   tracking, at the field's size so the address and the label read as one
+   line, behind a bell. */
 .interest-submit {
   flex: none;
   justify-content: center;
   height: 34px;
   padding: 0 16px;
-  font-size: 14px;
+  font-size: 16px;
   letter-spacing: 0;
+}
+
+/* With a mouse there's no zoom to avoid, so the field and its label drop to
+   14px together. */
+@media (pointer: fine) {
+  .interest-input,
+  .interest-submit {
+    font-size: 14px;
+  }
 }
 
 /* The sheen, after swiftwallet's sign-up buttons: a soft top gloss and a
