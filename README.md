@@ -32,15 +32,15 @@ data), and `--target es2022` is needed for the top-level `await` in `main.tsx`.
 `public/storybook/` serves two static Storybooks:
 
 - <https://rove.swiftsolve.net/storybook/>: Rove Components, the app's UI library, built from the Rove repo's `origin/master`.
-- <https://rove.swiftsolve.net/storybook/tokens/>: Rove Tokens, built from rove-design's `origin/main`.
+- <https://rove.swiftsolve.net/storybook/tokens/>: Rove Tokens, built from rove-tokens' `origin/main`.
 
-Like the demo, they don't update on their own. After a UI change lands on master or a token change lands on rove-design's main:
+Like the demo, they don't update on their own. After a UI change lands on master or a token change lands on rove-tokens' main:
 
 ```bash
 npm run sync-storybook
 ```
 
-then commit `public/storybook/` and redeploy. `scripts/sync-storybook.sh` builds each one in a temporary worktree of that ref, so neither repo's checked-out branch or uncommitted work reaches the site. Override with `ROVE_REPO`, `ROVE_REF`, `ROVE_DESIGN_REPO` and `ROVE_DESIGN_REF`. Next serves both folders' `index.html` through the rewrites in `next.config.mjs`.
+then commit `public/storybook/` and redeploy. `scripts/sync-storybook.sh` builds each one in a temporary worktree of that ref, so neither repo's checked-out branch or uncommitted work reaches the site. Override with `ROVE_REPO`, `ROVE_REF`, `ROVE_TOKENS_REPO` and `ROVE_TOKENS_REF`. Next serves both folders' `index.html` through the rewrites in `next.config.mjs`.
 
 ## Development
 
