@@ -135,6 +135,30 @@ function trackPointer(event: PointerEvent<HTMLButtonElement>) {
   el.style.setProperty('--pointer-y', `${((event.clientY - rect.top) / rect.height) * 100}%`)
 }
 
+/** On the narrow layout the stops are one horizontally scrolling row of chips,
+ *  and a chip focused (by Tab, or a tap that hands focus back) can sit half off
+ *  either end. Scroll the row — only the row, never the page — until the chip
+ *  and its focus ring (1px at a 2px offset) clear the row's edges. On the wide
+ *  layout the wrapper is display:contents and doesn't overflow, so it's a no-op. */
+function revealStop(stop: HTMLElement) {
+  const row = stop.closest<HTMLElement>('.tour-rails')
+  if (!row || row.scrollWidth <= row.clientWidth) return
+
+  const edge = 4
+  const box = row.getBoundingClientRect()
+  const chip = stop.getBoundingClientRect()
+  const delta =
+    chip.left < box.left + edge
+      ? chip.left - box.left - edge
+      : chip.right > box.right - edge
+        ? chip.right - box.right + edge
+        : 0
+  if (!delta) return
+
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  row.scrollBy({ left: delta, behavior: still ? 'auto' : 'smooth' })
+}
+
 function Rail({
   stops,
   side,
@@ -161,7 +185,11 @@ function Rail({
           role="tab"
           aria-selected={active === stop.label}
           className={`tour-stop${active === stop.label ? ' is-active' : ''}`}
-          onClick={(event) => onPick(stop.label, event.currentTarget, event.detail > 0)}
+          onClick={(event) => {
+            revealStop(event.currentTarget)
+            onPick(stop.label, event.currentTarget, event.detail > 0)
+          }}
+          onFocus={(event) => revealStop(event.currentTarget)}
           onPointerMove={trackPointer}
         >
           {/* The border-light layer: a masked gradient ring that brightens where
