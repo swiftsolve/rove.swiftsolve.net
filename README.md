@@ -27,6 +27,21 @@ load-bearing flags: `--mode development` + `NODE_ENV=development` keep
 `import.meta.env.DEV` true so the mock bridge is bundled (without it the demo has no
 data), and `--target es2022` is needed for the top-level `await` in `main.tsx`.
 
+## The hosted Storybooks
+
+`public/storybook/` serves two static Storybooks:
+
+- <https://rove.swiftsolve.net/storybook/>: Rove Components, the app's UI library, built from the Rove repo's `origin/master`.
+- <https://rove.swiftsolve.net/storybook/tokens/>: Rove Tokens, built from rove-design's latest `v*` tag.
+
+Like the demo, they don't update on their own. After a UI change lands on master or rove-design cuts a release:
+
+```bash
+npm run sync-storybook
+```
+
+then commit `public/storybook/` and redeploy. `scripts/sync-storybook.sh` builds each one in a temporary worktree of that ref, so neither repo's checked-out branch or uncommitted work reaches the site. Override with `ROVE_REPO`, `ROVE_REF`, `ROVE_DESIGN_REPO` and `ROVE_DESIGN_REF`. Next serves both folders' `index.html` through the rewrites in `next.config.mjs`.
+
 ## Development
 
 ```bash
