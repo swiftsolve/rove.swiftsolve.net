@@ -675,13 +675,16 @@ code {
 }
 
 /* Inset in the group, 4px off its top and bottom edges like TextField's
-   action, so it drops the standalone CTA's size. */
+   action, so it drops the standalone CTA's size. The label is Button's
+   solid one: Label/Large, 12px semibold with no tracking. */
 .interest-submit {
   flex: none;
   justify-content: center;
   height: 32px;
   padding: 0 14px;
-  font-size: 14px;
+  font-size: 12px;
+  line-height: 1.45;
+  letter-spacing: 0;
 }
 
 /* Sending: the button keeps full strength, as Button's loading state does;
