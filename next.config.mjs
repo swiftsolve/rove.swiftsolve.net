@@ -12,9 +12,13 @@ const nextConfig = {
   // Next doesn't directory-index public/ subfolders, so the demo iframe's
   // /app/ request would 404. Rewrite it to the real file. This used to be
   // dev-only, back when production was a static host that indexed the folder
-  // itself; now Next serves production too, so it applies everywhere.
+  // itself; now Next serves production too, so it applies everywhere. The
+  // hosted Storybooks (public/storybook/) need the same.
   async rewrites() {
-    return [{ source: '/app', destination: '/app/index.html' }]
+    return ['/app', '/storybook', '/storybook/tokens'].map((dir) => ({
+      source: dir,
+      destination: `${dir}/index.html`,
+    }))
   },
 }
 

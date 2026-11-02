@@ -11,7 +11,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "sync-demo": "bash scripts/sync-demo.sh"
+    "sync-demo": "bash scripts/sync-demo.sh",
+    "sync-storybook": "bash scripts/sync-storybook.sh"
   },
   "dependencies": {
     "motion": "^12.42.2",
