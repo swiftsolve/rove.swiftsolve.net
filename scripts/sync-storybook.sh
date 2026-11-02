@@ -3,16 +3,16 @@
 # sync-storybook.sh — rebuild the hosted Storybooks in public/storybook/
 #
 #   /storybook/         the Rove UI library, built from the app repo's master
-#   /storybook/tokens/  Rove Tokens, built from rove-design's latest release
+#   /storybook/tokens/  Rove Tokens, built from rove-design's main
 #
 # Like the demo, these are static snapshots: run this after a UI change lands
-# on master or rove-design cuts a release, then commit public/storybook/.
+# on master or a token change lands on rove-design's main, then commit
+# public/storybook/.
 #
 # Each Storybook builds in a temporary worktree of the remote ref, so neither
 # repo's current branch or uncommitted work ends up on the site. Override with:
 #   ROVE_REPO=/path/to/rove               ROVE_REF=origin/master
-#   ROVE_DESIGN_REPO=/path/to/rove-design ROVE_DESIGN_REF=v3.4.0
-# ROVE_DESIGN_REF defaults to the newest v* tag on rove-design's origin/main.
+#   ROVE_DESIGN_REPO=/path/to/rove-design ROVE_DESIGN_REF=origin/main
 
 set -euo pipefail
 
@@ -31,9 +31,9 @@ for repo in "$ROVE_REPO" "$ROVE_DESIGN_REPO"; do
 done
 
 git -C "$ROVE_REPO" fetch -q origin
-git -C "$ROVE_DESIGN_REPO" fetch -q --tags origin
+git -C "$ROVE_DESIGN_REPO" fetch -q origin
 ROVE_REF="${ROVE_REF:-origin/master}"
-ROVE_DESIGN_REF="${ROVE_DESIGN_REF:-$(git -C "$ROVE_DESIGN_REPO" describe --tags --abbrev=0 --match 'v*' origin/main)}"
+ROVE_DESIGN_REF="${ROVE_DESIGN_REF:-origin/main}"
 
 WORK="$(mktemp -d)"
 cleanup() {
@@ -64,5 +64,5 @@ mkdir -p "$OUT_DIR"
 cp -R "$WORK/rove-static/." "$OUT_DIR/"
 cp -R "$WORK/rove-design-static" "$OUT_DIR/tokens"
 
-echo "✓ Storybooks synced (rove $(git -C "$ROVE_REPO" rev-parse --short "$ROVE_REF"), rove-design $ROVE_DESIGN_REF)"
+echo "✓ Storybooks synced (rove $(git -C "$ROVE_REPO" rev-parse --short "$ROVE_REF"), rove-design $(git -C "$ROVE_DESIGN_REPO" rev-parse --short "$ROVE_DESIGN_REF"))"
 echo "  commit public/storybook/ and redeploy the site."

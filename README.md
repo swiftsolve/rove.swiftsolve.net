@@ -32,9 +32,9 @@ data), and `--target es2022` is needed for the top-level `await` in `main.tsx`.
 `public/storybook/` serves two static Storybooks:
 
 - <https://rove.swiftsolve.net/storybook/>: Rove Components, the app's UI library, built from the Rove repo's `origin/master`.
-- <https://rove.swiftsolve.net/storybook/tokens/>: Rove Tokens, built from rove-design's latest `v*` tag.
+- <https://rove.swiftsolve.net/storybook/tokens/>: Rove Tokens, built from rove-design's `origin/main`.
 
-Like the demo, they don't update on their own. After a UI change lands on master or rove-design cuts a release:
+Like the demo, they don't update on their own. After a UI change lands on master or a token change lands on rove-design's main:
 
 ```bash
 npm run sync-storybook
