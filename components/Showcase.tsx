@@ -144,7 +144,9 @@ function Rail({
   readonly stops: readonly TourStop[]
   readonly side: 'left' | 'right'
   readonly active: string
-  readonly onPick: (label: string, stop: HTMLElement) => void
+  /** `byPointer`: a click or tap, rather than Enter/Space (which fire a click
+   *  with detail 0). Decides whether the focus handed back shows a ring. */
+  readonly onPick: (label: string, stop: HTMLElement, byPointer: boolean) => void
 }) {
   return (
     <div
@@ -159,7 +161,7 @@ function Rail({
           role="tab"
           aria-selected={active === stop.label}
           className={`tour-stop${active === stop.label ? ' is-active' : ''}`}
-          onClick={(event) => onPick(stop.label, event.currentTarget)}
+          onClick={(event) => onPick(stop.label, event.currentTarget, event.detail > 0)}
           onPointerMove={trackPointer}
         >
           {/* The border-light layer: a masked gradient ring that brightens where
@@ -258,7 +260,7 @@ export default function Showcase() {
     }
   }, [])
 
-  const goTo = (label: string, stop: HTMLElement) => {
+  const goTo = (label: string, stop: HTMLElement, byPointer: boolean) => {
     setActive(label)
     const doc = iframeRef.current?.contentDocument
     const btn = doc?.querySelector<HTMLButtonElement>(`nav button[aria-label="${label}"]`)
@@ -271,7 +273,24 @@ export default function Showcase() {
     // picked. The app focuses within a microtask of the click; the listener
     // lapses shortly after, so a re-pick of the current stop (no navigation,
     // no focus move) can't leave it waiting to yank a later click out of the app.
-    const keepFocus = () => stop.focus({ preventScroll: true })
+    //
+    // That hand-back is a script focus coming out of a script focus, so browsers
+    // (Safari on a tap especially) show it as :focus-visible — a ring on a chip
+    // the visitor only tapped. A pointer pick marks the stop quiet until it
+    // blurs or a key is pressed on it, and the CSS skips the ring meanwhile.
+    const keepFocus = () => {
+      if (byPointer) {
+        stop.dataset.quietFocus = ''
+        const wake = () => {
+          delete stop.dataset.quietFocus
+          stop.removeEventListener('blur', wake)
+          stop.removeEventListener('keydown', wake)
+        }
+        stop.addEventListener('blur', wake)
+        stop.addEventListener('keydown', wake)
+      }
+      stop.focus({ preventScroll: true })
+    }
     doc.addEventListener('focusin', keepFocus, { once: true })
     setTimeout(() => doc.removeEventListener('focusin', keepFocus), 100)
     btn.click()

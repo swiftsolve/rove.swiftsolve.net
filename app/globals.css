@@ -1036,6 +1036,17 @@ code {
   color: var(--text-primary);
 }
 
+/* The global focus ring squares a button's corners off to 6px; keep the
+   stop's own 12px so the ring follows the card. A stop focused by a tap (see
+   goTo in Showcase.tsx) is quiet: it's the selection, not a keyboard
+   position, and the active styling already shows it. */
+.tour-stop:focus-visible {
+  border-radius: 12px;
+}
+.tour-stop[data-quiet-focus]:focus-visible {
+  outline: none;
+}
+
 .tour-stop-blurb {
   /* clears the title's icon (20px) and its gap (10px), so the blurb's first
      character lines up with the title's */
@@ -1812,7 +1823,13 @@ code {
     display: flex;
     gap: 8px;
     overflow-x: auto;
-    padding-bottom: 6px;
+    /* room on every side for a chip's focus ring (1px at a 2px offset), which
+       the scroll box would otherwise clip; the negative margin keeps the chips
+       where they were, and scroll-padding brings a focused end chip in far
+       enough to show its ring */
+    padding: 4px 4px 6px;
+    margin: -4px -4px 0;
+    scroll-padding-inline: 4px;
     scrollbar-width: none;
   }
 
