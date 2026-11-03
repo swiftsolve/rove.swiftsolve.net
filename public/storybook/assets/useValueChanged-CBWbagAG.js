@@ -1,1 +1,0 @@
-import{r as o}from"./iframe-B0v85q2s.js";import{b as s,a as c}from"./useBaseUiId-DBHE3ZOX.js";function f(e,a){const r=o.useRef(e),t=s(a);c(()=>{r.current!==e&&t(r.current),r.current=e},[e,t])}export{f as u};
