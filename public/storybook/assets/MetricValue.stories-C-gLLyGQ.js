@@ -1,0 +1,25 @@
+import{r as m,j as a}from"./iframe-DUVig4Wa.js";import{a as x,b as y}from"./cn-CdwUFd5Z.js";import{N as M}from"./NoValue-N7YJsuT1.js";import{S as N}from"./status-EdzG58Fr.js";import"./preload-helper-PPVm8Dsz.js";const w=.18,V=.05,S="(prefers-reduced-motion: reduce)";function T(e){const[i,s]=m.useState(e),t=m.useRef(e);return m.useEffect(()=>{let n=0;const g=()=>{const f=e-t.current;if(!Number.isFinite(f)||Math.abs(f)<V||matchMedia(S).matches){t.current=e,s(e);return}t.current+=f*w,s(t.current),n=requestAnimationFrame(g)};return n=requestAnimationFrame(g),()=>cancelAnimationFrame(n)},[e]),i}const j=y("num",{variants:{status:N}});function r({value:e,status:i,format:s,className:t}){const n=T(e);return a.jsx("span",{className:x(j({status:i}),t),children:s(n)??a.jsx(M,{})})}try{r.displayName="MetricValue",r.__docgenInfo={description:`A number that eases toward its latest value each poll. The first paint shows
+the value outright; only a later change eases.`,displayName:"MetricValue",filePath:"/tmp/tmp.erQmZWfF7q/rove/src/ui/metric-value/MetricValue.tsx",methods:[],props:{value:{defaultValue:null,declarations:[{fileName:"rove/src/ui/metric-value/MetricValue.tsx",name:"TypeLiteral"}],description:"The latest value; the figure eases toward it.",name:"value",required:!0,tags:{},type:{name:"number"}},status:{defaultValue:null,declarations:[{fileName:"rove/src/ui/metric-value/MetricValue.tsx",name:"TypeLiteral"}],description:"How healthy the value is, in the status text colours.",name:"status",required:!1,tags:{},type:{name:"enum",raw:"MetricStatus",value:[{value:'"negative"'},{value:'"positive"'},{value:'"warning"'}]}},format:{defaultValue:null,declarations:[{fileName:"rove/src/ui/metric-value/MetricValue.tsx",name:"TypeLiteral"}],description:"Turns the number, mid-ease too, into its text: `(n) => n.toFixed(1)`. Null draws a NoValue bar.",name:"format",required:!0,tags:{},type:{name:"(n: number) => string | null"}},className:{defaultValue:null,declarations:[{fileName:"rove/src/ui/metric-value/MetricValue.tsx",name:"TypeLiteral"}],description:"Its place in a layout: a column's width and alignment\n(`min-w-[46px] text-right`). It takes its size and colour from the text\naround it.",name:"className",required:!1,tags:{},type:{name:"string"}}},tags:{}}}catch{}const o=e=>`${Math.round(e)} ms`,L={title:"Data display/MetricValue",component:r,args:{value:42,format:o},argTypes:{status:{control:"inline-radio",options:[void 0,"positive","warning","negative"]},format:{control:!1}},decorators:[e=>a.jsx("span",{className:"type-number-default text-primary",children:a.jsx(e,{})})]},u={},p={args:{status:"positive"}},d={args:{value:180,status:"warning"}},v={args:{value:900,status:"negative"}},h=[24,38,180,62,900,31];function E(e){return e<=50?"positive":e<=200?"warning":"negative"}function _(){const[e,i]=m.useState(0);m.useEffect(()=>{const t=setInterval(()=>i(n=>(n+1)%h.length),2e3);return()=>clearInterval(t)},[]);const s=h[e]??0;return a.jsx("span",{className:"type-number-display metric-value",children:a.jsx(r,{value:s,status:E(s),format:o})})}const l={render:()=>a.jsx(_,{})},c={render:()=>a.jsxs("div",{className:"flex flex-wrap items-baseline gap-20",children:[a.jsx(r,{value:42,format:o}),a.jsx(r,{value:42,status:"positive",format:o}),a.jsx(r,{value:180,status:"warning",format:o}),a.jsx(r,{value:900,status:"negative",format:o})]})},O=["Default","Positive","Warning","Negative","Easing","AllStates"];u.parameters={...u.parameters,docs:{...u.parameters?.docs,source:{originalSource:"{}",...u.parameters?.docs?.source},description:{story:"No status: the value hasn't earned a colour. Change `value` to watch it ease.",...u.parameters?.docs?.description}}};p.parameters={...p.parameters,docs:{...p.parameters?.docs,source:{originalSource:`{
+  args: {
+    status: 'positive'
+  }
+}`,...p.parameters?.docs?.source}}};d.parameters={...d.parameters,docs:{...d.parameters?.docs,source:{originalSource:`{
+  args: {
+    value: 180,
+    status: 'warning'
+  }
+}`,...d.parameters?.docs?.source}}};v.parameters={...v.parameters,docs:{...v.parameters?.docs,source:{originalSource:`{
+  args: {
+    value: 900,
+    status: 'negative'
+  }
+}`,...v.parameters?.docs?.source}}};l.parameters={...l.parameters,docs:{...l.parameters?.docs,source:{originalSource:`{
+  render: () => <PollingMetric />
+}`,...l.parameters?.docs?.source},description:{story:"A new poll every two seconds: it eases to each value, up or down.",...l.parameters?.docs?.description}}};c.parameters={...c.parameters,docs:{...c.parameters?.docs,source:{originalSource:`{
+  render: () => <div className="flex flex-wrap items-baseline gap-20">
+      <MetricValue value={42} format={formatMs} />
+      <MetricValue value={42} status="positive" format={formatMs} />
+      <MetricValue value={180} status="warning" format={formatMs} />
+      <MetricValue value={900} status="negative" format={formatMs} />
+    </div>
+}`,...c.parameters?.docs?.source},description:{story:"Every status.",...c.parameters?.docs?.description}}};export{c as AllStates,u as Default,l as Easing,v as Negative,p as Positive,d as Warning,O as __namedExportsOrder,L as default};
