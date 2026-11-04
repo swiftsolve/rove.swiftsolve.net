@@ -1,0 +1,48 @@
+import{j as e,G as y}from"./iframe-BXzSuZzq.js";import{B as S}from"./Button-CRZASjQT.js";import{I as d}from"./IconButton-BM7EKwpP.js";import{b as j}from"./icon-options-FhsVMwbj.js";import{r as H,G as g,t as T,v as p,p as N}from"./Icons-DVtCSASZ.js";import{c as f}from"./cn-CdwUFd5Z.js";import{S as k}from"./ScreenReaderStatus-yebkBg8f.js";import{T as I}from"./Tooltip-BtBwNf0P.js";import{a as A}from"./layers-D5UzyUFr.js";import{P as w}from"./pressable-n_zMMF94.js";import"./preload-helper-PPVm8Dsz.js";import"./ButtonSpinner-Y8io_0x-.js";import"./usePositioner-Bms_sUF5.js";import"./useBaseUiId-z6tRsB3Q.js";import"./useOpenChangeComplete-_qZR9Ze3.js";import"./useTimeout-D7rG5t2J.js";import"./stateAttributesMapping-DqawBeMT.js";import"./visuallyHidden-BsIGJQ4u.js";import"./owner-CvMgaIeV.js";import"./shadowDom-CwQ3M_xX.js";import"./DirectionContext-BZ2D-M5k.js";const P=f("inline-flex size-(--rail-item-size) shrink-0 items-center justify-center rounded-md","bg-fill-subtle text-secondary hover:bg-hover hover:text-primary","transition-[color,background,transform] duration-(--duration-fast) ease-in-out",w),B="min-h-[calc(var(--font-size-xs)*1.35)] type-caption text-tertiary";function a({title:s,description:i,status:t,actions:m,icon:x,onBack:u}){const b=i!==void 0||t!==void 0;return e.jsxs("header",{className:f("page-header relative flex items-center gap-12",A),children:[u?e.jsx(I,{content:"Back",children:e.jsx("button",{type:"button",className:P,onClick:u,"aria-label":"Back",children:e.jsx(H,{size:18})})}):e.jsx("span",{className:"page-header-icon","aria-hidden":!0,children:x}),e.jsxs("div",{className:"flex min-w-0 flex-1 flex-col gap-4",children:[e.jsx("h1",{className:"type-heading-large text-primary",children:s}),b&&e.jsx("div",{className:B,children:t!==void 0?e.jsx("span",{"aria-hidden":!0,children:t},"status"):e.jsx("div",{className:"animate-fade-in",children:i},"description")}),e.jsx(k,{children:t})]}),m!==void 0&&e.jsx("div",{className:"flex shrink-0 items-center gap-6",children:m})]})}try{a.displayName="PageHeader",a.__docgenInfo={description:`The top of every page but Home: an icon chip (or a back button), the title
+with a line under it, and actions at the end, over a full-width divider. It
+sits above the page content (\`LAYER_RAISED\`), so its tooltips aren't painted
+over by the content they drop into. The actions hold their size, so a long
+description wraps instead of squeezing them.`,displayName:"PageHeader",filePath:"/tmp/tmp.6jx1sItMfA/rove/src/ui/page-header/PageHeader.tsx",methods:[],props:{title:{defaultValue:null,declarations:[{fileName:"rove/src/ui/page-header/PageHeader.tsx",name:"TypeLiteral"}],description:"The page's name.",name:"title",required:!0,tags:{},type:{name:"ReactNode"}},description:{defaultValue:null,declarations:[{fileName:"rove/src/ui/page-header/PageHeader.tsx",name:"TypeLiteral"}],description:"The line under the title. It fades in when it first shows, and again each\ntime `status` clears. `null` keeps the line's height while there's nothing\nto show; leave it out to have no line.",name:"description",required:!1,tags:{},type:{name:"ReactNode"}},status:{defaultValue:null,declarations:[{fileName:"rove/src/ui/page-header/PageHeader.tsx",name:"TypeLiteral"}],description:`Shown in the description's place while something loads or runs ("Checking…").`,name:"status",required:!1,tags:{},type:{name:"ReactNode"}},actions:{defaultValue:null,declarations:[{fileName:"rove/src/ui/page-header/PageHeader.tsx",name:"TypeLiteral"}],description:"Controls at the end of the header (help, refresh, the page's main action).",name:"actions",required:!1,tags:{},type:{name:"ReactNode"}},icon:{defaultValue:null,declarations:[{fileName:"rove/src/ui/page-header/PageHeader.tsx",name:"TypeLiteral"},{fileName:"rove/src/ui/page-header/PageHeader.tsx",name:"TypeLiteral"}],description:"The page's nav icon, in a chip: a top-level page.",name:"icon",required:!1,tags:{},type:{name:"ReactNode"}},onBack:{defaultValue:null,declarations:[{fileName:"rove/src/ui/page-header/PageHeader.tsx",name:"TypeLiteral"},{fileName:"rove/src/ui/page-header/PageHeader.tsx",name:"TypeLiteral"}],description:"A back button in the chip's place: a page layered over a tab.",name:"onBack",required:!1,tags:{},type:{name:"(() => void)"}}},tags:{}}}catch{}const{fn:h}=__STORYBOOK_MODULE_TEST__,v=e.jsxs(e.Fragment,{children:[e.jsx(d,{label:"Help",icon:p}),e.jsx(S,{variant:"solid",icon:N,onClick:h(),children:"Add service"})]}),$={title:"App frame/PageHeader",component:a,args:{title:"Services",icon:"GlobeIcon",description:"12 services, all up"},argTypes:{icon:j(18),actions:{control:!1},onBack:{control:!1}},parameters:{docs:{toc:y},guidance:{use:["The top of every page but Home.","`icon`, the page’s rail icon, on a top-level page.","`onBack` on a page layered over a tab, like Hosts.","`status` while something runs (“Scanning…”).","`actions` for the page’s controls: help, refresh, its main `Button`.","`description={null}` to hold the line’s height while there’s nothing to show."],avoid:["A card’s title: use `CardHeader`.","The window’s top edge: use `TitleBar`.","A message about the page, like an error: use `Banner`."],accessibility:{builtIn:["The title is the page’s `<h1>`, in a `<header>`.","A new `status` is announced to screen readers.","The back button is named “Back”, with a tooltip to match.","The icon chip is hidden from screen readers."],youHandle:["A title that names the page, as the rail does.","A short `status` that says what’s running: “Scanning…”.","Labels and tooltips on the actions you pass."]}}},render:({icon:s,onBack:i,...t})=>i?e.jsx(a,{...t,onBack:i}):e.jsx(a,{...t,icon:s}),decorators:[s=>e.jsx("div",{className:"w-[482px] pt-12 pr-(--content-inset-right) pl-12",children:e.jsx(s,{})})]},n={args:{actions:v}},r={args:{title:"Devices",icon:"SearchIcon",status:"Scanning…"}},o={args:{title:"Hosts",icon:void 0,onBack:h(),description:"Remote hosts by application, busiest first",actions:e.jsx(d,{label:"About per-app hosts",icon:p})}},c={args:{description:void 0}},l={parameters:{a11y:{config:{rules:[{id:"landmark-no-duplicate-banner",enabled:!1},{id:"landmark-unique",enabled:!1}]}}},render:()=>e.jsxs("div",{className:"flex flex-col gap-20",children:[e.jsx(a,{title:"Services",icon:e.jsx(g,{size:18}),description:"12 services, all up",actions:v}),e.jsx(a,{title:"Devices",icon:e.jsx(T,{size:18}),status:"Scanning…"}),e.jsx(a,{title:"Hosts",onBack:h(),description:"Remote hosts by application, busiest first",actions:e.jsx(d,{label:"About per-app hosts",icon:p})}),e.jsx(a,{title:"Services",icon:e.jsx(g,{size:18})})]})},ee=["TopLevel","Status","Subpage","TitleOnly","AllStates"];n.parameters={...n.parameters,docs:{...n.parameters?.docs,source:{originalSource:`{
+  args: {
+    actions
+  }
+}`,...n.parameters?.docs?.source},description:{story:"A top-level page: its nav icon in the chip, and its actions.",...n.parameters?.docs?.description}}};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
+  args: {
+    title: 'Devices',
+    icon: 'SearchIcon',
+    status: 'Scanning…'
+  }
+}`,...r.parameters?.docs?.source},description:{story:"While something runs, the status takes the description's place.",...r.parameters?.docs?.description}}};o.parameters={...o.parameters,docs:{...o.parameters?.docs,source:{originalSource:`{
+  args: {
+    title: 'Hosts',
+    icon: undefined,
+    onBack: fn(),
+    description: 'Remote hosts by application, busiest first',
+    actions: <IconButton label="About per-app hosts" icon={HelpIcon} />
+  }
+}`,...o.parameters?.docs?.source},description:{story:"A page layered over a tab: a back button in the chip's place, and its hint.",...o.parameters?.docs?.description}}};c.parameters={...c.parameters,docs:{...c.parameters?.docs,source:{originalSource:`{
+  args: {
+    description: undefined
+  }
+}`,...c.parameters?.docs?.source},description:{story:"No line under the title.",...c.parameters?.docs?.description}}};l.parameters={...l.parameters,docs:{...l.parameters?.docs,source:{originalSource:`{
+  // Several headers on one page is this overview only; the app has one.
+  parameters: {
+    a11y: {
+      config: {
+        rules: [{
+          id: 'landmark-no-duplicate-banner',
+          enabled: false
+        }, {
+          id: 'landmark-unique',
+          enabled: false
+        }]
+      }
+    }
+  },
+  render: () => <div className="flex flex-col gap-20">
+      <PageHeader title="Services" icon={<GlobeIcon size={18} />} description="12 services, all up" actions={actions} />
+      <PageHeader title="Devices" icon={<SearchIcon size={18} />} status="Scanning…" />
+      <PageHeader title="Hosts" onBack={fn()} description="Remote hosts by application, busiest first" actions={<IconButton label="About per-app hosts" icon={HelpIcon} />} />
+      <PageHeader title="Services" icon={<GlobeIcon size={18} />} />
+    </div>
+}`,...l.parameters?.docs?.source},description:{story:"Every form together.",...l.parameters?.docs?.description}}};export{l as AllStates,r as Status,o as Subpage,c as TitleOnly,n as TopLevel,ee as __namedExportsOrder,$ as default};
