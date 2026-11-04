@@ -59,6 +59,23 @@ export default function InterestForm() {
   return (
     <form className="interest" onSubmit={onSubmit}>
       <div className="interest-row">
+        {/* Lucide's mail, says what the field takes before anything is typed.
+            Laid over the input's padding, so a click on it still focuses the field. */}
+        <svg
+          className="interest-icon"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" />
+          <rect x="2" y="4" width="20" height="16" rx="2" />
+        </svg>
         <input
           className="interest-input"
           type="email"
@@ -84,26 +101,9 @@ export default function InterestForm() {
           disabled={status === 'sending'}
           aria-busy={status === 'sending' || undefined}
         >
-          {status === 'sending' ? (
-            <span className="interest-spinner" aria-hidden="true" />
-          ) : (
-            // Lucide's send, a little over the label's size and weighted to
-            // its semibold, so the thin lines don't look faint beside it.
-            <svg
-              width="15"
-              height="15"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.25"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" />
-              <path d="m21.854 2.147-10.94 10.939" />
-            </svg>
-          )}
+          {/* Words only: the field's mail icon already says what this is for,
+              and a second icon in one control would compete with it. */}
+          {status === 'sending' && <span className="interest-spinner" aria-hidden="true" />}
           {status === 'sending' ? 'Sending' : 'Notify me'}
         </button>
       </div>

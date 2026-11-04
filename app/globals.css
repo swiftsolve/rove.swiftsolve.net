@@ -643,6 +643,7 @@ code {
 }
 
 .interest-row {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -657,12 +658,30 @@ code {
   border-color: var(--accent);
 }
 
+/* Over the input's left padding, centred on its 48px line (not the row, which
+   grows when the button wraps under it on the narrowest phones). It doesn't
+   take clicks, so they land on the field. Quiet like the placeholder, a step
+   brighter while the field has focus. */
+.interest-icon {
+  position: absolute;
+  top: 24px;
+  left: 14px;
+  translate: 0 -50%;
+  color: var(--text-tertiary);
+  pointer-events: none;
+  transition: color var(--duration-fast) ease-in-out;
+}
+
+.interest-row:focus-within .interest-icon {
+  color: var(--text-secondary);
+}
+
 .interest-input {
   flex: 1;
   min-width: 0;
   /* A pixel more below than above: centred on its capitals, an address (all
      lowercase) reads low, so the text rides a pixel up. */
-  padding: 12px 14px 14px;
+  padding: 12px 14px 14px 40px;
   border: none;
   background: none;
   color: var(--text-primary);
@@ -681,8 +700,8 @@ code {
 /* Inset in the group 4px off its top, right and bottom edges, as TextField's
    action is, so it drops the standalone CTA's size. The label is Button's
    solid one, semibold with no tracking, at the field's size so the address
-   and the label read as one line, behind the send icon. The 2px under the
-   content lifts label and icon a pixel, onto the address's line. */
+   and the label read as one line. The 2px under the content lifts the label
+   a pixel, onto the address's line. */
 .interest-submit {
   flex: none;
   justify-content: center;
@@ -770,9 +789,11 @@ code {
     padding: 0 4px 4px;
   }
 
+  /* 36px, not 40: the row's 4px side padding already moves the input in, so
+     the icon and the text keep their places. */
   .interest-input {
     flex-basis: 100%;
-    padding-inline: 6px;
+    padding-inline: 36px 6px;
   }
 
   .interest-submit {
