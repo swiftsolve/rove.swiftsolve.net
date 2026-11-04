@@ -90,8 +90,8 @@ export default function InterestForm() {
             // Lucide's send, a little over the label's size and weighted to
             // its semibold, so the thin lines don't look faint beside it.
             <svg
-              width="16"
-              height="16"
+              width="15"
+              height="15"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"

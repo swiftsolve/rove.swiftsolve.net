@@ -634,20 +634,22 @@ code {
    Built to the Rove UI library's TextField with an action: the group, not the
    input, draws the border, so field and button read as one control, and focus
    turns that border accent. The type runs a step above the app's, at the
-   page's scale. */
+   page's scale. The group takes the panel fill, not TextField's inset: the
+   page behind it is darker than the inset, so an inset field would look
+   raised rather than sunk, and faint. */
 .interest {
   width: 100%;
-  max-width: 420px;
+  max-width: 400px;
 }
 
 .interest-row {
   display: flex;
   align-items: center;
   gap: 4px;
-  padding-right: 6px;
+  padding-right: 4px;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  background: var(--bg-inset);
+  background: var(--bg-panel);
   transition: border-color var(--duration-fast) ease-in-out;
 }
 
@@ -658,7 +660,9 @@ code {
 .interest-input {
   flex: 1;
   min-width: 0;
-  padding: 12px 14px;
+  /* A pixel more below than above: centred on its capitals, an address (all
+     lowercase) reads low, so the text rides a pixel up. */
+  padding: 12px 14px 14px;
   border: none;
   background: none;
   color: var(--text-primary);
@@ -674,16 +678,16 @@ code {
   color: var(--text-tertiary);
 }
 
-/* Inset in the group, 6px off its top, right and bottom edges (a roomier
-   take on TextField's 4px, for the page's larger field), so it drops the
-   standalone CTA's size. The label is Button's solid one, semibold with no
-   tracking, at the field's size so the address and the label read as one
-   line, behind a bell. */
+/* Inset in the group 4px off its top, right and bottom edges, as TextField's
+   action is, so it drops the standalone CTA's size. The label is Button's
+   solid one, semibold with no tracking, at the field's size so the address
+   and the label read as one line, behind the send icon. The 2px under the
+   content lifts label and icon a pixel, onto the address's line. */
 .interest-submit {
   flex: none;
   justify-content: center;
-  height: 34px;
-  padding: 0 16px;
+  height: 40px;
+  padding: 0 16px 2px;
   font-size: 16px;
   letter-spacing: 0;
 }
@@ -698,8 +702,10 @@ code {
 }
 
 /* The sheen, after swiftwallet's sign-up buttons: a soft top gloss and a
-   shimmer that keeps sweeping across, the gloss brightening on hover. Drawn
-   as background layers over the fill, so the label stays on top. */
+   shimmer, the gloss brightening on hover. Drawn as background layers over
+   the fill, so the label stays on top. The shimmer sweeps once soon after the
+   page loads, then rests a long while between passes, so it catches the eye
+   without nagging. */
 .interest-submit {
   background-image:
     linear-gradient(180deg, rgb(255 255 255 / 0.07) 0%, transparent 45%),
@@ -707,7 +713,7 @@ code {
   background-size: 100% 100%, 250% 100%;
   background-position: 0 0, 120% 0;
   background-repeat: no-repeat;
-  animation: interest-sheen 2.4s ease-in-out infinite;
+  animation: interest-sheen 10s ease-in-out 0.8s infinite;
 }
 
 .interest-submit:hover {
@@ -716,12 +722,12 @@ code {
     linear-gradient(90deg, transparent 30%, rgb(255 255 255 / 0.3) 50%, transparent 70%);
 }
 
-/* Left to right across the first half, then a rest before the next pass. */
+/* Left to right in the first 1.2s, then 8.8s of rest before the next pass. */
 @keyframes interest-sheen {
   0% {
     background-position: 0 0, 120% 0;
   }
-  50%,
+  12%,
   100% {
     background-position: 0 0, -20% 0;
   }
@@ -761,7 +767,7 @@ code {
 @media (max-width: 359px) {
   .interest-row {
     flex-wrap: wrap;
-    padding: 0 6px 6px;
+    padding: 0 4px 4px;
   }
 
   .interest-input {
