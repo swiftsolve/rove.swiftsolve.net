@@ -1,8 +1,0 @@
-import{j as s}from"./iframe-Bu6Si-F2.js";import{a as r}from"./cn-CdwUFd5Z.js";function t({label:e,type:n="button",className:a,...i}){return s.jsx("button",{type:n,role:"link",className:r("absolute inset-0 z-1 rounded-[inherit] focus-visible:outline-offset-(--focus-inset)",a),"aria-label":e,"data-stretched-link":"",...i})}try{t.displayName="StretchedLink",t.__docgenInfo={description:`A transparent link stretched over its positioned container (a row; a Card
-draws its own with \`onOpen\`), so a click anywhere opens the view the
-container summarises. It's a link to a screen reader, as it moves to another
-view rather than acting. A control in the container raises itself above it
-and stays a sibling, never nested. The focus ring follows the container's
-corners, just inside the edge; \`className\` can round it where they don't (a
-list's first and last rows). \`data-stretched-link\` lets the container style
-itself while it has focus.`,displayName:"StretchedLink",filePath:"/tmp/tmp.ocspLeVSJy/rove/src/ui/link/StretchedLink.tsx",methods:[],props:{label:{defaultValue:null,declarations:[{fileName:"rove/src/ui/link/StretchedLink.tsx",name:"TypeLiteral"}],description:"Names it: it has no text of its own, since the container's content shows\nthrough. Leave it out only to name it by a heading (`aria-labelledby`).",name:"label",required:!1,tags:{},type:{name:"string"}},onClick:{defaultValue:null,declarations:[{fileName:"rove/src/ui/link/StretchedLink.tsx",name:"TypeLiteral"}],description:"Opens the view the container summarises.",name:"onClick",required:!1,tags:{},type:{name:"MouseEventHandler<HTMLButtonElement>"}}},tags:{}}}catch{}export{t as S};

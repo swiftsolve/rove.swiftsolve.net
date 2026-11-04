@@ -1,5 +1,0 @@
-import{W as e}from"./TitleBar-D8rgo1Nx.js";import"./iframe-Bu6Si-F2.js";import"./preload-helper-PPVm8Dsz.js";import"./cn-CdwUFd5Z.js";import"./Icons-B0-J9HVI.js";import"./StatusDot-DCxxx1xO.js";import"./layers-D5UzyUFr.js";import"./status-EdzG58Fr.js";const{fn:t}=__STORYBOOK_MODULE_TEST__,l={title:"App frame/TitleBar/WindowButton",component:e,args:{action:"minimize",onClick:t()},argTypes:{action:{control:"inline-radio",options:["minimize","close"]}}},o={},r={args:{action:"close"}},u=["Minimize","Close"];o.parameters={...o.parameters,docs:{...o.parameters?.docs,source:{originalSource:"{}",...o.parameters?.docs?.source},description:{story:"Hover for its tint.",...o.parameters?.docs?.description}}};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
-  args: {
-    action: 'close'
-  }
-}`,...r.parameters?.docs?.source},description:{story:"Turns red on hover.",...r.parameters?.docs?.description}}};export{r as Close,o as Minimize,u as __namedExportsOrder,l as default};
