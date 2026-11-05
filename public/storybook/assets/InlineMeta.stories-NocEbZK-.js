@@ -1,0 +1,6 @@
+import{j as s}from"./iframe-DovSnlCC.js";import{I as a}from"./DotSeparator-D-5GInWp.js";import"./preload-helper-PPVm8Dsz.js";import"./cn-Dq0XH3An.js";const p={title:"Containers/DotSeparator/InlineMeta",component:a,args:{items:["192.168.1.20","Apple",null,"2 min ago"],shouldTruncate:!1},argTypes:{className:{control:!1}},render:t=>s.jsx("span",{className:"block w-[200px] type-body-small text-secondary",children:s.jsx(a,{...t})})},e={},r={args:{items:["a-very-long-hostname.local","Raspberry Pi Foundation","now"],shouldTruncate:!0}},l=["Default","Truncated"];e.parameters={...e.parameters,docs:{...e.parameters?.docs,source:{originalSource:"{}",...e.parameters?.docs?.source},description:{story:"A dot between the items; the empty ones drop out, and the rest wrap.",...e.parameters?.docs?.description}}};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
+  args: {
+    items: ['a-very-long-hostname.local', 'Raspberry Pi Foundation', 'now'],
+    shouldTruncate: true
+  }
+}`,...r.parameters?.docs?.source},description:{story:"One line, each item ellipsizing as space runs out.",...r.parameters?.docs?.description}}};export{e as Default,r as Truncated,l as __namedExportsOrder,p as default};
