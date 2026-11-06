@@ -1876,9 +1876,16 @@ code {
   /* the un-transformed 545px stage overflows the narrow frame's layout box;
      clip it so the page never gains a horizontal scroll (the scaled render
      fits exactly, so nothing visible is cut) — and re-center the window now
-     that the rails sit above it instead of beside it */
+     that the rails sit above it instead of beside it.
+
+     clip, not hidden: a hidden box is still a scroll container, and when the
+     app focuses something low in its window (the Devices card, after Discover)
+     Safari scrolls this frame to reveal it, measuring the unscaled stage, and
+     the window slides up out of its own frame. A clipped box can't scroll.
+     hidden stays as the fallback for browsers without clip. */
   .app-frame {
     overflow: hidden;
+    overflow: clip;
     justify-content: center;
   }
 

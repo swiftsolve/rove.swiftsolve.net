@@ -247,7 +247,18 @@ export default function Showcase() {
     fit()
     const observer = new ResizeObserver(fit)
     observer.observe(frame)
-    return () => observer.disconnect()
+
+    // Backstop for browsers without overflow: clip, where the narrow frame is
+    // still a (hidden) scroll container: if the app's focus moves scroll it,
+    // put it straight back, so the window never slides out of its frame.
+    const pin = () => {
+      if (frame.scrollTop || frame.scrollLeft) frame.scrollTo(0, 0)
+    }
+    frame.addEventListener('scroll', pin)
+    return () => {
+      observer.disconnect()
+      frame.removeEventListener('scroll', pin)
+    }
   }, [])
 
   // Keep the tour rail in sync with the app however it navigates: its nav rail,
