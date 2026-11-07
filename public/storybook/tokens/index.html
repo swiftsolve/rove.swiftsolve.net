@@ -43,15 +43,31 @@
       }
     </style>
 
-    <link href="./sb-manager/runtime.js?v=4b7e9fc" rel="modulepreload" />
+    <link href="./sb-manager/runtime.js?v=a5a4c4b" rel="modulepreload" />
 
     
-    <link href="./sb-addons/storybook-core-server-presets-0/common-manager-bundle.js?v=4b7e9fc" rel="modulepreload" />
+    <link href="./sb-addons/storybook-core-server-presets-0/common-manager-bundle.js?v=a5a4c4b" rel="modulepreload" />
     
-    <link href="./sb-addons/docs-1/manager-bundle.js?v=4b7e9fc" rel="modulepreload" />
+    <link href="./sb-addons/docs-1/manager-bundle.js?v=a5a4c4b" rel="modulepreload" />
     
-    <link href="./sb-addons/storybook-2/manager-bundle.js?v=4b7e9fc" rel="modulepreload" />
-       
+    <link href="./sb-addons/storybook-2/manager-bundle.js?v=a5a4c4b" rel="modulepreload" />
+      <!-- The tokens' faces for Storybook's own sidebar, which loads none of the pages' CSS.
+     Relative, so the build works under a subpath (rove.swiftsolve.net/storybook/tokens/). -->
+<style>
+  @font-face {
+    font-family: 'Hanken Grotesk';
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('fonts/HankenGrotesk-latin.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Urbanist';
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('fonts/Urbanist-latin.woff2') format('woff2');
+  }
+</style>
+ 
 
     <style>
       #storybook-root[hidden] {
@@ -136,17 +152,17 @@
     
 
     <script type="module">
-      import './sb-manager/globals-runtime.js?v=4b7e9fc';
+      import './sb-manager/globals-runtime.js?v=a5a4c4b';
 
       
-        import './sb-addons/storybook-core-server-presets-0/common-manager-bundle.js?v=4b7e9fc';
+        import './sb-addons/storybook-core-server-presets-0/common-manager-bundle.js?v=a5a4c4b';
       
-        import './sb-addons/docs-1/manager-bundle.js?v=4b7e9fc';
+        import './sb-addons/docs-1/manager-bundle.js?v=a5a4c4b';
       
-        import './sb-addons/storybook-2/manager-bundle.js?v=4b7e9fc';
+        import './sb-addons/storybook-2/manager-bundle.js?v=a5a4c4b';
       
 
-      import './sb-manager/runtime.js?v=4b7e9fc';
+      import './sb-manager/runtime.js?v=a5a4c4b';
     </script>
   </body>
 </html>
