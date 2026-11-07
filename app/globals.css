@@ -882,7 +882,7 @@ code {
 }
 
 /* The window sits in the middle with four stops down each side. Stacking all
-   eight in one column ran ~130px taller than the 649px window; split in two it
+   eight in one column ran ~130px taller than the 650px window; split in two it
    reads as one composition centred on the app. */
 .showcase-grid {
   display: grid;
@@ -1097,7 +1097,7 @@ code {
   text-wrap: pretty;
 }
 
-/* The stage holds the app at its exact desktop-window size (545×649,
+/* The stage holds the app at its exact desktop-window size (545×650,
    from tauri.conf.json) and scales down only when the column is narrower. */
 .app-frame {
   position: relative;
@@ -1118,7 +1118,7 @@ code {
 .app-stage {
   position: relative;
   width: 545px;
-  height: 649px;
+  height: 650px;
   transform-origin: top center;
   border-radius: 12px;
   box-shadow:
@@ -1132,7 +1132,7 @@ code {
 .app-stage iframe {
   display: block;
   width: 545px;
-  height: 649px;
+  height: 650px;
   border: 0;
   border-radius: 12px;
   background: var(--bg-app);

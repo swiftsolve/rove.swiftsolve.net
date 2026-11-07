@@ -5,9 +5,9 @@ import { useEffect, useRef, useState } from 'react'
 
 import Reveal from '@/components/Reveal'
 
-/** The Rove desktop window's exact size (tauri.conf.json: 545×649, not resizable). */
+/** The Rove desktop window's exact size (tauri.conf.json: 545×650, not resizable). */
 const APP_W = 545
-const APP_H = 649
+const APP_H = 650
 
 interface TourStop {
   /** The app's nav-rail aria-label to click. */
