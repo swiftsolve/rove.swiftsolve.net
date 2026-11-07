@@ -90,7 +90,7 @@ const TOUR: readonly TourStop[] = [
   {
     label: 'Connection',
     title: 'When something feels off',
-    blurb: 'Router latency, packet loss, DNS servers and who your ISP really is.',
+    blurb: 'Your path to the internet, link by link, with router latency, packet loss, your ISP and\u00a0DNS.',
     // The app's own hub-and-spoke glyph — custom, with no Lucide equivalent.
     icon: (
       <>
