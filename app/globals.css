@@ -1740,8 +1740,9 @@ code {
      further behind the copy instead of pushing the footer away. */
   margin-top: calc(var(--section-y) * 2 + 12px - var(--wordmark-size) * 0.62);
   overflow: hidden;
+  font-family: var(--font-display);
   font-size: var(--wordmark-size);
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: -0.045em;
   line-height: 0.9;
   text-align: center;
