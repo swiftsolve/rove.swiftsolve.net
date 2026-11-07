@@ -42,52 +42,6 @@ const TOUR: readonly TourStop[] = [
     ),
   },
   {
-    label: 'Devices',
-    title: "Who's on your Wi-Fi",
-    blurb: 'Every phone, TV and gadget on your network, named and classified.',
-    icon: (
-      <>
-        <path d="M18 8V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h8" />
-        <path d="M10 19v-3.96 3.15" />
-        <path d="M7 19h5" />
-        <rect width="6" height="10" x="16" y="12" rx="2" />
-      </>
-    ),
-  },
-  {
-    label: 'Apps',
-    title: 'What your apps are up to',
-    blurb: 'Data usage for every app on your machine, and the hosts each one talks to.',
-    icon: (
-      <>
-        <rect width="7" height="7" x="3" y="3" rx="1" />
-        <rect width="7" height="7" x="14" y="3" rx="1" />
-        <rect width="7" height="7" x="14" y="14" rx="1" />
-        <rect width="7" height="7" x="3" y="14" rx="1" />
-      </>
-    ),
-  },
-  {
-    label: 'Services',
-    title: 'The services you rely on',
-    blurb: 'Up or down, latency and a sparkline for every service you track.',
-    icon: <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />,
-  },
-  {
-    label: 'Timeline',
-    title: 'A history of your network',
-    blurb: 'A day-by-day feed of what changed, from devices coming and going to connection switches.',
-    icon: (
-      <>
-        <path d="M21 5H3" />
-        <path d="M10 12H3" />
-        <path d="M10 19H3" />
-        <circle cx="17" cy="15" r="3" />
-        <path d="m21 19-1.9-1.9" />
-      </>
-    ),
-  },
-  {
     label: 'Connection',
     title: 'When something feels off',
     blurb: 'Your path to the internet, link by link, with router latency, packet loss, your ISP and\u00a0DNS.',
@@ -107,6 +61,38 @@ const TOUR: readonly TourStop[] = [
     ),
   },
   {
+    label: 'Devices',
+    title: "Who's on your Wi-Fi",
+    blurb: 'Every phone, TV and gadget on your network, named and classified.',
+    icon: (
+      <>
+        <path d="M18 8V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h8" />
+        <path d="M10 19v-3.96 3.15" />
+        <path d="M7 19h5" />
+        <rect width="6" height="10" x="16" y="12" rx="2" />
+      </>
+    ),
+  },
+  {
+    label: 'Services',
+    title: 'The services you rely on',
+    blurb: 'Up or down, latency and a sparkline for every service you track.',
+    icon: <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />,
+  },
+  {
+    label: 'Apps',
+    title: 'What your apps are up to',
+    blurb: 'Data usage for every app on your machine, and the hosts each one talks to.',
+    icon: (
+      <>
+        <rect width="7" height="7" x="3" y="3" rx="1" />
+        <rect width="7" height="7" x="14" y="3" rx="1" />
+        <rect width="7" height="7" x="14" y="14" rx="1" />
+        <rect width="7" height="7" x="3" y="14" rx="1" />
+      </>
+    ),
+  },
+  {
     label: 'Usage',
     title: 'Where your data goes',
     blurb: 'Daily download and upload totals that survive reboots.',
@@ -116,6 +102,20 @@ const TOUR: readonly TourStop[] = [
         <path d="M18 17V9" />
         <path d="M13 17V5" />
         <path d="M8 17v-3" />
+      </>
+    ),
+  },
+  {
+    label: 'Timeline',
+    title: 'A history of your network',
+    blurb: 'A day-by-day feed of what changed, from devices coming and going to connection switches.',
+    icon: (
+      <>
+        <path d="M21 5H3" />
+        <path d="M10 12H3" />
+        <path d="M10 19H3" />
+        <circle cx="17" cy="15" r="3" />
+        <path d="m21 19-1.9-1.9" />
       </>
     ),
   },
