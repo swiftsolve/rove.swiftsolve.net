@@ -5,17 +5,19 @@ import './globals.css'
 // The weight range matters: without it the face is declared 400 only, and
 // every 500–650 heading and label is faux-bolded from the regular weight
 // instead of drawn from the variable font's own axis, as the app does.
-const inter = localFont({
-  src: './fonts/InterVariable.woff2',
-  variable: '--font-inter',
+// Rove's faces, from rove-tokens: Hanken Grotesk sets text and numbers,
+// Urbanist the headings. The files are the app's (src/assets/fonts).
+const hanken = localFont({
+  src: './fonts/HankenGrotesk-latin.woff2',
+  variable: '--font-hanken',
   weight: '100 900',
   display: 'swap',
 })
 
-const questrial = localFont({
-  src: './fonts/Questrial-Regular.woff2',
-  variable: '--font-questrial',
-  weight: '400',
+const urbanist = localFont({
+  src: './fonts/Urbanist-latin.woff2',
+  variable: '--font-urbanist',
+  weight: '100 900',
   display: 'swap',
 })
 
@@ -55,7 +57,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${questrial.variable} ${geistMono.variable}`}>
+    <html lang="en" className={`${hanken.variable} ${urbanist.variable} ${geistMono.variable}`}>
       <head>
         {/* Reveal's opening frame (opacity:0) is inlined into the static HTML,
             so without JS there is nothing to animate it back — the page would

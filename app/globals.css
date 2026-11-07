@@ -61,8 +61,10 @@
 
   --shadow-panel: 0 1px 2px rgba(0, 0, 0, 0.22), 0 4px 12px rgba(0, 0, 0, 0.1);
 
-  --font: var(--font-inter), system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-numeric: var(--font-questrial), ui-sans-serif, system-ui, sans-serif;
+  /* rove-tokens' font-family/sans and font-family/display, with next/font's
+     faces in front: text and numbers in one face, headings in the other. */
+  --font: var(--font-hanken), system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: var(--font-urbanist), system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -122,7 +124,7 @@ button:focus-visible {
 }
 
 code {
-  font-family: var(--font-numeric);
+  font-family: var(--font);
   font-size: 1em;
   color: var(--text-primary);
 }
@@ -173,7 +175,8 @@ code {
   gap: 11px;
   color: var(--text-primary);
   font-size: 19px;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1;
 }
@@ -501,7 +504,8 @@ code {
   margin: 26px auto 0;
   max-width: 16ch;
   font-size: clamp(42px, 6.8vw, 72px);
-  font-weight: 650;
+  font-family: var(--font-display);
+  font-weight: 700;
   letter-spacing: -0.038em;
   line-height: 1.03;
   color: var(--text-primary);
@@ -1043,7 +1047,8 @@ code {
   gap: 10px;
   /* same type as the feature cards' h3 / p below, so the two sections agree */
   font-size: 16.5px;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-weight: 700;
   letter-spacing: -0.015em;
   color: var(--text-secondary);
   transition: color 160ms ease;
@@ -1157,7 +1162,8 @@ code {
 
 .section-head h2 {
   font-size: clamp(28px, 4vw, 42px);
-  font-weight: 650;
+  font-family: var(--font-display);
+  font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.1;
   color: var(--text-primary);
@@ -1258,7 +1264,7 @@ code {
   gap: 3px;
   margin-top: 22px;
   color: var(--text-primary);
-  font-family: var(--font-numeric);
+  font-family: var(--font);
   line-height: 1;
 }
 
@@ -1446,7 +1452,7 @@ code {
   border-radius: 50%;
   background: var(--accent-muted);
   color: var(--accent);
-  font-family: var(--font-numeric);
+  font-family: var(--font);
   font-size: 14px;
   letter-spacing: 0.02em;
 }
@@ -1493,7 +1499,8 @@ code {
 
 .hood-copy h2 {
   font-size: clamp(26px, 3.2vw, 36px);
-  font-weight: 650;
+  font-family: var(--font-display);
+  font-weight: 700;
   letter-spacing: -0.028em;
   line-height: 1.12;
   color: var(--text-primary);
@@ -1692,7 +1699,8 @@ code {
 
 .bottom-cta h2 {
   font-size: clamp(30px, 4.4vw, 44px);
-  font-weight: 650;
+  font-family: var(--font-display);
+  font-weight: 700;
   letter-spacing: -0.032em;
   /* display type needs its own leading — without this it inherits the body's
      1.6, which is set for paragraphs and leaves the two lines adrift */
@@ -1810,7 +1818,8 @@ code {
   gap: 10px;
   color: var(--text-primary);
   font-size: 17px;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1;
 }
