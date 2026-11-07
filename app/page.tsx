@@ -69,7 +69,7 @@ const TESTIMONIALS: readonly Testimonial[] = [
   },
   {
     quote:
-      'Calls kept breaking up and nothing obvious was wrong. The diagnostics page put the packet loss at my own router rather than the ISP — it was a dying powerline adapter.',
+      'Calls kept breaking up and nothing obvious was wrong. The Connection page put the packet loss at my own router rather than the ISP — it was a dying powerline adapter.',
     name: 'Diego Ramos',
     role: 'Product designer',
   },
