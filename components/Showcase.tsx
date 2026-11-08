@@ -94,7 +94,7 @@ const TOUR: readonly TourStop[] = [
   },
   {
     label: 'Usage',
-    title: 'Where your data goes',
+    title: 'How much you use',
     blurb: 'Download and upload for today and the past\u00a0week.',
     icon: (
       <>
