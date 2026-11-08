@@ -22,7 +22,7 @@ const TOUR: readonly TourStop[] = [
   {
     label: 'Home',
     title: 'The whole picture',
-    blurb: 'Connection, live traffic, usage and devices at a glance, plus a Wi\u2011Fi QR\u00a0code.',
+    blurb: 'Connection, live traffic, what your link can handle, usage and devices, plus a Wi\u2011Fi QR\u00a0code.',
     icon: (
       <>
         <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
