@@ -33,7 +33,7 @@ const TOUR: readonly TourStop[] = [
   {
     label: 'Speed',
     title: 'Honest speed tests',
-    blurb: 'Download, upload and latency, what your link can handle, and past\u00a0results.',
+    blurb: 'Download, upload and latency, and whether your link is ready for 4K, video calls and\u00a0gaming.',
     icon: (
       <>
         <path d="m12 14 4-4" />
