@@ -74,7 +74,7 @@ const TOUR: readonly TourStop[] = [
     ),
   },
   {
-    label: 'Services',
+    label: 'Online services',
     title: 'The services you rely on',
     blurb: 'Up or down and latency for each service, with an outage\u00a0timeline.',
     icon: <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />,
