@@ -22,8 +22,7 @@ const TOUR: readonly TourStop[] = [
   {
     label: 'Home',
     title: 'The whole picture',
-    blurb:
-      'Connection, live traffic, what your link is ready for, data used and devices on one calm screen, plus a QR code to share your\u00a0Wi\u2011Fi.',
+    blurb: 'Connection, live traffic, usage and devices at a glance, plus a Wi\u2011Fi QR\u00a0code.',
     icon: (
       <>
         <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
@@ -34,7 +33,7 @@ const TOUR: readonly TourStop[] = [
   {
     label: 'Speed',
     title: 'Honest speed tests',
-    blurb: 'Download, upload, latency, jitter and loss, what your link can actually handle, and every past\u00a0result.',
+    blurb: 'Download, upload, latency and loss, with every past\u00a0result.',
     icon: (
       <>
         <path d="m12 14 4-4" />
@@ -45,7 +44,7 @@ const TOUR: readonly TourStop[] = [
   {
     label: 'Connection',
     title: 'When something feels off',
-    blurb: 'Your path to the internet, link by link, with router latency, packet loss, your ISP and\u00a0DNS.',
+    blurb: 'Your path to the internet, link by link, down to your ISP and\u00a0DNS.',
     // The app's own hub-and-spoke glyph — custom, with no Lucide equivalent.
     icon: (
       <>
@@ -64,7 +63,7 @@ const TOUR: readonly TourStop[] = [
   {
     label: 'Devices',
     title: "Who's on your Wi-Fi",
-    blurb: 'Every phone, TV and gadget on your network, named and classified.',
+    blurb: 'Every phone, TV and gadget on your network,\u00a0named.',
     icon: (
       <>
         <path d="M18 8V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h8" />
@@ -77,13 +76,13 @@ const TOUR: readonly TourStop[] = [
   {
     label: 'Services',
     title: 'The services you rely on',
-    blurb: 'Up or down, latency and a sparkline for every service you track, with a timeline of each\u00a0outage.',
+    blurb: 'Up or down and latency for each service, with an outage\u00a0timeline.',
     icon: <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />,
   },
   {
     label: 'Apps',
     title: 'What your apps are up to',
-    blurb: 'Data usage for every app on your machine, and the hosts each one talks to.',
+    blurb: 'Data used by each app, and the hosts it talks\u00a0to.',
     icon: (
       <>
         <rect width="7" height="7" x="3" y="3" rx="1" />
@@ -96,7 +95,7 @@ const TOUR: readonly TourStop[] = [
   {
     label: 'Usage',
     title: 'Where your data goes',
-    blurb: 'Download and upload for today and the past week, totals that survive\u00a0reboots.',
+    blurb: 'Download and upload for today and the past\u00a0week.',
     icon: (
       <>
         <path d="M3 3v16a2 2 0 0 0 2 2h16" />
@@ -109,7 +108,7 @@ const TOUR: readonly TourStop[] = [
   {
     label: 'Timeline',
     title: 'A history of your network',
-    blurb: 'A day-by-day feed of what changed, from devices coming and going to connection switches.',
+    blurb: 'What changed on your network, day by\u00a0day.',
     icon: (
       <>
         <path d="M21 5H3" />
