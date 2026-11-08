@@ -34,7 +34,7 @@ const TOUR: readonly TourStop[] = [
   {
     label: 'Speed',
     title: 'Honest speed tests',
-    blurb: 'Download, upload, latency, jitter, loss, and what your link can actually handle.',
+    blurb: 'Download, upload, latency, jitter and loss, what your link can actually handle, and every past\u00a0result.',
     icon: (
       <>
         <path d="m12 14 4-4" />
@@ -77,7 +77,7 @@ const TOUR: readonly TourStop[] = [
   {
     label: 'Services',
     title: 'The services you rely on',
-    blurb: 'Up or down, latency and a sparkline for every service you track.',
+    blurb: 'Up or down, latency and a sparkline for every service you track, with a timeline of each\u00a0outage.',
     icon: <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />,
   },
   {
@@ -96,7 +96,7 @@ const TOUR: readonly TourStop[] = [
   {
     label: 'Usage',
     title: 'Where your data goes',
-    blurb: 'Daily download and upload totals that survive reboots.',
+    blurb: 'Download and upload for today and the past week, totals that survive\u00a0reboots.',
     icon: (
       <>
         <path d="M3 3v16a2 2 0 0 0 2 2h16" />
