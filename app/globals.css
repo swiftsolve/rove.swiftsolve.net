@@ -1105,16 +1105,6 @@ code {
   justify-content: center;
 }
 
-/* glow anchored to the window itself */
-.app-frame::before {
-  content: '';
-  position: absolute;
-  inset: 4% -30px -8%;
-  width: auto;
-  background: radial-gradient(55% 55% at 50% 60%, rgba(91, 140, 255, 0.17), transparent 72%);
-  pointer-events: none;
-}
-
 .app-stage {
   position: relative;
   width: 545px;
@@ -1528,15 +1518,6 @@ code {
   overflow: hidden;
 }
 
-/* faint accent bloom in the card's corner */
-.terminal::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(380px 200px at 85% -10%, rgba(91, 140, 255, 0.08), transparent 70%);
-  pointer-events: none;
-}
-
 .terminal-bar {
   position: relative;
   display: flex;
@@ -1895,11 +1876,6 @@ code {
     overflow: hidden;
     overflow: clip;
     justify-content: center;
-  }
-
-  .app-frame::before {
-    inset: 4% 6% -8% 6%;
-    width: auto;
   }
 
   /* each rail is now just a run of chips inside the wrapper's scroll area */
