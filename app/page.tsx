@@ -106,6 +106,25 @@ function CircleCheckIcon() {
   )
 }
 
+function ArrowUpRightIcon() {
+  return (
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M7 17 17 7" />
+      <path d="M7 7h10v10" />
+    </svg>
+  )
+}
+
 export default function Home() {
   return (
     <>
@@ -295,9 +314,7 @@ export default function Home() {
             </a>
             <a href={DESIGN_URL} target="_blank" rel="noopener noreferrer">
               Design
-            </a>
-            <a href={`${GITHUB_URL}/issues`} target="_blank" rel="noopener noreferrer">
-              Report an issue
+              <ArrowUpRightIcon />
             </a>
           </span>
         </div>

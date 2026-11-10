@@ -1815,6 +1815,9 @@ code {
 }
 
 .footer-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   color: var(--text-tertiary);
   font-size: 13px;
   transition: color 140ms ease;
