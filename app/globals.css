@@ -401,22 +401,96 @@ code {
   }
 }
 
-/* mirror the app's About-page logo tile: charcoal squircle with a soft blue
-   bloom just below centre, the glyph itself carrying the app icon's gradient */
+/* The hero's app icon (HeroIcon.tsx): the app's About-page logo tile, a
+   charcoal squircle with a soft blue bloom just below centre, the glyph
+   carrying the app icon's gradient. Kept mostly flat and soft: its light
+   falls off gently to the corners, with no hard line to outline them, and
+   a soft shadow and a faint blue glow set it just off the page. It leans to
+   the pointer.
+   The stage round it takes the pointer from 40px out, then gives all of it
+   back, so the tile sits where the radar is centred and the headline's own
+   26px top margin is the gap under it. (The wrapper is a flex box, so a
+   margin under the tile would add to the headline's, not merge with it.) */
+.hero-icon {
+  display: flex;
+  justify-content: center;
+}
+
+.hero-icon-stage {
+  padding: 40px;
+  margin: -40px 0;
+}
+
 .hero-logo {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 120px;
   height: 120px;
-  margin: 0 auto 26px;
   /* Tracks the tile: the squircle's corner is ~23% of its side, and holding
      that ratio is what keeps it reading as the app icon at any size. */
   border-radius: 28px;
+  transform-style: preserve-3d;
   background:
     radial-gradient(circle at 50% 56%, rgba(91, 140, 255, 0.22), rgba(91, 140, 255, 0) 68%),
-    linear-gradient(180deg, #1f2125 0%, #16171a 100%);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+    radial-gradient(130% 130% at 50% 35%, #26282d 0%, #1c1d21 55%, #141518 100%);
+  box-shadow:
+    inset 0 1px 3px rgba(255, 255, 255, 0.06),
+    inset 0 0 14px rgba(0, 0, 0, 0.28),
+    0 12px 28px -10px rgba(0, 0, 0, 0.55),
+    0 18px 40px -20px rgba(91, 140, 255, 0.3);
+}
+
+/* The mark at 72% of the tile, so the room at its sides comes near the room
+   at its top and bottom (it is wider than it is tall) without the tile
+   looking empty. A share of the tile, so it holds at the phone's smaller
+   one. Its ink sits high in its box, and the arc is open at the foot, so it
+   is moved down a share of its own height to look centred. */
+.hero-icon-glyph {
+  display: flex;
+  width: 72%;
+  aspect-ratio: 1;
+}
+
+.hero-icon-glyph svg {
+  width: 100%;
+  height: 100%;
+  transform: translateY(5.5%);
+}
+
+/* The arc is pressed in; the dot sits flat on the face; the glint running
+   the arc is light lying in the groove (the filters are in HeroIcon.tsx).
+   Its filter replaces the flat glow .brand-glint gives it elsewhere. */
+.hero-icon-glyph svg path:not(.brand-glint) {
+  filter: url(#hero-icon-press);
+}
+
+.hero-icon-glyph svg .brand-glint {
+  filter: url(#hero-icon-glint);
+}
+
+/* The gloss on the corner that tips up as it leans, clipped to the tile. */
+.hero-icon-sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  /* All falloff, with no solid core, so it reads as a reflection, not a spot. */
+  background-image: radial-gradient(
+    circle at var(--sheen-x, 50%) var(--sheen-y, 50%),
+    rgb(255 255 255 / 62%) 0%,
+    rgb(255 255 255 / 24%) 28%,
+    transparent 62%
+  );
+}
+
+.hero-icon-filters {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
 }
 
 /* The mark at rest, alive: its dot breathes and a glint runs the arc from
@@ -469,11 +543,6 @@ code {
     stroke-dashoffset: -100;
     opacity: 0;
   }
-}
-
-.hero-logo svg {
-  /* the mark's ink sits slightly high in its viewBox; nudge down to visually center */
-  transform: translateY(2px);
 }
 
 .hero-badge {
@@ -1986,11 +2055,6 @@ code {
     border-radius: 22px;
   }
 
-  .hero-logo svg {
-    width: 72px;
-    height: 72px;
-  }
-
   .price-card {
     --price-pad-x: 24px;
     padding: 34px var(--price-pad-x) 30px;
@@ -2030,7 +2094,7 @@ code {
      markup from it on the client instead is what mismatched hydration. Here
      the content is simply visible from the first paint, whatever JS does.
      Scoped to the element itself, so the child transforms that hover states
-     use (.hero-logo svg) are untouched. */
+     use (.hero-icon-glyph svg) are untouched. */
   [data-reveal] {
     opacity: 1 !important;
     transform: none !important;

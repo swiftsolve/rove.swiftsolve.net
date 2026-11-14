@@ -1,5 +1,6 @@
 import BrandIcon from '@/components/BrandIcon'
 import CtaWordmark from '@/components/CtaWordmark'
+import HeroIcon from '@/components/HeroIcon'
 import InterestForm from '@/components/InterestForm'
 import Platforms from '@/components/Platforms'
 import Reveal from '@/components/Reveal'
@@ -162,8 +163,8 @@ export default function Home() {
           <span className="hero-blip" />
         </div>
         <div className="wrap">
-          <Reveal as="span" className="hero-logo" onMount aria-hidden={true}>
-            <BrandIcon size={90} gradient animated />
+          <Reveal className="hero-icon" onMount aria-hidden={true}>
+            <HeroIcon />
           </Reveal>
           <Reveal as="h1" onMount delay={0.07}>
             Your network,<br /><span className="accent">finally visible</span>
