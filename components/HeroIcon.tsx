@@ -6,7 +6,7 @@ import BrandIcon from '@/components/BrandIcon'
 
 /**
  * The hero's app icon: the About-page tile, soft and mostly flat, with the
- * arc pressed into its face and the glint lying in that groove. It leans away
+ * arc pressed into its face. It leans away
  * from the pointer like a plate on a gimbal, the corner under the pointer
  * pressing in, the tile swelling a touch, and a soft sheen catching the far
  * corner as it tips up into the light. It does not move on its own.
@@ -19,8 +19,8 @@ import BrandIcon from '@/components/BrandIcon'
  * the finger lifted), it stays flat.
  *
  * Styled by .hero-icon-* and .hero-logo in globals.css, which also point the
- * mark's arc and glint at the two filters drawn here. There is one hero on a
- * page, so their ids are fixed.
+ * mark's arc at the filter drawn here. There is one hero on a page, so its
+ * id is fixed.
  */
 
 /** Degrees of lean with the pointer at an edge. */
@@ -174,39 +174,6 @@ export default function HeroIcon() {
               <feMergeNode in="recessed" />
               <feMergeNode in="shade" />
               <feMergeNode in="light" />
-            </feMerge>
-          </filter>
-          {/*
-           * The glint is light lying in the groove, so it takes the same
-           * shape: its top wall in shadow, the bottom wall, facing up into the
-           * light, catching it brightest, and a soft glow spilling out.
-           */}
-          <filter id="hero-icon-glint" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="1.4" result="glowBlur" />
-            <feColorMatrix
-              in="glowBlur"
-              type="matrix"
-              values="0 0 0 0 0.36  0 0 0 0 0.55  0 0 0 0 1  0 0 0 0.6 0"
-              result="glow"
-            />
-            <feComponentTransfer in="SourceAlpha" result="outside">
-              <feFuncA type="table" tableValues="1 0" />
-            </feComponentTransfer>
-            <feOffset in="outside" dy="1.1" result="outsideDown" />
-            <feGaussianBlur in="outsideDown" stdDeviation="0.7" result="wallBlur" />
-            <feFlood floodColor="#1b3a8a" floodOpacity="0.8" />
-            <feComposite in2="wallBlur" operator="in" />
-            <feComposite in2="SourceAlpha" operator="in" result="wall" />
-            <feOffset in="outside" dy="-1" result="outsideUp" />
-            <feGaussianBlur in="outsideUp" stdDeviation="0.5" result="shineBlur" />
-            <feFlood floodColor="#e4ecff" floodOpacity="0.6" />
-            <feComposite in2="shineBlur" operator="in" />
-            <feComposite in2="SourceAlpha" operator="in" result="shine" />
-            <feMerge>
-              <feMergeNode in="glow" />
-              <feMergeNode in="SourceGraphic" />
-              <feMergeNode in="wall" />
-              <feMergeNode in="shine" />
             </feMerge>
           </filter>
         </svg>

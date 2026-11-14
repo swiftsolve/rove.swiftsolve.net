@@ -458,15 +458,10 @@ code {
   transform: translateY(5.5%);
 }
 
-/* The arc is pressed in; the dot sits flat on the face; the glint running
-   the arc is light lying in the groove (the filters are in HeroIcon.tsx).
-   Its filter replaces the flat glow .brand-glint gives it elsewhere. */
+/* The arc is pressed in (the filter is in HeroIcon.tsx); the dot sits flat
+   on the face, and the glint runs the arc as it does everywhere. */
 .hero-icon-glyph svg path:not(.brand-glint) {
   filter: url(#hero-icon-press);
-}
-
-.hero-icon-glyph svg .brand-glint {
-  filter: url(#hero-icon-glint);
 }
 
 /* The gloss on the corner that tips up as it leans, clipped to the tile. */
