@@ -12,17 +12,14 @@ const nextConfig = {
   // The landing page lives at nabilr.com/rove now, which is the only copy of
   // its code. Everything here redirects there for good (308s), path for path
   // where nabilr.com has the same thing: the Storybooks moved to
-  // /rove/storybook/, and the demo is the live app on /rove itself.
-  //
-  // /api/interest stays served here for now: the deployed nabilr.com/rove
-  // still posts its signups here until its own /api/interest (a Netlify
-  // Function) ships. Once it has, the exclusion below can go.
+  // /rove/storybook/, and the demo is the live app on /rove itself. Signups
+  // go to nabilr.com's own /api/interest, so nothing is served here.
   async redirects() {
     const NABILR = 'https://nabilr.com'
     return [
       { source: '/storybook/:path*', destination: `${NABILR}/rove/storybook/:path*`, permanent: true },
       { source: '/app/:path*', destination: `${NABILR}/rove#app`, permanent: true },
-      { source: '/((?!api/).*)', destination: `${NABILR}/rove`, permanent: true },
+      { source: '/:path*', destination: `${NABILR}/rove`, permanent: true },
     ]
   },
   // Next doesn't directory-index public/ subfolders, so the demo iframe's
