@@ -459,13 +459,18 @@ code {
 }
 
 /* The arc is pressed in; the dot sits flat on the face; the glint running
-   the arc is light lying in the groove (the filters are in HeroIcon.tsx).
+   the arc is a slip of water in the groove (the filters are in HeroIcon.tsx).
    Its filter replaces the flat glow .brand-glint gives it elsewhere. */
 .hero-icon-glyph svg path:not(.brand-glint) {
   filter: url(#hero-icon-press);
 }
 
+/* Softened like water: a touch narrower than the groove and longer than
+   elsewhere, so the blur leaves it a body rather than a smudge. */
 .hero-icon-glyph svg .brand-glint {
+  stroke: #b4ccff;
+  stroke-width: 4;
+  stroke-dasharray: 20 120;
   filter: url(#hero-icon-glint);
 }
 
