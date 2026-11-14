@@ -8,11 +8,13 @@ import { useEffect, useRef } from 'react'
  * the other, on the same 3.6s period and curves as .brand-dot and
  * .brand-glint. The first time it comes on screen it resolves out of noise.
  *
- * The art is worked out from the icon's own geometry each frame: the 48-unit
- * box is laid over a grid of character cells, each cell is sampled for how
- * much of the arc or the dot covers it, and that share picks a character
- * from a ramp of denser and denser glyphs. The glint lifts the cells it is
- * passing a few steps up the ramp and draws them in a lighter blue.
+ * It is drawn in binary. The art is worked out from the icon's own geometry
+ * each frame: the 48-unit box is laid over a grid of character cells, and
+ * each cell is sampled for how much of the arc or the dot covers it. A cell
+ * well inside the shape is a full-strength digit, one on its edge a faint
+ * one, so the outline stays soft. Each cell keeps its own 0 or 1, and a few
+ * flip every frame, so the icon reads as data running through it. The glint
+ * draws the cells it is passing in a lighter blue that glows.
  *
  * It draws only while on screen. Asked for less motion, it is drawn once,
  * at rest, with no glint.
@@ -40,16 +42,20 @@ const ROWS = 21
 const CELL_WIDTH = 48 / COLUMNS
 const CELL_HEIGHT = 48 / ROWS
 const SAMPLES = 3
-/** Emptiest to fullest. */
-const RAMP = ' .:-=+*#%@'
-const NOISE = '.:-=+*#%@/\\|<>{}[]~^'
+/** The share of a cell the shape must cover to be inked, and to be inked fully. */
+const INKED_SHARE = 0.2
+const SOLID_SHARE = 0.6
+/** The share of the glint's strength over a cell that draws it in the glint's blue. */
+const GLINT_SHARE = 0.25
+/** The share of cells whose digit flips each frame. */
+const FLIP_SHARE = 0.03
+/** While it resolves, the share of the shape's empty cells that show stray digits. */
+const NOISE_SHARE = 0.3
 
 /* --- the motion (.brand-dot, .brand-glint) --- */
 const PERIOD = 3600
 /** The glint's length and travel, on the arc measured as 100. */
 const GLINT_LENGTH = 12
-/** How many steps up the ramp the glint lifts a cell it fully covers. */
-const GLINT_LIFT = 5
 /** Frames a second: plenty for text, and light on the page. */
 const FPS = 24
 /** How long the first resolve out of noise takes. */
@@ -109,14 +115,13 @@ function arcPlace(x: number, y: number): number | null {
   return null
 }
 
-type Cell = { char: string; isGlint: boolean }
+type Tone = 'empty' | 'faint' | 'solid' | 'glint'
 
-function drawFrame(phase: number, isStill: boolean): Cell[][] {
+function drawFrame(phase: number, isStill: boolean): Tone[] {
   const glint = isStill ? null : glintAt(phase)
   const dotRadius = isStill ? DOT_RADIUS : dotRadiusAt(phase)
-  const grid: Cell[][] = []
+  const tones: Tone[] = []
   for (let row = 0; row < ROWS; row++) {
-    const line: Cell[] = []
     for (let column = 0; column < COLUMNS; column++) {
       let covered = 0
       let glinted = 0
@@ -135,47 +140,83 @@ function drawFrame(phase: number, isStill: boolean): Cell[][] {
         }
       }
       const share = covered / (SAMPLES * SAMPLES)
-      const lift = glint ? (glinted / (SAMPLES * SAMPLES)) * glint.strength * GLINT_LIFT : 0
-      const step = share === 0 ? 0 : Math.min(RAMP.length - 1, Math.max(1, Math.round(share * (RAMP.length - 1) + lift)))
-      line.push({ char: RAMP[step], isGlint: lift >= 1 })
+      const glintShare = glint ? (glinted / (SAMPLES * SAMPLES)) * glint.strength : 0
+      tones.push(
+        share < INKED_SHARE
+          ? 'empty'
+          : glintShare >= GLINT_SHARE
+            ? 'glint'
+            : share < SOLID_SHARE
+              ? 'faint'
+              : 'solid',
+      )
     }
-    grid.push(line)
   }
-  return grid
+  return tones
 }
 
-const escape = (char: string) => (char === '<' ? '&lt;' : char === '>' ? '&gt;' : char === '&' ? '&amp;' : char)
+const CLASS_FOR: Record<Tone, string> = {
+  empty: '',
+  faint: 'icon-terminal-faint',
+  solid: '',
+  glint: 'icon-terminal-glint',
+}
 
 /**
- * The frame as markup: the glint's runs of cells wrapped in a span, the rest
- * plain text. `resolved` (0 to 1) is how far out of the noise it has come:
- * each inked cell settles at its own moment, showing noise until then.
+ * The frame as markup, each run of cells of one tone in its own span.
+ * `resolved` (0 to 1) is how far out of the noise it has come: each cell
+ * settles at its own moment, and until then shows a stray faint digit, or,
+ * if it's inked, its digit at a flicker.
  */
-function toMarkup(grid: Cell[][], resolved: number) {
-  return grid
-    .map((line, row) => {
-      let markup = ''
-      let isInGlint = false
-      line.forEach((cell, column) => {
-        let char = cell.char
-        let isGlint = cell.isGlint
-        if (resolved < 1 && char !== ' ') {
-          /* A fixed moment per cell, from a hash of where it is. */
-          const settlesAt = ((row * 73 + column * 151) % 97) / 97
-          if (resolved < settlesAt) {
-            char = NOISE[Math.floor(Math.random() * NOISE.length)]
-            isGlint = false
-          }
+function toMarkup(tones: Tone[], digits: Uint8Array, resolved: number) {
+  const lines: string[] = []
+  for (let row = 0; row < ROWS; row++) {
+    let markup = ''
+    let openClass = ''
+    for (let column = 0; column < COLUMNS; column++) {
+      const index = row * COLUMNS + column
+      let tone = tones[index]
+      let char = tone === 'empty' ? ' ' : String(digits[index])
+      if (resolved < 1) {
+        /* A fixed moment per cell, from a hash of where it is. */
+        const settlesAt = ((row * 73 + column * 151) % 97) / 97
+        if (resolved < settlesAt) {
+          const showsNoise = tone !== 'empty' || Math.random() < NOISE_SHARE
+          tone = showsNoise ? 'faint' : 'empty'
+          char = showsNoise ? String(Math.round(Math.random())) : ' '
         }
-        if (isGlint !== isInGlint) {
-          markup += isGlint ? '<span class="icon-terminal-glint">' : '</span>'
-          isInGlint = isGlint
-        }
-        markup += escape(char)
-      })
-      return isInGlint ? `${markup}</span>` : markup
-    })
-    .join('\n')
+      }
+      const className = CLASS_FOR[tone]
+      if (className !== openClass) {
+        if (openClass) markup += '</span>'
+        if (className) markup += `<span class="${className}">`
+        openClass = className
+      }
+      markup += char
+    }
+    if (openClass) markup += '</span>'
+    lines.push(`<span style="color: ${rowColour(row)}">${markup}</span>`)
+  }
+  return lines.join('\n')
+}
+
+/** The icon's gradient, top to bottom (BrandIcon.tsx), as the colour of each row. */
+const TOP_COLOUR = [0x7a, 0xa4, 0xff]
+const BOTTOM_COLOUR = [0x54, 0x84, 0xf5]
+
+function rowColour(row: number) {
+  const share = between(row / (ROWS - 1), 0.15, 0.85)
+  const [r, g, b] = TOP_COLOUR.map((top, channel) => Math.round(top + (BOTTOM_COLOUR[channel] - top) * share))
+  return `rgb(${r} ${g} ${b})`
+}
+
+/** Flips a share of the digits, so the icon reads as data running through it. */
+function flipSome(digits: Uint8Array) {
+  const flips = Math.round(digits.length * FLIP_SHARE)
+  for (let i = 0; i < flips; i++) {
+    const index = Math.floor(Math.random() * digits.length)
+    digits[index] = 1 - digits[index]
+  }
 }
 
 export default function IconTerminal() {
@@ -187,8 +228,10 @@ export default function IconTerminal() {
     const art = artRef.current
     if (!card || !art) return
 
+    const digits = Uint8Array.from({ length: ROWS * COLUMNS }, () => Math.round(Math.random()))
+
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      art.innerHTML = toMarkup(drawFrame(0, true), 1)
+      art.innerHTML = toMarkup(drawFrame(0, true), digits, 1)
       return
     }
 
@@ -203,11 +246,12 @@ export default function IconTerminal() {
       const resolved = Math.min(1, (now - resolveStart) / RESOLVE_MS)
       /* The loop starts as the resolve ends, so the glint's first run is seen whole. */
       const phase = (((now - resolveStart - RESOLVE_MS) % PERIOD) + PERIOD) % PERIOD / PERIOD
-      art.innerHTML = toMarkup(drawFrame(resolved < 1 ? 0.6 : phase, false), resolved)
+      flipSome(digits)
+      art.innerHTML = toMarkup(drawFrame(resolved < 1 ? 0.6 : phase, false), digits, resolved)
     }
 
     /* Until it's first seen, the noise it will resolve out of. */
-    art.innerHTML = toMarkup(drawFrame(0.6, false), 0)
+    art.innerHTML = toMarkup(drawFrame(0.6, false), digits, 0)
     const observer = new IntersectionObserver(
       ([entry]) => {
         cancelAnimationFrame(frame)
@@ -223,7 +267,7 @@ export default function IconTerminal() {
   }, [])
 
   return (
-    <div className="terminal" ref={ref} role="img" aria-label="Rove's icon, drawn in text">
+    <div className="terminal" ref={ref} role="img" aria-label="Rove's icon, drawn in binary">
       <div className="terminal-bar">
         <span className="terminal-dot dot-r" />
         <span className="terminal-dot dot-y" />

@@ -1630,9 +1630,9 @@ code {
   line-height: 1.5;
 }
 
-/* Rove's icon in text (IconTerminal.tsx), centred in the window, in the
-   icon's own gradient, top to bottom, with the glint in a lighter blue that
-   glows. At this line height a cell is about 1.9 times as tall as it is
+/* Rove's icon in binary (IconTerminal.tsx), centred in the window, in the
+   icon's own gradient, top to bottom, its edge cells faint, with the glint
+   in a lighter blue that glows. At this line height a cell is about 1.9 times as tall as it is
    wide, which the drawing's grid is laid out for. */
 .icon-terminal-body {
   display: flex;
@@ -1650,11 +1650,14 @@ code {
   /* Every character its own cell: no ligature joining -> or >= in the noise. */
   font-variant-ligatures: none;
   font-feature-settings: 'liga' 0, 'calt' 0;
-  color: transparent;
-  background: linear-gradient(180deg, #7aa4ff 15%, #5484f5 85%);
-  -webkit-background-clip: text;
-  background-clip: text;
+  /* Each row is coloured from the icon's gradient as it's drawn. */
+  color: #6a95fa;
   user-select: none;
+}
+
+/* A cell on the shape's edge, so its outline stays soft. */
+.icon-terminal-faint {
+  opacity: 0.42;
 }
 
 .icon-terminal-glint {
