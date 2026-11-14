@@ -1632,8 +1632,8 @@ code {
 
 /* Rove's icon in binary (IconTerminal.tsx), centred in the window, in the
    icon's own gradient, top to bottom, its edge cells faint, with the glint
-   in a lighter blue that glows. At this line height a cell is about 1.9 times as tall as it is
-   wide, which the drawing's grid is laid out for. */
+   in a lighter blue that glows. The drawing measures a cell's shape on the
+   page and lays its rows out to stay round. */
 .icon-terminal-body {
   display: flex;
   justify-content: center;
@@ -1643,7 +1643,7 @@ code {
 .icon-terminal-art {
   margin: 0;
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 600;
   line-height: 1.15;
   letter-spacing: 0;

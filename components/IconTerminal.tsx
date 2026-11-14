@@ -6,7 +6,9 @@ import { useEffect, useRef } from 'react'
  * Rove's icon drawn in text, in a terminal window, alive the way the icon is
  * everywhere else: its dot breathes and a glint runs the arc from one end to
  * the other, on the same 3.6s period and curves as .brand-dot and
- * .brand-glint. The first time it comes on screen it resolves out of noise.
+ * .brand-glint. The first time it comes on screen it unwinds out of a swirl:
+ * the drawing starts twisted round its centre, more the further out, and
+ * turns back straight.
  *
  * It is drawn in binary. The art is worked out from the icon's own geometry
  * each frame: the 48-unit box is laid over a grid of character cells, and
@@ -36,11 +38,14 @@ const DOT_RADIUS = 7.5
 const DOT_BREATH = { rest: 6.75, full: 7.8 }
 
 /* --- the grid --- */
-const COLUMNS = 40
-const ROWS = 21
-/** A monospace cell is about 1.9 times as tall as it is wide at this line height. */
+const COLUMNS = 30
+/**
+ * Rows to keep the drawing round, from a cell's measured shape: a monospace
+ * cell's height to width varies with the font the browser ends up drawing,
+ * so it's measured on the page rather than assumed.
+ */
+const FALLBACK_CELL_RATIO = 1.9
 const CELL_WIDTH = 48 / COLUMNS
-const CELL_HEIGHT = 48 / ROWS
 const SAMPLES = 3
 /** The share of a cell the shape must cover to be inked, and to be inked fully. */
 const INKED_SHARE = 0.2
@@ -49,8 +54,6 @@ const SOLID_SHARE = 0.6
 const GLINT_SHARE = 0.25
 /** The share of cells whose digit flips each frame. */
 const FLIP_SHARE = 0.03
-/** While it resolves, the share of the shape's empty cells that show stray digits. */
-const NOISE_SHARE = 0.3
 
 /* --- the motion (.brand-dot, .brand-glint) --- */
 const PERIOD = 3600
@@ -58,8 +61,10 @@ const PERIOD = 3600
 const GLINT_LENGTH = 12
 /** Frames a second: plenty for text, and light on the page. */
 const FPS = 24
-/** How long the first resolve out of noise takes. */
-const RESOLVE_MS = 1100
+/** How long the first unwinding out of the swirl takes. */
+const RESOLVE_MS = 2200
+/** How far the swirl twists the drawing's edge at its start, in turns. */
+const SWIRL_TURNS = 1.5
 
 /** cubic-bezier(x1, y1, x2, y2) at progress x. */
 function bezier(x1: number, y1: number, x2: number, y2: number, x: number) {
@@ -117,18 +122,30 @@ function arcPlace(x: number, y: number): number | null {
 
 type Tone = 'empty' | 'faint' | 'solid' | 'glint'
 
-function drawFrame(phase: number, isStill: boolean): Tone[] {
-  const glint = isStill ? null : glintAt(phase)
+/**
+ * The tone of every cell, row by row. `swirl` (0 to 1) is how wound up the
+ * drawing is: each point is looked up turned back round the centre, by more
+ * the further out it is, so the icon shows as a spiral that straightens.
+ */
+function drawFrame(rows: number, phase: number, isStill: boolean, swirl = 0): Tone[] {
+  const glint = isStill || swirl > 0 ? null : glintAt(phase)
   const dotRadius = isStill ? DOT_RADIUS : dotRadiusAt(phase)
+  const cellHeight = 48 / rows
   const tones: Tone[] = []
-  for (let row = 0; row < ROWS; row++) {
+  for (let row = 0; row < rows; row++) {
     for (let column = 0; column < COLUMNS; column++) {
       let covered = 0
       let glinted = 0
       for (let sy = 0; sy < SAMPLES; sy++) {
         for (let sx = 0; sx < SAMPLES; sx++) {
-          const x = (column + (sx + 0.5) / SAMPLES) * CELL_WIDTH
-          const y = (row + (sy + 0.5) / SAMPLES) * CELL_HEIGHT
+          let x = (column + (sx + 0.5) / SAMPLES) * CELL_WIDTH
+          let y = (row + (sy + 0.5) / SAMPLES) * cellHeight
+          if (swirl > 0) {
+            const twist = swirl * SWIRL_TURNS * 2 * Math.PI * (Math.hypot(x - CENTRE, y - CENTRE) / CENTRE)
+            const [dx, dy] = [x - CENTRE, y - CENTRE]
+            x = CENTRE + dx * Math.cos(twist) - dy * Math.sin(twist)
+            y = CENTRE + dx * Math.sin(twist) + dy * Math.cos(twist)
+          }
           if (Math.hypot(x - CENTRE, y - CENTRE) <= dotRadius) {
             covered++
             continue
@@ -162,30 +179,16 @@ const CLASS_FOR: Record<Tone, string> = {
   glint: 'icon-terminal-glint',
 }
 
-/**
- * The frame as markup, each run of cells of one tone in its own span.
- * `resolved` (0 to 1) is how far out of the noise it has come: each cell
- * settles at its own moment, and until then shows a stray faint digit, or,
- * if it's inked, its digit at a flicker.
- */
-function toMarkup(tones: Tone[], digits: Uint8Array, resolved: number) {
+/** The frame as markup, each run of cells of one tone in its own span. */
+function toMarkup(rows: number, tones: Tone[], digits: Uint8Array) {
   const lines: string[] = []
-  for (let row = 0; row < ROWS; row++) {
+  for (let row = 0; row < rows; row++) {
     let markup = ''
     let openClass = ''
     for (let column = 0; column < COLUMNS; column++) {
       const index = row * COLUMNS + column
-      let tone = tones[index]
-      let char = tone === 'empty' ? ' ' : String(digits[index])
-      if (resolved < 1) {
-        /* A fixed moment per cell, from a hash of where it is. */
-        const settlesAt = ((row * 73 + column * 151) % 97) / 97
-        if (resolved < settlesAt) {
-          const showsNoise = tone !== 'empty' || Math.random() < NOISE_SHARE
-          tone = showsNoise ? 'faint' : 'empty'
-          char = showsNoise ? String(Math.round(Math.random())) : ' '
-        }
-      }
+      const tone = tones[index]
+      const char = tone === 'empty' ? ' ' : String(digits[index])
       const className = CLASS_FOR[tone]
       if (className !== openClass) {
         if (openClass) markup += '</span>'
@@ -195,7 +198,7 @@ function toMarkup(tones: Tone[], digits: Uint8Array, resolved: number) {
       markup += char
     }
     if (openClass) markup += '</span>'
-    lines.push(`<span style="color: ${rowColour(row)}">${markup}</span>`)
+    lines.push(`<span style="color: ${rowColour(row, rows)}">${markup}</span>`)
   }
   return lines.join('\n')
 }
@@ -204,8 +207,8 @@ function toMarkup(tones: Tone[], digits: Uint8Array, resolved: number) {
 const TOP_COLOUR = [0x7a, 0xa4, 0xff]
 const BOTTOM_COLOUR = [0x54, 0x84, 0xf5]
 
-function rowColour(row: number) {
-  const share = between(row / (ROWS - 1), 0.15, 0.85)
+function rowColour(row: number, rows: number) {
+  const share = between(row / (rows - 1), 0.15, 0.85)
   const [r, g, b] = TOP_COLOUR.map((top, channel) => Math.round(top + (BOTTOM_COLOUR[channel] - top) * share))
   return `rgb(${r} ${g} ${b})`
 }
@@ -228,10 +231,17 @@ export default function IconTerminal() {
     const art = artRef.current
     if (!card || !art) return
 
-    const digits = Uint8Array.from({ length: ROWS * COLUMNS }, () => Math.round(Math.random()))
+    /* One cell's shape, from a line of digits drawn the way the art is. */
+    art.textContent = '0'.repeat(COLUMNS)
+    const probe = art.getBoundingClientRect()
+    const lineHeight = parseFloat(getComputedStyle(art).lineHeight)
+    const cellRatio = probe.width > 0 && lineHeight > 0 ? lineHeight / (probe.width / COLUMNS) : FALLBACK_CELL_RATIO
+    const rows = Math.max(8, Math.round(COLUMNS / cellRatio))
+
+    const digits = Uint8Array.from({ length: rows * COLUMNS }, () => Math.round(Math.random()))
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      art.innerHTML = toMarkup(drawFrame(0, true), digits, 1)
+      art.innerHTML = toMarkup(rows, drawFrame(rows, 0, true), digits)
       return
     }
 
@@ -244,14 +254,16 @@ export default function IconTerminal() {
       lastDrawn = now
       if (!resolveStart) resolveStart = now
       const resolved = Math.min(1, (now - resolveStart) / RESOLVE_MS)
-      /* The loop starts as the resolve ends, so the glint's first run is seen whole. */
+      /* Eased in and out, so the swirl is seen turning before it settles. */
+      const swirl = 1 - breathEase(resolved)
+      /* The loop starts as the swirl ends, so the glint's first run is seen whole. */
       const phase = (((now - resolveStart - RESOLVE_MS) % PERIOD) + PERIOD) % PERIOD / PERIOD
       flipSome(digits)
-      art.innerHTML = toMarkup(drawFrame(resolved < 1 ? 0.6 : phase, false), digits, resolved)
+      art.innerHTML = toMarkup(rows, drawFrame(rows, resolved < 1 ? 0.6 : phase, false, swirl), digits)
     }
 
-    /* Until it's first seen, the noise it will resolve out of. */
-    art.innerHTML = toMarkup(drawFrame(0.6, false), digits, 0)
+    /* Until it's first seen, the swirl it will unwind out of. */
+    art.innerHTML = toMarkup(rows, drawFrame(rows, 0.6, false, 1), digits)
     const observer = new IntersectionObserver(
       ([entry]) => {
         cancelAnimationFrame(frame)
