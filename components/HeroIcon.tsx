@@ -177,34 +177,36 @@ export default function HeroIcon() {
             </feMerge>
           </filter>
           {/*
-           * The glint runs the groove like a slip of water: no edge of its
-           * own, a soft translucent body with its ends melting into the arc,
-           * a faint gleam along its top where it catches the light, and a
-           * wide, faint glow round it.
+           * The glint is light lying in the groove, so it takes the same
+           * shape: its top wall in shadow, the bottom wall, facing up into the
+           * light, catching it brightest, and a soft glow spilling out.
            */}
           <filter id="hero-icon-glint" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="2.4" result="glowBlur" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.4" result="glowBlur" />
             <feColorMatrix
               in="glowBlur"
               type="matrix"
-              values="0 0 0 0 0.42  0 0 0 0 0.6  0 0 0 0 1  0 0 0 0.35 0"
+              values="0 0 0 0 0.36  0 0 0 0 0.55  0 0 0 0 1  0 0 0 0.6 0"
               result="glow"
             />
-            <feGaussianBlur in="SourceGraphic" stdDeviation="1.1" result="bodyBlur" />
-            <feColorMatrix
-              in="bodyBlur"
-              type="matrix"
-              values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.7 0"
-              result="body"
-            />
-            <feOffset in="SourceAlpha" dy="-0.7" result="alphaUp" />
-            <feGaussianBlur in="alphaUp" stdDeviation="0.9" result="gleamBlur" />
-            <feFlood floodColor="#ffffff" floodOpacity="0.3" />
-            <feComposite in2="gleamBlur" operator="in" result="gleam" />
+            <feComponentTransfer in="SourceAlpha" result="outside">
+              <feFuncA type="table" tableValues="1 0" />
+            </feComponentTransfer>
+            <feOffset in="outside" dy="1.1" result="outsideDown" />
+            <feGaussianBlur in="outsideDown" stdDeviation="0.7" result="wallBlur" />
+            <feFlood floodColor="#1b3a8a" floodOpacity="0.8" />
+            <feComposite in2="wallBlur" operator="in" />
+            <feComposite in2="SourceAlpha" operator="in" result="wall" />
+            <feOffset in="outside" dy="-1" result="outsideUp" />
+            <feGaussianBlur in="outsideUp" stdDeviation="0.5" result="shineBlur" />
+            <feFlood floodColor="#e4ecff" floodOpacity="0.6" />
+            <feComposite in2="shineBlur" operator="in" />
+            <feComposite in2="SourceAlpha" operator="in" result="shine" />
             <feMerge>
               <feMergeNode in="glow" />
-              <feMergeNode in="body" />
-              <feMergeNode in="gleam" />
+              <feMergeNode in="SourceGraphic" />
+              <feMergeNode in="wall" />
+              <feMergeNode in="shine" />
             </feMerge>
           </filter>
         </svg>
