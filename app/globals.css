@@ -459,13 +459,19 @@ code {
 }
 
 /* The arc is pressed in; the dot sits flat on the face; the glint running
-   the arc is light lying in the groove (the filters are in HeroIcon.tsx).
+   the arc is a drop of water rolling in the groove (the filters are in
+   HeroIcon.tsx).
    Its filter replaces the flat glow .brand-glint gives it elsewhere. */
 .hero-icon-glyph svg path:not(.brand-glint) {
   filter: url(#hero-icon-press);
 }
 
+/* A short dash with round caps, so the glint is a drop, a little longer than
+   it is wide, as one rolling would be. */
 .hero-icon-glyph svg .brand-glint {
+  stroke: #d4e2ff;
+  stroke-opacity: 1;
+  stroke-dasharray: 2.5 120;
   filter: url(#hero-icon-glint);
 }
 
