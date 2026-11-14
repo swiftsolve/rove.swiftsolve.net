@@ -1576,7 +1576,8 @@ code {
   margin-top: 12px;
 }
 
-/* terminal-style spec card — the "systems tool" claim, shown not told */
+/* a terminal window, the "systems tool" claim, shown not told: Rove's icon,
+   drawn in text */
 .terminal {
   position: relative;
   border-radius: 14px;
@@ -1629,79 +1630,36 @@ code {
   line-height: 1.5;
 }
 
-.terminal-prompt {
+/* Rove's icon in text (IconTerminal.tsx), centred in the window, in the
+   icon's own gradient, top to bottom, with the glint in a lighter blue that
+   glows. At this line height a cell is about 1.9 times as tall as it is
+   wide, which the drawing's grid is laid out for. */
+.icon-terminal-body {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--text-secondary);
+  justify-content: center;
+  padding: 26px 22px 28px;
 }
 
-.terminal-prompt + .terminal-row {
-  margin-top: 12px;
+.icon-terminal-art {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: 0;
+  /* Every character its own cell: no ligature joining -> or >= in the noise. */
+  font-variant-ligatures: none;
+  font-feature-settings: 'liga' 0, 'calt' 0;
+  color: transparent;
+  background: linear-gradient(180deg, #7aa4ff 15%, #5484f5 85%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  user-select: none;
 }
 
-.prompt-mark {
-  color: var(--accent);
-}
-
-/* Rows and the trailing prompt occupy their space from the start and only fade
-   in as the session prints them, so the card never changes height mid-play. */
-.terminal-row {
-  display: flex;
-  gap: 18px;
-  padding: 4px 0;
-  opacity: 0;
-  transition: opacity 200ms ease;
-}
-
-.terminal-row.is-shown {
-  opacity: 1;
-}
-
-.terminal-row + .terminal-prompt {
-  opacity: 0;
-  transition: opacity 200ms ease;
-}
-
-.terminal-row + .terminal-prompt.is-shown {
-  opacity: 1;
-}
-
-.terminal-row + .terminal-prompt {
-  margin-top: 12px;
-}
-
-.terminal-key {
-  flex: 0 0 92px;
-  color: var(--text-tertiary);
-}
-
-.terminal-value {
-  color: var(--text-primary);
-}
-
-.terminal-value.is-accent { color: var(--accent); }
-.terminal-value.is-positive { color: var(--positive); }
-
-.terminal-cursor {
-  display: inline-block;
-  width: 8px;
-  height: 15px;
-  vertical-align: -2px;
-  background: var(--text-secondary);
-  animation: cursor-blink 1.1s steps(1) infinite;
-}
-
-/* mid-command the cursor holds steady — it only blinks once the prompt is
-   idle and waiting, the way a real one does */
-.terminal-cursor.is-typing {
-  margin-left: 2px;
-  animation: none;
-}
-
-@keyframes cursor-blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+.icon-terminal-glint {
+  color: #cfe0ff;
+  text-shadow: 0 0 8px rgba(91, 140, 255, 0.85);
 }
 
 /* --- bottom CTA --- */

@@ -2,10 +2,10 @@ import BrandIcon from '@/components/BrandIcon'
 import CtaWordmark from '@/components/CtaWordmark'
 import HeroIcon from '@/components/HeroIcon'
 import InterestForm from '@/components/InterestForm'
+import IconTerminal from '@/components/IconTerminal'
 import Platforms from '@/components/Platforms'
 import Reveal from '@/components/Reveal'
 import Showcase from '@/components/Showcase'
-import SpecTerminal from '@/components/SpecTerminal'
 import Testimonials from '@/components/Testimonials'
 
 const GITHUB_URL = 'https://github.com/swiftsolve/rove'
@@ -262,8 +262,8 @@ export default function Home() {
       )}
 
       <section className="hood">
-        {/* SpecTerminal sits this one out: it already waits for the card to be
-            on screen and then types itself in. */}
+        {/* IconTerminal sits this one out: it already waits for the card to be
+            on screen and then resolves itself in. */}
         <div className="wrap hood-grid">
           <Reveal className="hood-copy">
             <span className="kicker">Under the hood</span>
@@ -283,7 +283,7 @@ export default function Home() {
             </p>
           </Reveal>
 
-          <SpecTerminal />
+          <IconTerminal />
         </div>
       </section>
 
