@@ -1637,7 +1637,7 @@ code {
 .icon-terminal-body {
   display: flex;
   justify-content: center;
-  padding: 26px 22px 28px;
+  padding: 26px 22px;
 }
 
 .icon-terminal-art {

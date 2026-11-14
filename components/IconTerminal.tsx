@@ -7,8 +7,8 @@ import { useEffect, useRef } from 'react'
  * everywhere else: its dot breathes and a glint runs the arc from one end to
  * the other, on the same 3.6s period and curves as .brand-dot and
  * .brand-glint. The first time it comes on screen it unwinds out of a swirl:
- * the drawing starts twisted round its centre, more the further out, and
- * turns back straight.
+ * the drawing starts small and twisted round its centre, more the further
+ * out, and grows as it turns back straight.
  *
  * It is drawn in binary. The art is worked out from the icon's own geometry
  * each frame: the 48-unit box is laid over a grid of character cells, and
@@ -38,6 +38,13 @@ const DOT_RADIUS = 7.5
 const DOT_BREATH = { rest: 6.75, full: 7.8 }
 
 /* --- the grid --- */
+/**
+ * The part of the 48-unit box the grid covers: the icon's ink, from the arc's
+ * outer edge round to the foot of its end caps, with a unit to spare. The
+ * arc is open at the foot, so the ink sits high in the box; laid over the ink
+ * rather than the box, the drawing sits centred in the window.
+ */
+const INK = { left: 3.5, top: 3.5, width: 41, height: 36 }
 const COLUMNS = 30
 /**
  * Rows to keep the drawing round, from a cell's measured shape: a monospace
@@ -45,7 +52,7 @@ const COLUMNS = 30
  * so it's measured on the page rather than assumed.
  */
 const FALLBACK_CELL_RATIO = 1.9
-const CELL_WIDTH = 48 / COLUMNS
+const CELL_WIDTH = INK.width / COLUMNS
 const SAMPLES = 3
 /** The share of a cell the shape must cover to be inked, and to be inked fully. */
 const INKED_SHARE = 0.2
@@ -65,6 +72,12 @@ const FPS = 24
 const RESOLVE_MS = 2200
 /** How far the swirl twists the drawing's edge at its start, in turns. */
 const SWIRL_TURNS = 1.5
+/**
+ * How small the drawing starts as it swirls in, growing to full size as it
+ * straightens: turned, the arc's gap swings away from the foot, and at full
+ * size the arc would run past the grid's bottom edge, which fits its ink.
+ */
+const SWIRL_START_SCALE = 0.8
 
 /** cubic-bezier(x1, y1, x2, y2) at progress x. */
 function bezier(x1: number, y1: number, x2: number, y2: number, x: number) {
@@ -130,7 +143,7 @@ type Tone = 'empty' | 'faint' | 'solid' | 'glint'
 function drawFrame(rows: number, phase: number, isStill: boolean, swirl = 0): Tone[] {
   const glint = isStill || swirl > 0 ? null : glintAt(phase)
   const dotRadius = isStill ? DOT_RADIUS : dotRadiusAt(phase)
-  const cellHeight = 48 / rows
+  const cellHeight = INK.height / rows
   const tones: Tone[] = []
   for (let row = 0; row < rows; row++) {
     for (let column = 0; column < COLUMNS; column++) {
@@ -138,11 +151,13 @@ function drawFrame(rows: number, phase: number, isStill: boolean, swirl = 0): To
       let glinted = 0
       for (let sy = 0; sy < SAMPLES; sy++) {
         for (let sx = 0; sx < SAMPLES; sx++) {
-          let x = (column + (sx + 0.5) / SAMPLES) * CELL_WIDTH
-          let y = (row + (sy + 0.5) / SAMPLES) * cellHeight
+          let x = INK.left + (column + (sx + 0.5) / SAMPLES) * CELL_WIDTH
+          let y = INK.top + (row + (sy + 0.5) / SAMPLES) * cellHeight
           if (swirl > 0) {
-            const twist = swirl * SWIRL_TURNS * 2 * Math.PI * (Math.hypot(x - CENTRE, y - CENTRE) / CENTRE)
-            const [dx, dy] = [x - CENTRE, y - CENTRE]
+            const scale = 1 - (1 - SWIRL_START_SCALE) * swirl
+            const dx = (x - CENTRE) / scale
+            const dy = (y - CENTRE) / scale
+            const twist = swirl * SWIRL_TURNS * 2 * Math.PI * (Math.hypot(dx, dy) / CENTRE)
             x = CENTRE + dx * Math.cos(twist) - dy * Math.sin(twist)
             y = CENTRE + dx * Math.sin(twist) + dy * Math.cos(twist)
           }
@@ -236,7 +251,7 @@ export default function IconTerminal() {
     const probe = art.getBoundingClientRect()
     const lineHeight = parseFloat(getComputedStyle(art).lineHeight)
     const cellRatio = probe.width > 0 && lineHeight > 0 ? lineHeight / (probe.width / COLUMNS) : FALLBACK_CELL_RATIO
-    const rows = Math.max(8, Math.round(COLUMNS / cellRatio))
+    const rows = Math.max(8, Math.round((COLUMNS * INK.height) / INK.width / cellRatio))
 
     const digits = Uint8Array.from({ length: rows * COLUMNS }, () => Math.round(Math.random()))
 
