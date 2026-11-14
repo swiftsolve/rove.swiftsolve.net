@@ -442,14 +442,13 @@ code {
     0 18px 40px -20px rgba(91, 140, 255, 0.3);
 }
 
-/* The mark at 72% of the tile, so the room at its sides comes near the room
-   at its top and bottom (it is wider than it is tall) without the tile
-   looking empty. A share of the tile, so it holds at the phone's smaller
+/* The mark at 78% of the tile, so it fills it, with room round it but no
+   emptiness. A share of the tile, so it holds at the phone's smaller
    one. Its ink sits high in its box, and the arc is open at the foot, so it
    is moved down a share of its own height to look centred. */
 .hero-icon-glyph {
   display: flex;
-  width: 72%;
+  width: 78%;
   aspect-ratio: 1;
 }
 
