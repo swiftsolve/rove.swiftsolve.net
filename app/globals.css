@@ -525,19 +525,27 @@ code {
   }
 }
 
+/* The glint fades in as it slides out of the arc's start, and fades out
+   while it is still sliding into the end, so it never shows as a bead that
+   shrinks to a dot and blinks out. Its travel eases out, so it is fully out
+   by about 10% and starts to shrink into the end at about 33%: it is
+   already fading by then, dims as it slides into the end, and is gone
+   before it shrinks to nothing. */
 @keyframes brand-glint {
   0% {
     stroke-dashoffset: 12;
     opacity: 0;
   }
-  8% {
+  14% {
     opacity: 1;
   }
-  52% {
-    stroke-dashoffset: -100;
+  28% {
     opacity: 1;
   }
-  58%,
+  42% {
+    opacity: 0;
+  }
+  52%,
   100% {
     stroke-dashoffset: -100;
     opacity: 0;
